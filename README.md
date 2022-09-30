@@ -1,7 +1,7 @@
 # SpinalHDL_Chinese_Doc
 Translated SpinalHDL-Doc(v1.7.2) into Chinese
 
-既然是中文版就用中文写Readme了;)
+既然是中文版就用中文写Readme了; )
 
 SpinalHDL_Chinese_Doc是我们团队将Spinal-Doc翻译成中文手册的成果，相比于原作者的SpinalHDL来说，有如下内容的增加:
 
