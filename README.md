@@ -3,9 +3,9 @@ Translated SpinalHDL-Doc(v1.7.2) into Chinese
 
 既然是中文版就用中文写Readme了; )
 
-SpinalHDL_Chinese_Doc是我们团队将Spinal-Doc翻译成中文手册的成果，相比于原作者的SpinalHDL来说，有如下内容的增加:
+SpinalHDL_Chinese_Doc是我们团队将Spinal-Doc翻译成中文手册的成果，相比于原作者的SpinalHDL来说，有如下内容的增加:Cancel changes
 
-1. 翻译成pdf并增加了书签，方便查阅;
+1. 翻译成pdf并增加了书签、目录等，方便查阅;
 2. 原文中大部分的SpinalHDL代码都翻译出了对应的Verilog代码，方便大家对照学习。
 
 源代码是markdown格式的，因此关于书签，有几种方式可以添加:
