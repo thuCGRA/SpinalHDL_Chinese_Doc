@@ -64,7 +64,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: output
-          path: output
+          path: asset
 
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
@@ -72,6 +72,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: output/SpinalHDL中文手册.docx
+          asset_path: asset/SpinalHDL中文手册.docx
           asset_name: SpinalHDL中文手册.docx
           asset_content_type: application/vnd.openxmlformats-officedocument.wordprocessingml.document
