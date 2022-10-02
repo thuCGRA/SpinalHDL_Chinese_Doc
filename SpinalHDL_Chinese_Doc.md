@@ -10951,7 +10951,7 @@ class RegBankExample extends Component{
   // busif.accept(JsonGenerator("regif.json"))
 }
 ```
-![](/image/reg_auto_allocate.gif)
+![](/image/reg-auto-allocate.jpg)
 
 自动字段分配：
 ```Scala
