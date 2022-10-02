@@ -1,0 +1,19 @@
+name: generate pdf
+
+on: push
+
+jobs:
+  convert_via_pandoc:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: create file list
+        id: files_list
+        run: mkdir output
+      - uses: docker://pandoc/latex:2.9
+        with:
+          args: --output=output/SpinalHDL中文手册.pdf SpinalHDL_Chinese_Doc.md
+      - uses: actions/upload-artifact@master
+        with:
+          name: output
+          path: output
