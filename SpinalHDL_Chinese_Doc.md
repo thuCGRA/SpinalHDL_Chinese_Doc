@@ -2419,7 +2419,7 @@ Scala是一款功能强大的编程语言, 它的产生受到了很多其他独�
 
 SpinalHDL语言提供了五种基本数据类型和两种复合类型。
 
-![](2022-08-29-10-06-13.png)
+![](image/2022-08-29-10-06-13.png)
 
 + 基础类型：Bool, Bits, UInt无符号整型, SInt有符号整型, Enum
 + 复合类型：Bundle和Vec
@@ -10951,7 +10951,7 @@ class RegBankExample extends Component{
   // busif.accept(JsonGenerator("regif.json"))
 }
 ```
-![](/image/reg-auto-allocate.jpg)
+![](image/reg-auto-allocate.jpg)
 
 自动字段分配：
 ```Scala
@@ -16433,7 +16433,7 @@ endmodule
     }
     ```
     随后我们可以定义一个`Apb3UartCtrl`组件来实例化一个`UartCtrl`并且在它和APB3总线之间创建一个内存映射逻辑：
-    ![](/image/memory_mapped_uart.svg)
+    ![](image/memory_mapped_uart.svg)
 
     ```Scala
     class Apb3UartCtrl(uartCtrlConfig : UartCtrlGenerics, rxFifoDepth : Int) extends Component{
