@@ -10,6 +10,7 @@ jobs:
       - name: create file list
         run: |
           mkdir output
+          sudo apt-get update
           sudo apt-get install pandoc
           sudo apt install texlive texlive-latex-extra texlive-latex-recommended texlive-xetex pandoc
           pandoc --pdf-engine=xelatex --output=output/SpinalHDL中文手册.pdf SpinalHDL_Chinese_Doc.md
