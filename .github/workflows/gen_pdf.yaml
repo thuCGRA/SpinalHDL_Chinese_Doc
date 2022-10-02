@@ -3,23 +3,6 @@ name: generate pdf
 on: push
 
 jobs:
-  convert_via_pandoc:
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-      - name: create file list
-        run: |
-          mkdir output
-          sudo apt-get update
-          sudo apt-get install pandoc
-          sudo apt install texlive texlive-latex-extra texlive-latex-recommended texlive-xetex pandoc
-          pandoc --output=output/SpinalHDL中文手册.docx SpinalHDL_Chinese_Doc.md
-# pandoc --latex-engine=xelatex --output=output/SpinalHDL中文手册.pdf SpinalHDL_Chinese_Doc.md
-      - uses: actions/upload-artifact@master
-        with:
-          name: output
-          path: output
-
   dependencies:
     name: Build dependencies
     runs-on: ubuntu-latest
@@ -54,24 +37,30 @@ jobs:
           draft: false
           prerelease: true
 
-  assets:
-    name: Upload release assets
-    runs-on: ubuntu-latest
+  convert_via_pandoc:
+    runs-on: ubuntu-18.04
     needs: [dependencies, release]
-
     steps:
-      - name: Download build assets
-        uses: actions/download-artifact@v2
+      - uses: actions/checkout@v2
+      - name: create file list
+        run: |
+          mkdir output
+          sudo apt-get update
+          sudo apt-get install pandoc
+          sudo apt install texlive texlive-latex-extra texlive-latex-recommended texlive-xetex pandoc
+          pandoc --output=output/SpinalHDL中文手册.docx SpinalHDL_Chinese_Doc.md
+# pandoc --latex-engine=xelatex --output=output/SpinalHDL中文手册.pdf SpinalHDL_Chinese_Doc.md
+      - uses: actions/upload-artifact@master
         with:
           name: output
-          path: asset
-
+          path: output
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: asset/SpinalHDL中文手册.docx
+          asset_path: output/SpinalHDL中文手册.docx
           asset_name: SpinalHDL中文手册.docx
           asset_content_type: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+      
