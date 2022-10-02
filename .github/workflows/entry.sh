@@ -1,1 +1,1 @@
-sudo apt install texlive texlive-latex-extra texlive-latex-recommended texlive-xetex pandoc
+apt install texlive texlive-latex-extra texlive-latex-recommended texlive-xetex pandoc
