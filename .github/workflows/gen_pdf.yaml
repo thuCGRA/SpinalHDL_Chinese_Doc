@@ -13,7 +13,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install pandoc
           sudo apt install texlive texlive-latex-extra texlive-latex-recommended texlive-xetex pandoc
-          pandoc --pdf-engine=xelatex --output=output/SpinalHDL中文手册.pdf SpinalHDL_Chinese_Doc.md
+          pandoc --latex-engine=xelatex --output=output/SpinalHDL中文手册.pdf SpinalHDL_Chinese_Doc.md
       - uses: actions/upload-artifact@master
         with:
           name: output
