@@ -8,12 +8,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: create file list
-        id: files_list
-        run: mkdir output
-      - uses: docker://pandoc/latex:2.9
-        with:
-          entrypoint: .github/workflows/entry.sh
-          args: --pdf-engine=xelatex --output=output/SpinalHDL中文手册.pdf SpinalHDL_Chinese_Doc.md
+        run: |
+          mkdir output
+          sudo apt-get install pandoc
+          sudo apt install texlive texlive-latex-extra texlive-latex-recommended texlive-xetex pandoc
+          pandoc --pdf-engine=xelatex --output=output/SpinalHDL中文手册.pdf SpinalHDL_Chinese_Doc.md
       - uses: actions/upload-artifact@master
         with:
           name: output
