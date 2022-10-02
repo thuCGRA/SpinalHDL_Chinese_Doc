@@ -10965,7 +10965,7 @@ val fd3 = M_REG0.fieldAt(pos=16, Bits(4 bit), doc= "fields 3")
 //自动保存12 bits
 ```
 
-![field-auto-allocate](/image/field-auto-allocate.gif)
+![field-auto-allocate](image/field-auto-allocate.gif)
 
 冲突检测：
 ```Scala
@@ -11029,7 +11029,7 @@ cause Exception
 
 HTML自动文档目前完成了, 生成的HTML文档如下：
 
-![regif-html](/image/regif-html.png)
+![regif-html](image/regif-html.png)
 
 ### 四、例子
 
@@ -11133,7 +11133,7 @@ class EasyInterrupt extends Component {
 }
 ```
 
-![easy-intr](/image/easy-intr.png)
+![easy-intr](image/easy-intr.png)
 
 ## 中断设计规范(Interrupt Design Spec)
 
@@ -11146,7 +11146,7 @@ class EasyInterrupt extends Component {
 |  MASK  |    RW    |      整形mask寄存器, 1:关闭, 0：打开；默认为1       |
 | STATUS |    RO    |           整形状态, 只读。`status = (raw            |  | force) && ! mask` |
 
-![RFMS](/image/RFMS.svg)
+![RFMS](image/RFMS.svg)
 
 Spinal使用:
 ```Scala
@@ -11160,7 +11160,7 @@ busif.interruptFactory("T", io.a, io.b, io.c, io.d, io.e)
 |  MASK  |    RW    |  整形mask寄存器, 1:关闭; 0: 打开；默认1关闭  |
 | STATUS |    RO    | 整形状态, RO, `status = int_level && ! mask` |
 
-![MS](/image/MS.svg)
+![MS](image/MS.svg)
 
 Spinal使用：
 ```Scala
