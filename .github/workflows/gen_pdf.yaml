@@ -55,13 +55,22 @@ jobs:
         with:
           name: output
           path: output
-      - name: Upload release assets
+      - name: Upload release assets docx
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: output/*
-          asset_name: SpinalHDL中文手册
+          asset_path: output/SpinalHDL中文手册.docx
+          asset_name: SpinalHDL_Chinese_Doc.docx
           asset_content_type: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+      - name: Upload release assets html
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: output/SpinalHDL中文手册.html
+          asset_name: SpinalHDL_Chinese_Doc.html
+          asset_content_type: text/html
       
