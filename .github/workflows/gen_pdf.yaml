@@ -49,6 +49,7 @@ jobs:
           sudo apt-get install pandoc
           sudo apt install texlive texlive-latex-extra texlive-latex-recommended texlive-xetex pandoc
           pandoc --output=output/SpinalHDL中文手册.docx SpinalHDL_Chinese_Doc.md
+          pandoc --output=output/SpinalHDL中文手册.html SpinalHDL_Chinese_Doc.md
 # pandoc --latex-engine=xelatex --output=output/SpinalHDL中文手册.pdf SpinalHDL_Chinese_Doc.md
       - uses: actions/upload-artifact@master
         with:
@@ -60,7 +61,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: output/SpinalHDL中文手册.docx
-          asset_name: SpinalHDL中文手册.docx
+          asset_path: output/*
+          asset_name: SpinalHDL中文手册
           asset_content_type: application/vnd.openxmlformats-officedocument.wordprocessingml.document
       
