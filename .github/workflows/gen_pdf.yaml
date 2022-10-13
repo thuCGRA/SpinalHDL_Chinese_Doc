@@ -1,0 +1,76 @@
+name: generate pdf
+
+on: push
+
+jobs:
+  dependencies:
+    name: Build dependencies
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Create global variables
+        id: version
+        run: echo "::set-output name=version::$(git rev-parse --short HEAD)"
+
+  release:
+    name: "Create Github tag/pre-release"
+    runs-on: ubuntu-latest
+    needs: dependencies
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Create Github pre-release (${{ needs.dependencies.outputs.version }})
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}-${{ needs.dependencies.outputs.version }}
+          release_name: Version ${{ github.run_number }} (${{ needs.dependencies.outputs.version }})
+          draft: false
+          prerelease: true
+
+  convert_via_pandoc:
+    runs-on: ubuntu-18.04
+    needs: [dependencies, release]
+    steps:
+      - uses: actions/checkout@v2
+      - name: create file list
+        run: |
+          mkdir output
+          sudo apt-get update
+          sudo apt-get install pandoc
+          sudo apt install texlive texlive-latex-extra texlive-latex-recommended texlive-xetex pandoc
+          pandoc --output=output/SpinalHDL中文手册.docx SpinalHDL_Chinese_Doc.md
+          pandoc --output=output/SpinalHDL中文手册.html SpinalHDL_Chinese_Doc.md
+# pandoc --latex-engine=xelatex --output=output/SpinalHDL中文手册.pdf SpinalHDL_Chinese_Doc.md
+      - uses: actions/upload-artifact@master
+        with:
+          name: output
+          path: output
+      - name: Upload release assets docx
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: output/SpinalHDL中文手册.docx
+          asset_name: SpinalHDL_Chinese_Doc.docx
+          asset_content_type: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+      - name: Upload release assets html
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: output/SpinalHDL中文手册.html
+          asset_name: SpinalHDL_Chinese_Doc.html
+          asset_content_type: text/html
+      
