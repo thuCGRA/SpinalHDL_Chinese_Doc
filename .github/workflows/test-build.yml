@@ -1,7 +1,7 @@
 name: "Linkceck and buildtest on PR"
 
 on:
-  - pull_request
+  - push
 
 jobs:
   test:
@@ -23,3 +23,8 @@ jobs:
       run: make linkcheck
     - name: "Test doc building"
       run: make html
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/html
