@@ -1,5 +1,0 @@
-## 表现(Presentation)
-
-见PPT
-
-https://github.com/SpinalHDL/SpinalDoc/blob/master/presentation/en/presentation.pdf

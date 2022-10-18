@@ -1,6 +1,0 @@
-## 通常(General)
-
-SpinalHDL可以生成SystemVerilog Assertions(SVA)的子集。大多数是断言, 假设, 覆盖和一些其他的。
-
-此外它还提供允许直接在开源Symbi-Yosys工具链运行的形式化验证后端。
-
