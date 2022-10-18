@@ -1,0 +1,35 @@
+## 排除空指针(NullPointerException)
+
+### 一、简介
+
+`NullPointerException`是一个Scala运行时的报错, 它会在一个变量在初始化前就被访问时发生。
+
+### 二、例子
+
+下述代码：
+```Scala
+class TopLevel extends Component {
+  a := 42
+  val a = UInt(8 bits)
+}
+```
+将会报错：
+```
+Exception in thread "main" java.lang.NullPointerException
+  ***
+  Source file location of the a := 42 assignment via the stack trace
+  ***
+```
+修复为：
+```Scala
+class TopLevel extends Component {
+  val a = UInt(8 bits)
+  a := 42
+}
+```
+
+1. 问题解释(Issue explanation)
+
+    SpinalHDL不是一门语言, 它是一个Scala库, 这意味着它遵守与Scala通用编程语言相同的规则。
+
+    当运行上面的SpinalHDL硬件描述来生成相应的VHDL/Verilog RTL时, SpinalHDL硬件描述将作为一个Scala程序执行, 并且a将是一个空引用, 直到程序执行`val a = UInt(8 bits)`, 所以在此之前试图给它赋值将导致`NullPointerException`。

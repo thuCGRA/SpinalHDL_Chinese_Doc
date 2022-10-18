@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAM/ROM &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="设计错误(Design Errors)" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html" />
+    <link rel="prev" title="寄存器(Registers)" href="%E5%AF%84%E5%AD%98%E5%99%A8.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">时序逻辑(Sequential logic)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E5%AF%84%E5%AD%98%E5%99%A8.html">寄存器(Registers)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">RAM/ROM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#syntax">一、语义(Syntax)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quirk-synchronous-enable-quirk">二、同步使能quirk(Synchronous enable quirk)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#read-under-write-policy">三、读下写原则(Read-under-write policy)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ram-mixed-width-ram">四、混合宽度ram(Mixed-width ram)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mem-automatic-blackboxing">五、自动化mem黑盒(Automatic blackboxing)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">时序逻辑(Sequential logic)</a> &raquo;</li>
+      <li>RAM/ROM</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/时序逻辑/RAM_ROM.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ram-rom">
+<h1>RAM/ROM<a class="headerlink" href="#ram-rom" title="此标题的永久链接"></a></h1>
+<section id="syntax">
+<h2>一、语义(Syntax)<a class="headerlink" href="#syntax" title="此标题的永久链接"></a></h2>
+<p>用<code class="docutils literal notranslate"><span class="pre">Mem</span></code>类在SpinalHDL中创建memory, 它允许你定义memory并增加读写端口。</p>
+<p>以下表格展示了如何例化memory：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">语句</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Mem(type: Data, size: Int)</td>
+<td style="text-align: center;">创建RAM</td>
+</tr>
+<tr>
+<td style="text-align: center;">Mem(type: Data, initialContent: Array[Data])</td>
+<td style="text-align: center;">创建ROM, 如果目标是FPGA, 因为memory会被推断成ram模块, 故也可以创建写端口</td>
+</tr>
+</tbody>
+</table><blockquote>
+<div><p>备注：如果你想定义ROM, <code class="docutils literal notranslate"><span class="pre">initialContent</span></code>阵列的元素应该是纯粹的值(没有操作符, 没有改变尺寸函数), 在例子里有Sinus rom的例子。</p>
+</div></blockquote>
+<blockquote>
+<div><p>备注：给RAM初始化时, 也可以用<code class="docutils literal notranslate"><span class="pre">init</span></code>函数。</p>
+</div></blockquote>
+<blockquote>
+<div><p>备注：写mask宽度是灵活的, 可以把mem字拆分成和mask宽度一样的片段。例如如果你有32 bits的mem字并提供了4 bits的mask, 那么这就是字节(byte)mask。如果你提供32 bits的mask, 那这就是bit mask。</p>
+</div></blockquote>
+<p>以下表格展示了如何给memory增加端口：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: left;">语句</th>
+<th style="text-align: center;">描述</th>
+<th style="text-align: center;">返回类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">mem(address):=data</td>
+<td style="text-align: center;">同步写</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">mem(x)</td>
+<td style="text-align: center;">异步读</td>
+<td style="text-align: center;">T</td>
+</tr>
+<tr>
+<td style="text-align: left;">mem.write(<br>address<br>data<br>[enable]<br>[mask]<br>)</td>
+<td style="text-align: center;">用可选择的mask同步写。如果没有给定enable, 它会自动从被引用的条件区域里推断</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">mem.readAsync(<br>address<br>[readUnderWrite]<br>)</td>
+<td style="text-align: center;">基于可选择的读下写原则异步读</td>
+<td style="text-align: center;">T</td>
+</tr>
+<tr>
+<td style="text-align: left;">mem.readSync(<br>address<br>[enable]<br>[readUnderWrite]<br>[clockCrossing]<br>)</td>
+<td style="text-align: center;">用可选择的enable, 读下写原则和<code>clockCrossing</code>模式同步写</td>
+<td style="text-align: center;">T</td>
+</tr>
+<tr>
+<td style="text-align: left;">mem.readWriteSync(<br>address<br>data<br>enable<br>write<br>[mask]<br>[readUnderWrite]<br>[clockCrossing]<br>)</td>
+<td style="text-align: center;">推断读写端口。当<code>enable &amp;&amp; write</code>时<code>data</code>被写入。返回读数据, 当<code>enable</code>为真时触发读</td>
+<td style="text-align: center;">T</td>
+</tr>
+</tbody>
+</table><blockquote>
+<div><p>备注：如果处于某些原因你需要指定非SpinalHDL实现的memory端口, 你可以通过给memory指定一个黑盒来抽象它。</p>
+</div></blockquote>
+<blockquote>
+<div><p>重要：SpinalHDL的memory端口不是推断得到的, 而是清晰地定义出的。你不能用像VHDL/Verilog一样的代码模板帮助综合工具推断出memory。</p>
+</div></blockquote>
+<p>以下是一个推断出双端口ram(32 bits*256)的例子：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">mem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Mem</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">32</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="w"> </span><span class="n">wordCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">256</span><span class="p">)</span><span class="w"></span>
+<span class="n">mem</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">enable</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">writeValid</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">writeAddress</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">writeData</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="n">io</span><span class="p">.</span><span class="n">readData</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">mem</span><span class="p">.</span><span class="n">readSync</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">enable</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">readValid</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">readAddress</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="k">module</span><span class="w"> </span><span class="n">MyTopLevel</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_writeValid</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">      </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_writeAddress</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">      </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">io_writeData</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_readValid</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">      </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_readAddress</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">     </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">io_readData</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">clk</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">reset</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">_zz_mem_port1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">mem</span><span class="w"> </span><span class="p">[</span><span class="mh">0</span><span class="o">:</span><span class="mh">255</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">io_writeValid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">mem</span><span class="p">[</span><span class="n">io_writeAddress</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">io_writeData</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">io_readValid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">_zz_mem_port1</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">mem</span><span class="p">[</span><span class="n">io_readAddress</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_readData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_zz_mem_port1</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">endmodule</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="quirk-synchronous-enable-quirk">
+<h2>二、同步使能quirk(Synchronous enable quirk)<a class="headerlink" href="#quirk-synchronous-enable-quirk" title="此标题的永久链接"></a></h2>
+<p>如果在条件模块中使用使能信号, 如同<code class="docutils literal notranslate"><span class="pre">when</span></code>, 只有使能信号会作为访存条件生成, <code class="docutils literal notranslate"><span class="pre">when</span></code>条件被忽视。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">rom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Mem</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="w"> </span><span class="mi">32</span><span class="p">)</span><span class="w"></span>
+<span class="n">when</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">rdata</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">rom</span><span class="p">.</span><span class="n">readSync</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">rdEna</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>在上述例子中, 条件<code class="docutils literal notranslate"><span class="pre">cond</span></code>不会在生成后的RTL中描述, 在使能信号中包含条件<code class="docutils literal notranslate"><span class="pre">cond</span></code>的方法如下：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="n">io</span><span class="p">.</span><span class="n">rdata</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">rom</span><span class="p">.</span><span class="n">readSync</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">rdEna</span><span class="w"> </span><span class="n">&amp;</span><span class="w"> </span><span class="n">cond</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="read-under-write-policy">
+<h2>三、读下写原则(Read-under-write policy)<a class="headerlink" href="#read-under-write-policy" title="此标题的永久链接"></a></h2>
+<p>这个规则指定了当在读和写发生在同一周期同一地址时, 写会如何影响。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">类别</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>dontCare</code></td>
+<td style="text-align: center;">当情况发生时不关心读的值</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>readFirst</code></td>
+<td style="text-align: center;">读会取到旧(写前)的值</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>writeFirst</code></td>
+<td style="text-align: center;">读会得到新(写后)的值</td>
+</tr>
+</tbody>
+</table><blockquote>
+<div><p>重要：生成的VHDL/Verilog总是<code class="docutils literal notranslate"><span class="pre">readFirst</span></code>模式, 会兼容<code class="docutils literal notranslate"><span class="pre">dontCare</span></code>但是不兼容<code class="docutils literal notranslate"><span class="pre">writeFirst</span></code>。为了产生有这个特点的电路, 需要使能<em>自动化mem黑盒</em></p>
+</div></blockquote>
+</section>
+<section id="ram-mixed-width-ram">
+<h2>四、混合宽度ram(Mixed-width ram)<a class="headerlink" href="#ram-mixed-width-ram" title="此标题的永久链接"></a></h2>
+<p>你可以指定访存mem的端口的位宽, 这个位宽是mem位宽的一部分, 是二的幂次方, 函数如下：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">语句</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">mem.writeMixedWidth(<br>address<br>data<br>[readUnderWrite]<br>)</td>
+<td style="text-align: center;">类似于<code>mem.write</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">mem.readAsyncMixedWidth(<br>address<br>data<br>[readUnderWrite]<br>)</td>
+<td style="text-align: center;">类似于<code>mem.readAsync</code>, 但是它会驱动<code>data</code>给定的信号/对象而不是返回读的值</td>
+</tr>
+<tr>
+<td style="text-align: center;">mem.readSyncMixedWidth(<br>address<br>data<br>[enable]<br>[readUnderWrite]<br>[clockCrossing]<br>)</td>
+<td style="text-align: center;">类似于<code>mem.readSync</code>, 但是它会驱动<code>data</code>给定的信号/对象而不是返回读的值</td>
+</tr>
+<tr>
+<td style="text-align: center;">mem.readWriteSyncMixedWidth(<br>address<br>data<br>enable<br>write<br>[mask]<br>[readUnderWrite]<br>[clockCrossing]<br>)</td>
+<td style="text-align: center;">等价于<code>mem.readWriteSync</code></td>
+</tr>
+</tbody>
+</table><blockquote>
+<div><p>重要：对于读下写机制, 为了使用这个特点你需要使能<em>自动化mem黑盒</em>, 因为没有一般性的VHDL/Verilog代码模板推断ram的混合位宽</p>
+</div></blockquote>
+</section>
+<section id="mem-automatic-blackboxing">
+<h2>五、自动化mem黑盒(Automatic blackboxing)<a class="headerlink" href="#mem-automatic-blackboxing" title="此标题的永久链接"></a></h2>
+<p>因为用传统VHDL/Verilog推断所有ram类型是不可能的, SpinalHDL集成了可选择的自动化黑盒(automatic blackboxing system)系统。这个系统会检查你的RTL网表中所有出现了的mem并把他们用黑盒替代。之后产生的代码会根据第三方IP提供mem的特性, 例如读时写(read-during-write)机制和混合带宽端口。</p>
+<p>以下例子说明了如何默认开启mem黑盒：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nc">SpinalConfig</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">addStandardMemBlackboxing</span><span class="p">(</span><span class="n">blackboxAll</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">generateVhdl</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">TopLevel</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>如果对于你的设计, 标准黑盒工具还不够用, 不要犹豫去创建一个<em>Github issue</em>。这里还有一种你创建自己黑盒工具的方法。</p>
+<ol class="simple">
+<li><p>黑盒机制(Blackboxing policy)</p></li>
+</ol>
+<p>有多种机制供你使用, 你可以选择你想要把哪个mem变成黑盒, 并且当黑盒不可用时要做什么：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">种类</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>blackboxAll</code></td>
+<td style="text-align: center;">把所有mem变成黑盒。对于无法黑盒化的mem报错</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>blackboxAllWhatsYouCan</code></td>
+<td style="text-align: center;">把所有可黑盒化的mem变成黑盒</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>blackboxRequestedAndUninferable</code></td>
+<td style="text-align: center;">把用户给定的和已知可被推断的mem变成黑盒。对于无法黑盒化的mem报错</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>blackboxOnlyIfRequested</code></td>
+<td style="text-align: center;">用户指定哪些mem变成黑盒。对于无法黑盒化的mem报错</td>
+</tr>
+</tbody>
+</table><p>为了清晰地把mem设置成黑盒, 你可以用<code class="docutils literal notranslate"><span class="pre">generateAsBlackBox</span></code>函数</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">mem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Mem</span><span class="p">(</span><span class="nc">Rgb</span><span class="p">(</span><span class="n">rgbConfig</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"></span>
+<span class="n">mem</span><span class="p">.</span><span class="n">generateAsBlackBox</span><span class="p">()</span><span class="w"></span>
+</pre></div>
+</div>
+<p>你也可以通过拓展<code class="docutils literal notranslate"><span class="pre">MemBlackboxingPolicy</span></code>类定义你自己的黑盒机制。</p>
+<ol class="simple">
+<li><p>标准mem黑盒(Standard memory blackboxed)</p></li>
+</ol>
+<p>以下展示的是SpinalHDL中用的标准黑盒的VHDL定义：</p>
+<div class="highlight-VHDL notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Simple asynchronous dual port (1 write port, 1 read port)</span><span class="w"></span>
+<span class="k">component</span><span class="w"> </span><span class="nc">Ram_1w_1ra</span><span class="w"> </span><span class="k">is</span><span class="w"></span>
+<span class="w">    </span><span class="k">generic</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">wordCount</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wordWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">technology</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">readUnderWrite</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wrAddressWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wrDataWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wrMaskWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wrMaskEnable</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">rdAddressWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">rdDataWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="w"></span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">port</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">clk</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wr_en</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wr_mask</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wr_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">unsigned</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wr_data</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">rd_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">unsigned</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">rd_data</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="w"></span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="k">end</span><span class="w"> </span><span class="k">component</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">-- Simple synchronous dual port (1 write port, 1 read port)</span><span class="w"></span>
+<span class="k">component</span><span class="w"> </span><span class="nc">Ram_1w_1rs</span><span class="w"> </span><span class="k">is</span><span class="w"></span>
+<span class="w">    </span><span class="k">generic</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">wordCount</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wordWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">clockCrossing</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">technology</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">readUnderWrite</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wrAddressWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wrDataWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wrMaskWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wrMaskEnable</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">rdAddressWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">rdDataWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">rdEnEnable</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="w"></span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">port</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">wr_clk</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wr_en</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wr_mask</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wr_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">unsigned</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wr_data</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">rd_clk</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">rd_en</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">rd_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">unsigned</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">rd_data</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="w"></span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="k">end</span><span class="w"> </span><span class="k">component</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">-- Single port (1 readWrite port)</span><span class="w"></span>
+<span class="k">component</span><span class="w"> </span><span class="nc">Ram_1wrs</span><span class="w"> </span><span class="k">is</span><span class="w"></span>
+<span class="w">    </span><span class="k">generic</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">wordCount</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wordWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">readUnderWrite</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">technology</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"></span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">port</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">clk</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">en</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">unsigned</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wrData</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">rdData</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="w"></span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="k">end</span><span class="w"> </span><span class="k">component</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">--True dual port (2 readWrite port)</span><span class="w"></span>
+<span class="k">component</span><span class="w"> </span><span class="nc">Ram_2wrs</span><span class="w"> </span><span class="k">is</span><span class="w"></span>
+<span class="w">    </span><span class="k">generic</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">wordCount</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">wordWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">clockCrossing</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">technology</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portA_readUnderWrite</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portA_addressWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portA_dataWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portA_maskWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portA_maskEnable</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portB_readUnderWrite</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portB_addressWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portB_dataWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portB_maskWidth</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portB_maskEnable</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="w"></span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">port</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">portA_clk</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portA_en</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portA_wr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portA_mask</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portA_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">unsigned</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portA_wrData</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portA_rdData</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portB_clk</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portB_en</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portB_wr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portB_mask</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portB_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">unsigned</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portB_wrData</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">portB_rdData</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="w"></span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="k">end</span><span class="w"> </span><span class="k">component</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>如你所见, 黑盒有一个技术参数。你可以在对应的mem上用<code class="docutils literal notranslate"><span class="pre">setTechnology</span></code>函数来设置它。当前有4中可用的技术：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ramBlock</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">distributedLut</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">registerFile</span></code></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E5%AF%84%E5%AD%98%E5%99%A8.html" class="btn btn-neutral float-left" title="寄存器(Registers)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html" class="btn btn-neutral float-right" title="设计错误(Design Errors)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

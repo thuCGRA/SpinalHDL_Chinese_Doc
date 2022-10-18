@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>时钟域(Clock domains) &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="满线程API(Thread-full API)" href="%E6%BB%A1%E7%BA%BF%E7%A8%8BAPI.html" />
+    <link rel="prev" title="访问仿真信号(Accessing signals of the simulation)" href="%E8%AE%BF%E9%97%AE%E4%BB%BF%E7%9C%9F%E4%BF%A1%E5%8F%B7.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">仿真(Simulation)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E7%AE%80%E4%BB%8B.html">介绍(Introduction)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97.html">安装指南(Installation instructions)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%90%AF%E5%8A%A8%E4%BB%BF%E7%9C%9F.html">启动仿真(Boot a Simulation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%90%AF%E5%8A%A8%E4%BB%BF%E7%9C%9F.html#accessing-signals-of-the-simulation">访问仿真信号(Accessing signals of the simulation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E8%AE%BF%E9%97%AE%E4%BB%BF%E7%9C%9F%E4%BF%A1%E5%8F%B7.html">访问仿真信号(Accessing signals of the simulation)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">时钟域(Clock domains)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-stimulus-api">一、激励API(Stimulus API)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-wait-api">二、等待API(Wait API)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-callback-api">三、传回API(Callback API)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#default-clockdomain">四、默认时钟域(Default ClockDomain)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#new-clockdomain">五、新时钟域(New ClockDomain)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%BB%A1%E7%BA%BF%E7%A8%8BAPI.html">满线程API(Thread-full API)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%B0%91%E7%BA%BF%E7%A8%8BAPI.html">少线程API(Thread-less API)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%95%8F%E6%84%9FAPI.html">敏感API(Sensitive API)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BB%BF%E7%9C%9F%E5%BC%95%E6%93%8E.html">仿真引擎(Simulation engine)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BE%8B%E5%AD%90.html">例子(Examples)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">仿真(Simulation)</a> &raquo;</li>
+      <li>时钟域(Clock domains)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/仿真/时钟域.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="clock-domains">
+<h1>时钟域(Clock domains)<a class="headerlink" href="#clock-domains" title="此标题的永久链接"></a></h1>
+<section id="api-stimulus-api">
+<h2>一、激励API(Stimulus API)<a class="headerlink" href="#api-stimulus-api" title="此标题的永久链接"></a></h2>
+<p>以下是<code class="docutils literal notranslate"><span class="pre">ClockDomain</span></code>激励函数的列表：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">时钟域激励函数</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>forkStimulus(period)</code></td>
+<td style="text-align: center;">分化仿真流程来产生时钟域激励(clock, reset, softReset, clockEnable singals)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>forkSimSpeedPrinter(printPeriod)</code></td>
+<td style="text-align: center;">分化仿真流程定期以实时秒数下的千-周期打印仿真速度。<code>printPeriod</code>是实时秒数</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>clockToggle()</code></td>
+<td style="text-align: center;">切换时钟信号</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>fallingEdge()</code></td>
+<td style="text-align: center;">清空时钟信号</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>risingEdge()</code></td>
+<td style="text-align: center;">设置时钟信号</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>assertReset()</code></td>
+<td style="text-align: center;">将复位信号设置为有效电平</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>deassertReset()</code></td>
+<td style="text-align: center;">将复位信号设置为无效电平</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>assertClockEnable()</code></td>
+<td style="text-align: center;">将时钟使能信号设置为有效电平</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>deassertClockEnable()</code></td>
+<td style="text-align: center;">将时钟使能信号设置为无效电平</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>assertSoftReset()</code></td>
+<td style="text-align: center;">将软复位设置为有效电平</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>deassertSoftReset()</code></td>
+<td style="text-align: center;">将软复位信号设置为无效电平</td>
+</tr>
+</tbody>
+</table></section>
+<section id="api-wait-api">
+<h2>二、等待API(Wait API)<a class="headerlink" href="#api-wait-api" title="此标题的永久链接"></a></h2>
+<p>以下是可用于等待时钟域中给定事件的<code class="docutils literal notranslate"><span class="pre">ClockDomain</span></code>实用程序列表：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">时钟域等待函数</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>waitSampling([cyclesCount])</code></td>
+<td style="text-align: center;">一直等待直到<code>ClockDomain</code>采样(active clock edge &amp;&amp; deassertReset &amp;&amp; assertClockEnable)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>waitRisingEdge([cyclesCount])</code></td>
+<td style="text-align: center;">等待<code>cyclesCount</code>个时钟上升沿, <code>cyclesCount</code>默认是1周期。注意, <code>cyclesCount=0</code>是合法的, 并且该函数对reset/softReset/clockEnable不敏感</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>waitFallingEdge([cyclesCount])</code></td>
+<td style="text-align: center;">与<code>waitRisingEdge</code>相同但是针对下降沿</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>waitActiveEdge([cyclesCount])</code></td>
+<td style="text-align: center;">与<code>waitRisingEdge</code>相同但是针对由<code>ClockDomainConfig</code>指定的边沿</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>waitRisingEdgeWhere(condition)</code></td>
+<td style="text-align: center;">与<code>waitRisingEdge</code>相同但要是退出, 当上升沿触发Boolean<code>condition</code>必须为真</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>waitFallingEdgeWhere(condition)</code></td>
+<td style="text-align: center;">与<code>waitRisingEdgeWhere</code>相同但是针对下降沿</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>waitActiveEdgeWhere(condition)</code></td>
+<td style="text-align: center;">与<code>waitRisingEdgeWhere</code>相同但是针对由<code>ClockDomainConfig</code>指定的边沿</td>
+</tr>
+</tbody>
+</table><blockquote>
+<div><p>注意：所有的等待API的功能只能从线程内部调用, 不能从传回调用。</p>
+</div></blockquote>
+</section>
+<section id="api-callback-api">
+<h2>三、传回API(Callback API)<a class="headerlink" href="#api-callback-api" title="此标题的永久链接"></a></h2>
+<p>以下是可以用于传回时钟域中给定事件的<code class="docutils literal notranslate"><span class="pre">ClockDomain</span></code>实用程序列表：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">时钟域传回函数</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>onNextSampling{ callback }</code></td>
+<td style="text-align: center;">只在下一个<code>ClockDomain</code>采样时执行传回代码(active edge + reset off + clock enable on)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>onSamplings{ callback }</code></td>
+<td style="text-align: center;">每次<code>ClockDomain</code>采样时执行传回代码(active edge + reset off + clock enable on)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>onActiveEdges{ callback }</code></td>
+<td style="text-align: center;">每次<code>ClockDomain</code>生成配置边沿时执行传回代码</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>onEdges{ callback }</code></td>
+<td style="text-align: center;">每次<code>ClockDomain</code>生成上升或下降边沿时执行传回代码</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>onRisingEdges{ callback }</code></td>
+<td style="text-align: center;">每次<code>ClockDomain</code>生成上升边沿时执行传回代码</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>onFallingEdges{ callback }</code></td>
+<td style="text-align: center;">每次<code>ClockDomain</code>生成下降边沿时执行传回代码</td>
+</tr>
+</tbody>
+</table></section>
+<section id="default-clockdomain">
+<h2>四、默认时钟域(Default ClockDomain)<a class="headerlink" href="#default-clockdomain" title="此标题的永久链接"></a></h2>
+<p>你可以如下所示访存顶层的默认<code class="docutils literal notranslate"><span class="pre">ClockDomain</span></code>：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">//线程分叉以产生复位的例子, 并且之后每5个单位时间翻转一次时钟。</span>
+<span class="c1">//dut.clockDomain参考在模块例化期间产生的隐含的时钟域</span>
+<span class="n">fork</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">dut</span><span class="p">.</span><span class="n">clockDomain</span><span class="p">.</span><span class="n">assertReset</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="n">dut</span><span class="p">.</span><span class="n">clockDomain</span><span class="p">.</span><span class="n">fallingEdge</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">dut</span><span class="p">.</span><span class="n">clockDomain</span><span class="p">.</span><span class="n">clockToggle</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>备注：你也可以直接分化一个标准reset/clock进程：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="n">dut</span><span class="p">.</span><span class="n">clockDomain</span><span class="p">.</span><span class="n">forkStimulus</span><span class="p">(</span><span class="n">period</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>下例所如何等待时钟上升沿的例子：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="n">dut</span><span class="p">.</span><span class="n">clockDomain</span><span class="p">.</span><span class="n">waitRisingEdge</span><span class="p">()</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="new-clockdomain">
+<h2>五、新时钟域(New ClockDomain)<a class="headerlink" href="#new-clockdomain" title="此标题的永久链接"></a></h2>
+<p>如果你顶层定义了一些时钟并且复位输入没有直接集成到<code class="docutils literal notranslate"><span class="pre">ClockDomain</span></code>中, 你可以直接在testbench中定义他们对应的<code class="docutils literal notranslate"><span class="pre">ClockDomain</span></code>：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">//在testbench中</span>
+<span class="nc">ClockDomain</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">coreClk</span><span class="p">,</span><span class="w"> </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">coreReset</span><span class="p">).</span><span class="n">forkStimulus</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E8%AE%BF%E9%97%AE%E4%BB%BF%E7%9C%9F%E4%BF%A1%E5%8F%B7.html" class="btn btn-neutral float-left" title="访问仿真信号(Accessing signals of the simulation)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E6%BB%A1%E7%BA%BF%E7%A8%8BAPI.html" class="btn btn-neutral float-right" title="满线程API(Thread-full API)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

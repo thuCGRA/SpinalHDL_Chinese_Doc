@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>总线(bus) &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="Com" href="Com.html" />
+    <link rel="prev" title="中断设计规范(Interrupt Design Spec)" href="%E4%B8%AD%E6%96%AD%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Libraries(库)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E7%AE%80%E4%BB%8B.html">简介</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7.html">Utils(实用工具)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%B5%81%E5%BC%8F.html">流(Stream)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%B5%81.html">Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%89%87%E6%AE%B5.html">片段(Fragment)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%8A%B6%E6%80%81%E6%9C%BA.html">状态机(State machine)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="VexRiscv.html">VexRiscv(RV32IM CPU)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BB%8E%E7%AB%AF%E6%80%BB%E7%BA%BF%E5%BA%93.html">从端总线库(Bus Slave Factory)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%BA%A4%E7%A8%8B%E6%A1%86%E6%9E%B6.html">纤程框架(Fiber Framework)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%B3%BB%E7%BB%9F.html">二进制系统(Binary System)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AF%84%E5%AD%98%E5%99%A8%E6%8E%A5%E5%8F%A3.html">寄存器接口(RegIf)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%B8%AD%E6%96%AD%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.html">中断设计规范(Interrupt Design Spec)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">总线(bus)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ahb-lite3">一、AHB-Lite3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#apb3">二、Apb3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#avalonmm">四、AvalonMM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Com.html">Com</a></li>
+<li class="toctree-l2"><a class="reference internal" href="IO%E5%8F%A3.html">IO口</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%9B%BE%E5%BD%A2.html">图形(Graphics)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E8%87%AA%E5%8A%A8%E8%AE%BE%E8%AE%A1%E5%B7%A5%E5%85%B7.html">自动设计工具(EDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Misc.html">Misc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Libraries(库)</a> &raquo;</li>
+      <li>总线(bus)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/库/总线.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="bus">
+<h1>总线(bus)<a class="headerlink" href="#bus" title="此标题的永久链接"></a></h1>
+<section id="ahb-lite3">
+<h2>一、AHB-Lite3<a class="headerlink" href="#ahb-lite3" title="此标题的永久链接"></a></h2>
+<ol>
+<li><p>配置与实例化(Configuration and instanciation)</p>
+<p>首先, 每次创建AHB-Lite3总线时, 都需要一个配置对象。这个配置对象是一个<code class="docutils literal notranslate"><span class="pre">AhbLite3Config</span></code>, 有以下参数:
+|    参数名    | 类型  | 默认值 |         描述          |
+| :———-: | :—: | :—-: | :——————-: |
+| addressWidth |  Int  |        | HADDR的位宽(字节粒度) |
+|  dataWidth   |  Int  |        | HWDATA和HRDATA的位宽  |</p>
+<p>简而言之, 在SpinalHDL库中AHB-Lite3总线是如下定义的:</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AhbLite3</span><span class="p">(</span><span class="n">config</span><span class="p">:</span><span class="w"> </span><span class="nc">AhbLite3Config</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="nc">IMasterSlave</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//  地址和控制</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">HADDR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">addressWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">HSEL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">HREADY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">HWRITE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">HSIZE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">3</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">HBURST</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">3</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">HPROT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">HTRANS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">HMASTLOCK</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//  数据</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">HWDATA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">dataWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">HRDATA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">dataWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//  传输回答</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">HREADYOUT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">HRESP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">asMaster</span><span class="p">():</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">out</span><span class="p">(</span><span class="nc">HADDR</span><span class="p">,</span><span class="nc">HWRITE</span><span class="p">,</span><span class="nc">HSIZE</span><span class="p">,</span><span class="nc">HBURST</span><span class="p">,</span><span class="nc">HPROT</span><span class="p">,</span><span class="nc">HTRANS</span><span class="p">,</span><span class="nc">HMASTLOCK</span><span class="p">,</span><span class="nc">HWDATA</span><span class="p">,</span><span class="nc">HREADY</span><span class="p">,</span><span class="nc">HSEL</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">in</span><span class="p">(</span><span class="nc">HREADYOUT</span><span class="p">,</span><span class="nc">HRESP</span><span class="p">,</span><span class="nc">HRDATA</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>简单的使用样例：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">ahbConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">AhbLite3Config</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">addressWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">dataWidth</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">ahbX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">AhbLite3</span><span class="p">(</span><span class="n">ahbConfig</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">ahbY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">AhbLite3</span><span class="p">(</span><span class="n">ahbConfig</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">when</span><span class="p">(</span><span class="n">ahbY</span><span class="p">.</span><span class="nc">HSEL</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//...</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>变式(Variations)</p>
+<p>有一个AhbLite3Master变体。唯一的区别是没有<code class="docutils literal notranslate"><span class="pre">HREADYOUT</span></code>信号。当互连线和从端口使用<code class="docutils literal notranslate"><span class="pre">AhbLite3</span></code>时, 这个变式应该只被master使用。</p>
+</li>
+</ol>
+</section>
+<section id="apb3">
+<h2>二、Apb3<a class="headerlink" href="#apb3" title="此标题的永久链接"></a></h2>
+<ol>
+<li><p>简介</p>
+<p>AMBA3-APB总线通常用于连接低带宽外设。</p>
+</li>
+<li><p>配置和实例化</p>
+<p>首先, 每次创建APB3总线时, 都需要一个配置对象。这个配置对象是<code class="docutils literal notranslate"><span class="pre">Apb3Config</span></code>, 有以下参数:
+|    参数名     |  类型   | 默认值 |         描述          |
+| :———–: | :—–: | :—-: | :——————-: |
+| addressWidth  |   Int   |        | HADDR的位宽(字节粒度) |
+|   dataWidth   |   Int   |        | PWDATA和PRDATA的位宽  |
+|   selWidth    |   Int   |   1    |      PSEL的位宽       |
+| useSlaveError | Boolean | false  |     指定PSLVERROR     |</p>
+<p>简而言之, APB3总线在SpinalHDL库中定义的方式如下:</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Apb3</span><span class="p">(</span><span class="n">config</span><span class="p">:</span><span class="w"> </span><span class="nc">Apb3Config</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="nc">IMasterSlave</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">PADDR</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">addressWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">PSEL</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">selWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">PENABLE</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">PREADY</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">PWRITE</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">PWDATA</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">dataWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">PRDATA</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">dataWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">PSLVERROR</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">useSlaveError</span><span class="p">)</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//...</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>简单的使用样例：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">apbConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Apb3Config</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">addressWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">dataWidth</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">apbX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Apb3</span><span class="p">(</span><span class="n">apbConfig</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">apbY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Apb3</span><span class="p">(</span><span class="n">apbConfig</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">when</span><span class="p">(</span><span class="n">apbY</span><span class="p">.</span><span class="nc">PENABLE</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//...</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>函数和运算(Functions and operators)</p></li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">参数名</th>
+<th style="text-align: center;">返回</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">X &gt;&gt; Y</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">连接X到Y。Y的地址可以小于X</td>
+</tr>
+<tr>
+<td style="text-align: center;">X &lt;&lt; Y</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">做与&gt;&gt;相反的操作</td>
+</tr>
+</tbody>
+</table>
+<h3>三、Axi4</h3><ol>
+<li><p>简介</p>
+<p>AXI4是ARM定义的高带宽总线</p>
+</li>
+<li><p>配置和实例化</p>
+<p>首先, 每次创建AXI4总线时, 都需要一个配置对象。这个配置对象是一个<code class="docutils literal notranslate"><span class="pre">Axi4Config</span></code>, 它有以下参数:
+注意:useXXX 指定总线是否有 XXX 信号。</p>
+</li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">参数名</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">addressWidth</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;">dataWidth</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;">idWidth</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;">userWidth</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;">useld</td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: center;">true</td>
+</tr>
+<tr>
+<td style="text-align: center;">useRegion</td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: center;">true</td>
+</tr>
+<tr>
+<td style="text-align: center;">useBurst</td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: center;">true</td>
+</tr>
+<tr>
+<td style="text-align: center;">useLock</td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: center;">true</td>
+</tr>
+<tr>
+<td style="text-align: center;">useCache</td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: center;">true</td>
+</tr>
+<tr>
+<td style="text-align: center;">useSize</td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: center;">true</td>
+</tr>
+<tr>
+<td style="text-align: center;">useQos</td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: center;">true</td>
+</tr>
+<tr>
+<td style="text-align: center;">useLen</td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: center;">true</td>
+</tr>
+<tr>
+<td style="text-align: center;">useLast</td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: center;">true</td>
+</tr>
+<tr>
+<td style="text-align: center;">useResp</td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: center;">true</td>
+</tr>
+<tr>
+<td style="text-align: center;">useProt</td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: center;">true</td>
+</tr>
+<tr>
+<td style="text-align: center;">useStrb</td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: center;">true</td>
+</tr>
+<tr>
+<td style="text-align: center;">useUser</td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: center;">false</td>
+</tr>
+</tbody>
+</table><p>简而言之, SpinalHDL库中定义AXI4总线的方式如下:</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Axi4</span><span class="p">(</span><span class="n">config</span><span class="p">:</span><span class="w"> </span><span class="nc">Axi4Config</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="nc">IMasterSlave</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">aw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Axi4Aw</span><span class="p">(</span><span class="n">config</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">w</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Axi4W</span><span class="p">(</span><span class="n">config</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">b</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Axi4B</span><span class="p">(</span><span class="n">config</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">ar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Axi4Ar</span><span class="p">(</span><span class="n">config</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">r</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Axi4R</span><span class="p">(</span><span class="n">config</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">asMaster</span><span class="p">():</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">master</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span><span class="n">aw</span><span class="p">,</span><span class="n">w</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">slave</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>简单的使用样例：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">axiConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Axi4Config</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">addressWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">dataWidth</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">idWidth</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">axiX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Axi4</span><span class="p">(</span><span class="n">axiConfig</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">axiY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Axi4</span><span class="p">(</span><span class="n">axiConfig</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">when</span><span class="p">(</span><span class="n">axiY</span><span class="p">.</span><span class="n">aw</span><span class="p">.</span><span class="n">valid</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//...</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<ol>
+<li><p>变式</p>
+<p>Axi4总线有三个变式：</p>
+</li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Axi4ReadOnly</td>
+<td style="text-align: center;">只有AR和R通道在</td>
+</tr>
+<tr>
+<td style="text-align: center;">Axi4WriteOnly</td>
+<td style="text-align: center;">只有AW、W和B通道在</td>
+</tr>
+<tr>
+<td style="text-align: center;">Axi4Shared</td>
+<td style="text-align: center;">这种变式是该库的首创。<br>它使用4个通道, W, B,R, 还有一个名为AWR的新通道。<br>AWR通道可以用来传输AR和AW事务。要分离它们, 需要一个信号<code>write</code>。<br>这种Axi4Shared变体的优点是使用更少的面积, 尤其是在互连方面。</td>
+</tr>
+</tbody>
+</table><ol class="simple">
+<li><p>函数与操作</p></li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">参数名</th>
+<th style="text-align: center;">返回</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">X &gt;&gt; Y</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">连接X到Y。能够像AXI4规范中指定的那样推断默认值, 并以安全的方式调整一些宽度。</td>
+</tr>
+<tr>
+<td style="text-align: center;">X &lt;&lt; Y</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">做与&gt;&gt;相反的操作</td>
+</tr>
+<tr>
+<td style="text-align: center;">X.toWriteOnly</td>
+<td style="text-align: center;">Axi4WriteOnly</td>
+<td style="text-align: center;">返回一个由X驱动的Axi4WriteOnly总线</td>
+</tr>
+<tr>
+<td style="text-align: center;">X.toReadOnly</td>
+<td style="text-align: center;">Axi4ReadOnly</td>
+<td style="text-align: center;">返回一个由X驱动的Axi4ReadOnly总线</td>
+</tr>
+</tbody>
+</table></section>
+<section id="avalonmm">
+<h2>四、AvalonMM<a class="headerlink" href="#avalonmm" title="此标题的永久链接"></a></h2>
+<ol>
+<li><p>简介</p>
+<p>AvalonMM总线非常适合FPGA。它非常灵活:</p>
+<ul class="simple">
+<li><p>与APB一样简单</p></li>
+<li><p>在许多需要带宽的应用程序中, 比AHB表现更好, 因为AvalonMM有一种模式, 可以从命令中解耦读响应(减少延迟读延迟的影响)。</p></li>
+<li><p>性能不如AXI, 但使用的面积少得多(读写命令使用相同的握手通道。主端口不需要存储挂起请求的地址以避免读/写风险)</p></li>
+</ul>
+</li>
+<li><p>配置和实例化</p>
+<p>AvalonMM Bundle有一个构造参数<code class="docutils literal notranslate"><span class="pre">AvalonMMConfig</span></code>。由于Avalon总线的灵活性, <code class="docutils literal notranslate"><span class="pre">AvalonMMConfig</span></code>可以作为许多配置元素。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AvalonMMConfig</span><span class="p">(</span><span class="w"> </span><span class="n">addressWidth</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">dataWidth</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">burstCountWidth</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">useByteEnable</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">useDebugAccess</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">useRead</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">useWrite</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">useResponse</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">useLock</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">useWaitRequestn</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">useReadDataValid</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">useBurstCount</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="c1">//useEndOfPacket : Boolean,</span>
+
+<span class="w">                       </span><span class="n">addressUnits</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">AddressUnits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">symbols</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">burstCountUnits</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">AddressUnits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">words</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">burstOnBurstBoundariesOnly</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">constantBurstBehavior</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">holdTime</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">linewrapBursts</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">maximumPendingReadTransactions</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">maximumPendingWriteTransactions</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="c1">// unlimited</span>
+<span class="w">                       </span><span class="n">readLatency</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">readWaitTime</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">setupTime</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="n">writeWaitTime</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">                       </span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>这样的配置类也有一些函数：</p>
+</li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">函数名</th>
+<th style="text-align: center;">返回</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">getReadOnlyConfig</td>
+<td style="text-align: center;">AvalonMMConfig</td>
+<td style="text-align: center;">返回一个类似的配置, 但禁用所有写入属性。</td>
+</tr>
+<tr>
+<td style="text-align: center;">getWriteOnlyConfig</td>
+<td style="text-align: center;">AvalonMMConfig</td>
+<td style="text-align: center;">返回一个类似的配置, 但禁用所有读属性</td>
+</tr>
+</tbody>
+</table>
+<p>这个配置对象也有一些函数来提供一些AvalonMMConfig模板:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">函数名</th>
+<th style="text-align: center;">返回</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">fixed(addressWidth,dataWidth,readLatency)</td>
+<td style="text-align: center;">AvalonMMConfig</td>
+<td style="text-align: center;">返回一个具有固定读取时间的简单配置。</td>
+</tr>
+<tr>
+<td style="text-align: center;">pipelined(addressWidth,dataWidth)</td>
+<td style="text-align: center;">AvalonMMConfig</td>
+<td style="text-align: center;">返回一个配置, 读取延迟可变</td>
+</tr>
+<tr>
+<td style="text-align: center;">bursted(addressWidth,dataWidth,burstCountWidth)</td>
+<td style="text-align: center;">AvalonMMConfig</td>
+<td style="text-align: center;">返回一个具有可变延迟读取和突发功能的配置</td>
+</tr>
+</tbody>
+</table><div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">// 创建一个只写的AvalonMM配置, 具有突发能力和字节使能</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">myAvalonConfig</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="nc">AvalonMMConfig</span><span class="p">.</span><span class="n">bursted</span><span class="p">(</span><span class="w"></span>
+<span class="w">                    </span><span class="n">addressWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">addressWidth</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="n">dataWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">memDataWidth</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="n">burstCountWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">log2Up</span><span class="p">(</span><span class="n">burstSize</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">                  </span><span class="p">).</span><span class="n">copy</span><span class="p">(</span><span class="w"></span>
+<span class="w">                    </span><span class="n">useByteEnable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="n">constantBurstBehavior</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="n">burstOnBurstBoundariesOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="w">                  </span><span class="p">).</span><span class="n">getWriteOnlyConfig</span><span class="w"></span>
+
+<span class="c1">// 创建一个利用该配置的总线实例</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">bus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">AvalonMM</span><span class="p">(</span><span class="n">myAvalonConfig</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E4%B8%AD%E6%96%AD%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.html" class="btn btn-neutral float-left" title="中断设计规范(Interrupt Design Spec)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Com.html" class="btn btn-neutral float-right" title="Com" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

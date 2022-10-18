@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>开始入门(Getting Started) &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="表现(Presentation)" href="%E8%A1%A8%E7%8E%B0.html" />
+    <link rel="prev" title="开始入门(Getting Started)" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">开始入门(Getting Started)</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">开始入门(Getting Started)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements-things-to-download-to-get-started">一、开始所要下载的必要条件/事情(Requirements/Things to download to get started)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spinalhdl-how-to-start-programming-with-spinalhdl">二、如何开始用SpinalHDL编程(How to start programming with SpinalHDL)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spinalhdl-a-very-simple-spinalhdl-example">三、一个非常简单的SpinalHDL例子(A very simple SpinalHDL example)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-to-do-next">四、接下来做什么?(What to do next?)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E8%A1%A8%E7%8E%B0.html">表现(Presentation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%9B%AE%E7%9A%84.html">目的(Motivation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Scala%E6%8C%87%E5%AF%BC%E6%89%8B%E5%86%8C.html">Scala指导手册(Scala Guide)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AF%B9VHDL%E7%9A%84%E6%94%AF%E6%8C%81.html">对VHDL的支持(Help for VHDL people)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">开始入门(Getting Started)</a> &raquo;</li>
+      <li>开始入门(Getting Started)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/开始入门/开始入门.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started">
+<h1>开始入门(Getting Started)<a class="headerlink" href="#getting-started" title="此标题的永久链接"></a></h1>
+<p>SpinalHDL 是一种用 Scala 编写的硬件描述语言, Scala 是一种使用 Java 虚拟机 (JVM) 的静态类型功能语言。 为了开始使用 SpinalHDL 进行编程, 你必须拥有 JVM 以及 Scala 编译器。 在下一节中, 我们将说明如果你还没有这些工具, 如何下载它们。</p>
+<section id="requirements-things-to-download-to-get-started">
+<h2>一、开始所要下载的必要条件/事情(Requirements/Things to download to get started)<a class="headerlink" href="#requirements-things-to-download-to-get-started" title="此标题的永久链接"></a></h2>
+<p>在你下载SpinalHDL工具之前, 你应该安装：</p>
+<ul class="simple">
+<li><p>Java JDK</p></li>
+<li><p>Scala 2.11.X版本</p></li>
+<li><p>SBT搭建工具</p></li>
+</ul>
+<p>可选择：</p>
+<ul class="simple">
+<li><p>推荐你用带有Scala接口的IntelliJ IDEA</p></li>
+<li><p>Git, 用来版本控制</p></li>
+</ul>
+</section>
+<section id="spinalhdl-how-to-start-programming-with-spinalhdl">
+<h2>二、如何开始用SpinalHDL编程(How to start programming with SpinalHDL)<a class="headerlink" href="#spinalhdl-how-to-start-programming-with-spinalhdl" title="此标题的永久链接"></a></h2>
+<p>下载所有要求后, 有两种方法可以开始 SpinalHDL 编程。</p>
+<ul class="simple">
+<li><p>SBT方式：如果你已经熟悉 SBT 构建系统和/或如果你不需要 IDE；</p></li>
+<li><p>IDE方式：获取已经在 IDE 中为你设置的项目并立即开始编程。</p></li>
+</ul>
+<ol>
+<li><p>SBT方式(SBT way)</p>
+<p>我们在 Github 上为你准备了一个现成的项目。</p>
+<ul class="simple">
+<li><p>clone或下载”getting started”仓库；</p></li>
+<li><p>在它的根目录中打开一个终端并运行<code class="docutils literal notranslate"><span class="pre">sbt</span> <span class="pre">run</span></code>。 当你第一次执行它时, 该过程可能需要一些时间, 因为它将下载运行SpinalHDL所需的所有依赖项。</p></li>
+</ul>
+<p>正常情况下, 这个命令必定生成一个输出文件<code class="docutils literal notranslate"><span class="pre">MyTopLevel.vhd</span></code>, 对应<code class="docutils literal notranslate"><span class="pre">src\main\scala\MyCode.scala</span></code>中定义的顶层SpinalHDL代码, 对应最简单的SpinalHDL例子。</p>
+<p>在干净的Debian发行版中, 你可以在shell中键入以下命令。这些命令将安装 ava、Scala、SBT, 下载基础项目, 并生成相应的VHDL文件。如果你第一次运行它需要一些时间, 请不担心。</p>
+<div class="highlight-Linux notranslate"><div class="highlight"><pre><span></span>sudo apt-get install openjdk-8-jdk
+sudo apt-get install scala
+echo &quot;deb https://repo.scala-sbt.org/scalasbt/debian all main&quot; | sudo tee /etc/apt/sources.list.d/sbt.list
+echo &quot;deb https://repo.scala-sbt.org/scalasbt/debian /&quot; | sudo tee /etc/apt/sources.list.d/sbt_old.list
+curl -sL &quot;https://keyserver.ubuntu.com/pks/lookup?op=get&amp;search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823&quot; | sudo apt-key add
+sudo apt-get update
+sudo apt-get install sbt
+git clone https://github.com/SpinalHDL/SpinalTemplateSbt.git SpinalTemplateSbt
+cd SpinalTemplateSbt
+sbt run   # select &quot;mylib.MyTopLevelVhdl&quot; in the menu
+ls MyTopLevel.vhd
+</pre></div>
+</div>
+<p><strong>离线SBT环境</strong></p>
+<p>通常, SBT使用在线存储库来下载和缓存你的项目依赖项, 此缓存位于你的<code class="docutils literal notranslate"><span class="pre">home/.ivy2</span></code>文件夹中。设置无互联网环境的方法是从缓存已被填充一次的互联网完整环境中复制此缓存, 然将其复制到你的无互联网环境中。</p>
+<p>可移植的SBT搭建途径：https://www.scala-sbt.org/download.html</p>
+</li>
+<li><p>用带有Scala接口的IntelliJ IDEA的IDE方式(The IDE way, with IntelliJ IDEA and its Scala plugin)</p>
+<p>除了上述要求外, 还需要下载IntelliJ IDEA(免费社区版就够了)。 安装IntelliJ后, 还要检查是否启用了它的Scala插件(可以在此处找到安装信息)。</p>
+<p>进行如下操作：</p>
+<ul class="simple">
+<li><p>clone或下载”getting started”仓库。</p></li>
+<li><p>在IntelliJ IDEA, 使用此存储库的根目录“import project”, 选择从外部模型SBT导入项目并确保选中所有框。</p></li>
+<li><p>此外, 你可能需要指定一些路径, 例如将JDK安装到IntelliJ的位置。</p></li>
+<li><p>在项目(Intellij 项目 GUI)中, 右键单击<code class="docutils literal notranslate"><span class="pre">src/main/scala/mylib/MyTopLevel.scala</span></code>并选择“Run MyTopLevel”。</p></li>
+</ul>
+<p>这应该会在项目目录中生成输出文件<code class="docutils literal notranslate"><span class="pre">MyTopLevel.vhd</span></code>, 它实现了一个简单的 8 位计数器。</p>
+</li>
+</ol>
+</section>
+<section id="spinalhdl-a-very-simple-spinalhdl-example">
+<h2>三、一个非常简单的SpinalHDL例子(A very simple SpinalHDL example)<a class="headerlink" href="#spinalhdl-a-very-simple-spinalhdl-example" title="此标题的永久链接"></a></h2>
+<p>以下代码生成有两个1-bit输入<code class="docutils literal notranslate"><span class="pre">and</span></code>门：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="n">_</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AND_Gate</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">  </span><span class="cm">/**</span>
+<span class="cm">    * This is the component definition that corresponds to</span>
+<span class="cm">    * the VHDL entity of the component</span>
+<span class="cm">    */</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// Here we define some asynchronous logic</span>
+<span class="w">  </span><span class="n">io</span><span class="p">.</span><span class="n">c</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="n">&amp;</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">b</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">object</span><span class="w"> </span><span class="nc">AND_Gate</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// Let&#39;s go</span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nc">SpinalVhdl</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">AND_Gate</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>如你所见, 你必须在SpinalHDL中编写的第一行是<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">spinal.core._</span></code>, 这表明我们正在使用文件中的Spinal组件。</p>
+<ol>
+<li><p>生成代码(Generated code)</p>
+<p>一旦你成功编译代码, 编译器会生成如下VHDL代码：</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="n">pkg_enum</span><span class="w"> </span><span class="n">is</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="k">end</span><span class="w"> </span><span class="n">pkg_enum</span><span class="p">;</span><span class="w"></span>
+
+<span class="kn">package</span> <span class="n">pkg_scala2hdl</span><span class="w"> </span><span class="n">is</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="k">end</span><span class="w">  </span><span class="n">pkg_scala2hdl</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">library</span><span class="w"> </span><span class="n">ieee</span><span class="p">;</span><span class="w"></span>
+<span class="n">use</span><span class="w"> </span><span class="n">ieee</span><span class="p">.</span><span class="n">std_logic_1164</span><span class="p">.</span><span class="n">all</span><span class="p">;</span><span class="w"></span>
+<span class="n">use</span><span class="w"> </span><span class="n">ieee</span><span class="p">.</span><span class="n">numeric_std</span><span class="p">.</span><span class="n">all</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">library</span><span class="w"> </span><span class="n">work</span><span class="p">;</span><span class="w"></span>
+<span class="n">use</span><span class="w"> </span><span class="n">work</span><span class="p">.</span><span class="n">pkg_scala2hdl</span><span class="p">.</span><span class="n">all</span><span class="p">;</span><span class="w"></span>
+<span class="n">use</span><span class="w"> </span><span class="n">work</span><span class="p">.</span><span class="n">all</span><span class="p">;</span><span class="w"></span>
+<span class="n">use</span><span class="w"> </span><span class="n">work</span><span class="p">.</span><span class="n">pkg_enum</span><span class="p">.</span><span class="n">all</span><span class="p">;</span><span class="w"></span>
+
+
+<span class="n">entity</span><span class="w"> </span><span class="n">AND_Gate</span><span class="w"> </span><span class="n">is</span><span class="w"></span>
+<span class="n">port</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">io_a</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">io_b</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">io_c</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="n">std_logic</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+<span class="k">end</span><span class="w"> </span><span class="n">AND_Gate</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">architecture</span><span class="w"> </span><span class="n">arch</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">AND_Gate</span><span class="w"> </span><span class="n">is</span><span class="w"></span>
+
+<span class="k">begin</span><span class="w"></span>
+<span class="n">io_c</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">(</span><span class="n">io_a</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">io_b</span><span class="p">);</span><span class="w"></span>
+<span class="k">end</span><span class="w"> </span><span class="n">arch</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="what-to-do-next">
+<h2>四、接下来做什么?(What to do next?)<a class="headerlink" href="#what-to-do-next" title="此标题的永久链接"></a></h2>
+<p>这取决于你, 但为什么不看看SpinalHDL中的类型或发现该语言提供哪些原语来描述硬件组件呢？ 你还可以查看我们的示例, 了解你接下来可以做什么的一些示例。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="开始入门(Getting Started)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E8%A1%A8%E7%8E%B0.html" class="btn btn-neutral float-right" title="表现(Presentation)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

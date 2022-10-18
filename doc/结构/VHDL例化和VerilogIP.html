@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VHDL例化和Verilog IP(Instantiate VHDL and Verilog IP) &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="保留名称(Preserving names)" href="%E4%BF%9D%E7%95%99%E5%90%8D%E7%A7%B0.html" />
+    <link rel="prev" title="时钟域(Clock domains)" href="%E6%97%B6%E9%92%9F%E5%9F%9F.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">结构(Structuring)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9D%97%E5%92%8C%E5%B1%82%E6%AC%A1.html">模块和层次(Component and hierarchy)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%8C%BA%E5%9F%9F.html">区域(Area)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%87%BD%E6%95%B0.html">函数(Function)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%97%B6%E9%92%9F%E5%9F%9F.html">时钟域(Clock domains)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">VHDL例化和Verilog IP(Instantiate VHDL and Verilog IP)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">一、描述(Description)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#defining-an-blackbox">二、定义黑盒(Defining an blackbox)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generics">三、范式(Generics)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#instantiating-a-blackbox">四、例化黑盒(Instantiating a blackbox)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clock-and-reset-mapping">五、时钟和复位的布局(Clock and reset mapping)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#io-io-prefix">六、io前缀(io prefix)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#io-rename-all-io-of-a-blackbox">七、重命名黑盒的所有io(Rename all io of a blackbox)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rtl-add-rtl-source">八、添加RTL源(Add RTL source)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vhdl-vhdl-no-numeric-type">九、VHDL——非数字类型(VHDL-No numeric type)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BF%9D%E7%95%99%E5%90%8D%E7%A7%B0.html">保留名称(Preserving names)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%8F%82%E6%95%B0%E5%8C%96.html">参数化(Parametrization)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">结构(Structuring)</a> &raquo;</li>
+      <li>VHDL例化和Verilog IP(Instantiate VHDL and Verilog IP)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/结构/VHDL例化和VerilogIP.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="vhdlverilog-ip-instantiate-vhdl-and-verilog-ip">
+<h1>VHDL例化和Verilog IP(Instantiate VHDL and Verilog IP)<a class="headerlink" href="#vhdlverilog-ip-instantiate-vhdl-and-verilog-ip" title="此标题的永久链接"></a></h1>
+<section id="description">
+<h2>一、描述(Description)<a class="headerlink" href="#description" title="此标题的永久链接"></a></h2>
+<p>黑盒(blackbox)允许使用者把已有的VHDL/Verilog模块通过指定接口集成到当前设计中, 这种调用的正确描述取决于仿真器或综合器。</p>
+</section>
+<section id="defining-an-blackbox">
+<h2>二、定义黑盒(Defining an blackbox)<a class="headerlink" href="#defining-an-blackbox" title="此标题的永久链接"></a></h2>
+<p>一个定义黑盒的例子如下所示：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">//定义Ram黑盒</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Ram_1w_1r</span><span class="p">(</span><span class="n">wordWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"> </span><span class="n">wordCount</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">BlackBox</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//给黑盒增加VHDL范式/Verilog参数</span>
+<span class="w">    </span><span class="c1">//你可以用String, Int, Double, Boolean和所有基于SpinalHDL的类型作为参数值</span>
+<span class="w">    </span><span class="n">addGeneric</span><span class="p">(</span><span class="s">&quot;wordCount&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">wordCount</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">addGeneric</span><span class="p">(</span><span class="s">&quot;wordWidth&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">wordWidth</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//定义VHDL通道的io/Verilog模块</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">clk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">wr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">en</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">log2Up</span><span class="p">(</span><span class="n">wordCount</span><span class="p">)</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="n">wordWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">rd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">en</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">log2Up</span><span class="p">(</span><span class="n">wordCount</span><span class="p">)</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="n">wordWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//把当前时钟域映射到io.clk引脚</span>
+<span class="w">    </span><span class="n">mapClockDomain</span><span class="p">(</span><span class="n">clock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">clk</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">Ram_1w_1r</span><span class="w"> </span><span class="p">#(</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">wordCount</span><span class="p">(</span><span class="mh">4</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">wordWidth</span><span class="p">(</span><span class="mh">4</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_clk</span><span class="w">     </span><span class="p">(</span><span class="n">clk</span><span class="w">                 </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_wr_en</span><span class="w">   </span><span class="p">(</span><span class="n">wren</span><span class="w">                </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_wr_addr</span><span class="w"> </span><span class="p">(</span><span class="n">wraddr</span><span class="p">[</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">         </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_wr_data</span><span class="w"> </span><span class="p">(</span><span class="n">wrdata</span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">         </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_rd_en</span><span class="w">   </span><span class="p">(</span><span class="n">rden</span><span class="w">                </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_rd_addr</span><span class="w"> </span><span class="p">(</span><span class="n">rdaddr</span><span class="p">[</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">         </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_rd_data</span><span class="w"> </span><span class="p">(</span><span class="n">test_io_rd_data</span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">])</span><span class="w">  </span><span class="c1">//o</span>
+<span class="w">  </span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>在VHDL, <code class="docutils literal notranslate"><span class="pre">Bool</span></code>信号类型会被翻译成<code class="docutils literal notranslate"><span class="pre">std_logic</span></code>, <code class="docutils literal notranslate"><span class="pre">Bits</span></code>会被翻译成<code class="docutils literal notranslate"><span class="pre">std_logic_vector</span></code>。如果你想得到<code class="docutils literal notranslate"><span class="pre">std_ulogic</span></code>, 你需要用<code class="docutils literal notranslate"><span class="pre">BlackBoxULogic</span></code>而不是<code class="docutils literal notranslate"><span class="pre">BlackBox</span></code>。</p>
+<p>在Verilog中, <code class="docutils literal notranslate"><span class="pre">BlackBoxUlogic</span></code>没有影响。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Ram_1w_1r</span><span class="p">(</span><span class="n">wordWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"> </span><span class="n">wordCount</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">BlackBoxULogic</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="generics">
+<h2>三、范式(Generics)<a class="headerlink" href="#generics" title="此标题的永久链接"></a></h2>
+<p>有两种方式定义范式：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Ram</span><span class="p">(</span><span class="n">wordWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"> </span><span class="n">wordCount</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">BlackBox</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">addGeneric</span><span class="p">(</span><span class="s">&quot;wordCount&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">wordCount</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">addGeneric</span><span class="p">(</span><span class="s">&quot;wordWidth&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">wordWidth</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//或者</span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">generic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Generic</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">wordCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Ram</span><span class="p">.</span><span class="bp">this</span><span class="p">.</span><span class="n">wordCount</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">wordWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Ram</span><span class="p">.</span><span class="bp">this</span><span class="p">.</span><span class="n">wirdWidth</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="instantiating-a-blackbox">
+<h2>四、例化黑盒(Instantiating a blackbox)<a class="headerlink" href="#instantiating-a-blackbox" title="此标题的永久链接"></a></h2>
+<p>只需要像例化<code class="docutils literal notranslate"><span class="pre">Component</span></code>一样例化<code class="docutils literal notranslate"><span class="pre">BlackBox</span></code>：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">//创建顶层并例化Ram</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TopLevel</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">wr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">en</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">log2Up</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">rd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">en</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">log2Up</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//例化黑盒</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">ram</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Ram_1w_1r</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//连接所有信号</span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">wr</span><span class="p">.</span><span class="n">en</span><span class="w">    </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">ram</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">wr</span><span class="p">.</span><span class="n">en</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">wr</span><span class="p">.</span><span class="n">addr</span><span class="w">  </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">ram</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">wr</span><span class="p">.</span><span class="n">addr</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">wr</span><span class="p">.</span><span class="n">data</span><span class="w">    </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">ram</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">wr</span><span class="p">.</span><span class="n">data</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">rd</span><span class="p">.</span><span class="n">en</span><span class="w">  </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">ram</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">rd</span><span class="p">.</span><span class="n">en</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">rd</span><span class="p">.</span><span class="n">addr</span><span class="w">    </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">ram</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">rd</span><span class="p">.</span><span class="n">addr</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">rd</span><span class="p">.</span><span class="n">data</span><span class="w">  </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">ram</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">rd</span><span class="p">.</span><span class="n">data</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">object</span><span class="w"> </span><span class="nc">Main</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">]):</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nc">SpinalVhdl</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">TopLevel</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="k">module</span><span class="w"> </span><span class="n">MyTopLevel</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_wr_en</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">      </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_wr_addr</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">      </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_wr_data</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_rd_en</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">      </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_rd_addr</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">     </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_rd_data</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">clk</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">ram_io_rd_data</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">Ram_1w_1r</span><span class="w"> </span><span class="p">#(</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">wordCount</span><span class="p">(</span><span class="mh">16</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">wordWidth</span><span class="p">(</span><span class="mh">8</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="n">ram</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_clk</span><span class="w">     </span><span class="p">(</span><span class="n">clk</span><span class="w">                </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_wr_en</span><span class="w">   </span><span class="p">(</span><span class="n">io_wr_en</span><span class="w">           </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_wr_addr</span><span class="w"> </span><span class="p">(</span><span class="n">io_wr_addr</span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_wr_data</span><span class="w"> </span><span class="p">(</span><span class="n">io_wr_data</span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_rd_en</span><span class="w">   </span><span class="p">(</span><span class="n">io_rd_en</span><span class="w">           </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_rd_addr</span><span class="w"> </span><span class="p">(</span><span class="n">io_rd_addr</span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_rd_data</span><span class="w"> </span><span class="p">(</span><span class="n">ram_io_rd_data</span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">])</span><span class="w">  </span><span class="c1">//o</span>
+<span class="w">  </span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_rd_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ram_io_rd_data</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">endmodule</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="clock-and-reset-mapping">
+<h2>五、时钟和复位的布局(Clock and reset mapping)<a class="headerlink" href="#clock-and-reset-mapping" title="此标题的永久链接"></a></h2>
+<p>在你定义的黑盒中, 你需要清晰地定义出时钟和复位wire。为了能把<code class="docutils literal notranslate"><span class="pre">ClockDomain</span></code>的信号映射到对应的黑盒输入端, 你可以使用<code class="docutils literal notranslate"><span class="pre">mapClockDomain</span></code>或<code class="docutils literal notranslate"><span class="pre">mapCurrentClockDomain</span></code>函数。<code class="docutils literal notranslate"><span class="pre">mapClockDomain</span></code>有如下参数：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">参数名</th>
+<th style="text-align: center;">数据类型</th>
+<th style="text-align: center;">默认</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">clockDomain</td>
+<td style="text-align: center;">ClockDomain</td>
+<td style="text-align: center;">clockDomain.current</td>
+<td style="text-align: center;">指定提供信号的时钟域</td>
+</tr>
+<tr>
+<td style="text-align: center;">clock</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">Nothing</td>
+<td style="text-align: center;">连接时钟域时钟的黑盒输入</td>
+</tr>
+<tr>
+<td style="text-align: center;">reset</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">Nothing</td>
+<td style="text-align: center;">连接时钟域复位的黑盒输入</td>
+</tr>
+<tr>
+<td style="text-align: center;">enable</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">Nothing</td>
+<td style="text-align: center;">连接时钟域使能的黑盒输入</td>
+</tr>
+</tbody>
+</table><p><code class="docutils literal notranslate"><span class="pre">mapCurrentClockDomain</span></code>和<code class="docutils literal notranslate"><span class="pre">mapClockDomain</span></code>有着近乎相同的参数, 唯一区别是没有<code class="docutils literal notranslate"><span class="pre">clockDomain</span></code>。</p>
+<p>例如：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyRam</span><span class="p">(</span><span class="n">clkDomain</span><span class="p">:</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">BlackBox</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">clkA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="p">...</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">clkB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//A时钟映射在给定时钟域</span>
+<span class="w">    </span><span class="n">mapClockDomain</span><span class="p">(</span><span class="n">clkDomain</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">clkA</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//B时钟映射在当前时钟域</span>
+<span class="w">    </span><span class="n">mapCurrentClockDomain</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">clkB</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="io-io-prefix">
+<h2>六、io前缀(io prefix)<a class="headerlink" href="#io-io-prefix" title="此标题的永久链接"></a></h2>
+<p>为了避免在黑盒的IO口书写“io_”前缀, 也可以使用<code class="docutils literal notranslate"><span class="pre">noIoPrefix()</span></code>函数, 如下所示：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Ram_1w_1r</span><span class="p">(</span><span class="n">wordWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"> </span><span class="n">wordCount</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">BlackBox</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">generic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Generic</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">wordCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Ram_1w_1r</span><span class="p">.</span><span class="bp">this</span><span class="p">.</span><span class="n">wordCount</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">wordWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Ram_1w_1r</span><span class="p">.</span><span class="bp">this</span><span class="p">.</span><span class="n">wordWidth</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">clk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">wr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">en</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">log2Up</span><span class="p">(</span><span class="n">_wordCount</span><span class="p">)</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="n">_wordWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">rd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">en</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">log2Up</span><span class="p">(</span><span class="n">_wordCount</span><span class="p">)</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="n">_wordWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">noIoPrefix</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">mapCurrentClockDomain</span><span class="p">(</span><span class="n">clock</span><span class="o">=</span><span class="n">io</span><span class="p">.</span><span class="n">clk</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="io-rename-all-io-of-a-blackbox">
+<h2>七、重命名黑盒的所有io(Rename all io of a blackbox)<a class="headerlink" href="#io-rename-all-io-of-a-blackbox" title="此标题的永久链接"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">BlackBox</span></code>或<code class="docutils literal notranslate"><span class="pre">Component</span></code>中的IOs能通过<code class="docutils literal notranslate"><span class="pre">addPrePopTask</span></code>在编译期间重命名。这个函数接受一个在编译期间无变量的函数, 并且这个函数在增加重命名通道的时候很有用, 如下所示：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyRam</span><span class="p">()</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Blackbox</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">clk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">portA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">cs</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">rwn</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">dIn</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">32</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">dOut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">32</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">portB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">cs</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">rwn</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">dIn</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">32</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="n">dOut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">32</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">//映射时钟</span>
+<span class="w">    </span><span class="n">mapCurrentClockDomain</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">clk</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//移除io_ prefix</span>
+<span class="w">    </span><span class="n">noIoPrefix</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//用函数给黑盒中所有信号重命名</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">renameIO</span><span class="p">():</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">io</span><span class="p">.</span><span class="n">flatten</span><span class="p">.</span><span class="n">foreach</span><span class="p">(</span><span class="n">bt</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">bt</span><span class="p">.</span><span class="n">getName</span><span class="p">().</span><span class="n">contains</span><span class="p">(</span><span class="s">&quot;portA&quot;</span><span class="p">))</span><span class="w"> </span><span class="n">bt</span><span class="p">.</span><span class="n">setName</span><span class="p">(</span><span class="n">bt</span><span class="p">.</span><span class="n">getName</span><span class="p">().</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;portA_&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;_A&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">bt</span><span class="p">.</span><span class="n">getName</span><span class="p">().</span><span class="n">contains</span><span class="p">(</span><span class="s">&quot;portB&quot;</span><span class="p">))</span><span class="w"> </span><span class="n">bt</span><span class="p">.</span><span class="n">setName</span><span class="p">(</span><span class="n">bt</span><span class="p">.</span><span class="n">getName</span><span class="p">().</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;portB_&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;_B&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">})</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">//在创建模块后执行重命名函数</span>
+<span class="w">        </span><span class="n">addPrePopTask</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">renameIO</span><span class="p">())</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="c1">//这段代码会产生如下信号名字:</span>
+<span class="c1">//    clk</span>
+<span class="c1">//    cs_A, rwn_A, dIn_A, dOut_A</span>
+<span class="c1">//    cs_B, rwn_B, dIn_B, dOut_B</span>
+</pre></div>
+</div>
+</section>
+<section id="rtl-add-rtl-source">
+<h2>八、添加RTL源(Add RTL source)<a class="headerlink" href="#rtl-add-rtl-source" title="此标题的永久链接"></a></h2>
+<p>通过<code class="docutils literal notranslate"><span class="pre">addRTLPath()</span></code>你可以把黑盒和RTL源代码联系起来。在生成SpinalHDL代码后可以调用函数<code class="docutils literal notranslate"><span class="pre">mergeRTLSource</span></code>把这些源代码整合起来。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyBlackBox</span><span class="p">()</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Blackbox</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">clk</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">start</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">dIn</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">32</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">dOut</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">32</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">ready</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//映射时钟</span>
+<span class="w">    </span><span class="n">mapCurrentClockDomain</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">clk</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//移除io_前缀</span>
+<span class="w">    </span><span class="n">noIoPrefix</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//增加所有rtl依赖</span>
+<span class="w">    </span><span class="n">addRTLPath</span><span class="p">(</span><span class="s">&quot;./rtl/RegisterBank.v&quot;</span><span class="p">)</span><span class="w">                      </span><span class="c1">//增加verilog文件</span>
+<span class="w">    </span><span class="n">addRTLPath</span><span class="p">(</span><span class="s">s&quot;./rtl/myDesign.vhd&quot;</span><span class="p">)</span><span class="w">                       </span><span class="c1">//增加VHDL文件</span>
+<span class="w">    </span><span class="n">addRTLPath</span><span class="p">(</span><span class="s">s&quot;</span><span class="si">${</span><span class="n">sys</span><span class="p">.</span><span class="n">env</span><span class="p">(</span><span class="s">&quot;MY_PROJECT&quot;</span><span class="p">)</span><span class="si">}</span><span class="s">/myTopLevel.vhd&quot;</span><span class="p">)</span><span class="w">  </span><span class="c1">//使用环境变量MY_PROJECT(System.getenv(&quot;MY_PROJECT&quot;))</span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="p">...</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">report</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">SpinalVhdl</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">MyBlackBox</span><span class="p">)</span><span class="w"></span>
+<span class="n">report</span><span class="p">.</span><span class="n">mergeRTLSource</span><span class="p">(</span><span class="s">&quot;mergeRTL&quot;</span><span class="p">)</span><span class="w">       </span><span class="c1">//把所有rtl源代码整合进mergeRTL.vhd和mergeRTL.v文件</span>
+</pre></div>
+</div>
+</section>
+<section id="vhdl-vhdl-no-numeric-type">
+<h2>九、VHDL——非数字类型(VHDL-No numeric type)<a class="headerlink" href="#vhdl-vhdl-no-numeric-type" title="此标题的永久链接"></a></h2>
+<p>如果你只想在黑盒模块中使用<code class="docutils literal notranslate"><span class="pre">std_logic_vector</span></code>, 你可以给黑河增加<code class="docutils literal notranslate"><span class="pre">noNumericType</span></code>标签。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyBlackBox</span><span class="p">()</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">BlackBox</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">clk</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">increment</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">initValue</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">counter</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">map</span><span class="w"> </span><span class="nc">CurrentClockDomain</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">clk</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">noIoPrefix</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">addTag</span><span class="p">(</span><span class="n">noNumericType</span><span class="p">)</span><span class="w">       </span><span class="c1">//只有std_logic_vector</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>上述代码会生成以下VHDL：</p>
+<div class="highlight-VHDL notranslate"><div class="highlight"><pre><span></span><span class="k">component</span><span class="w"> </span><span class="nc">MyBlackBox</span><span class="w"> </span><span class="k">is</span><span class="w"></span>
+<span class="w">  </span><span class="k">port</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">clk</span><span class="w">       </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w">  </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">increment</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w">  </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">initValue</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w">  </span><span class="kt">std_logic_vector</span><span class="p">(</span><span class="mi">7</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">counter</span><span class="w">   </span><span class="o">:</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="p">(</span><span class="mi">7</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">);</span><span class="w"></span>
+<span class="k">end</span><span class="w"> </span><span class="k">component</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E6%97%B6%E9%92%9F%E5%9F%9F.html" class="btn btn-neutral float-left" title="时钟域(Clock domains)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E4%BF%9D%E7%95%99%E5%90%8D%E7%A7%B0.html" class="btn btn-neutral float-right" title="保留名称(Preserving names)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

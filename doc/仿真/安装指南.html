@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>安装指南(Installation instructions) &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="启动仿真(Boot a Simulation)" href="%E5%90%AF%E5%8A%A8%E4%BB%BF%E7%9C%9F.html" />
+    <link rel="prev" title="介绍(Introduction)" href="%E7%AE%80%E4%BB%8B.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">仿真(Simulation)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E7%AE%80%E4%BB%8B.html">介绍(Introduction)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">安装指南(Installation instructions)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scala">一、Scala</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#backend-dependent-installation-instructions">二、后端相关的安装指南(Backend-dependent installation instructions)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%90%AF%E5%8A%A8%E4%BB%BF%E7%9C%9F.html">启动仿真(Boot a Simulation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%90%AF%E5%8A%A8%E4%BB%BF%E7%9C%9F.html#accessing-signals-of-the-simulation">访问仿真信号(Accessing signals of the simulation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E8%AE%BF%E9%97%AE%E4%BB%BF%E7%9C%9F%E4%BF%A1%E5%8F%B7.html">访问仿真信号(Accessing signals of the simulation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%97%B6%E9%92%9F%E5%9F%9F.html">时钟域(Clock domains)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%BB%A1%E7%BA%BF%E7%A8%8BAPI.html">满线程API(Thread-full API)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%B0%91%E7%BA%BF%E7%A8%8BAPI.html">少线程API(Thread-less API)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%95%8F%E6%84%9FAPI.html">敏感API(Sensitive API)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BB%BF%E7%9C%9F%E5%BC%95%E6%93%8E.html">仿真引擎(Simulation engine)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BE%8B%E5%AD%90.html">例子(Examples)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">仿真(Simulation)</a> &raquo;</li>
+      <li>安装指南(Installation instructions)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/仿真/安装指南.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation-instructions">
+<h1>安装指南(Installation instructions)<a class="headerlink" href="#installation-instructions" title="此标题的永久链接"></a></h1>
+<section id="scala">
+<h2>一、Scala<a class="headerlink" href="#scala" title="此标题的永久链接"></a></h2>
+<p>为了能启动SpinalSim, 以下语句需要添加到你的build.sbt文件中：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="n">fork</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+</pre></div>
+</div>
+<p>同样的以下导入也需要添加在testbench源文件中：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="n">_</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="nn">sim</span><span class="p">.</span><span class="n">_</span>
+</pre></div>
+</div>
+</section>
+<section id="backend-dependent-installation-instructions">
+<h2>二、后端相关的安装指南(Backend-dependent installation instructions)<a class="headerlink" href="#backend-dependent-installation-instructions" title="此标题的永久链接"></a></h2>
+<ol>
+<li><p>GHDL的搭建和安装(Setup and installation of GHDL)</p>
+<p>尽管GHDL在linux分发包系统中广泛应用, SpinalHDL在GHDL v0.37后才支持基于GHDL的代码bug修正功能, 因此推荐从源安装GHDL。进程间boost的C++库也应该被安装, 这个库包含在像分式debian的libboost-dev包中。需要进程间boost来生成共享存储的通信接口。</p>
+<p><strong>Linux</strong></p>
+<div class="highlight-Linux notranslate"><div class="highlight"><pre><span></span>sudo apt-get install build-essential libboost-dev git
+sudo apt-get install gnat # Ada compiler used to buid GHDL
+git clone https://github.com/ghdl/ghdl.git
+cd ghdl
+mkdir build
+cd build
+../configure
+make
+sudo make install
+</pre></div>
+</div>
+<p>同样的与你的Java版本相应的openjdk包也应该被安装。</p>
+<p>Windows安装与更多的配置选择, 可参考https://ghdl.github.io/ghdl/getting.html</p>
+</li>
+<li><p>Icarus的搭建和安装(Setup and installation of Icarus)</p>
+<p>在大多数最近的分发包linux系统中, 一个最近版本的Icarus Verilog通过该系统被广泛应用。进程间boost的C++库也应该被安装, 这个库包含在像分布式debian的libboost-dev包中。需进程间boost来生成共享存储的通信接口。</p>
+<p><strong>Linux</strong></p>
+<div class="highlight-Linux notranslate"><div class="highlight"><pre><span></span>sudo apt-get install build-essential libboost-dev iverilog
+</pre></div>
+</div>
+<p>同样的与你的Java版本相应的openjdk包也应该被安装。</p>
+<p>Windows安装与更多的配置选择, 可参考https://iverilog.fandom.com/wiki/Installation_Guide</p>
+</li>
+<li><p>VCS仿真配置(VCS Simulation Configuration)</p>
+<p><strong>环境变量</strong></p>
+<p>你应该先定义如下环境变量：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">VCS_HOME</span></code>：VCS的安装根目录。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VERDI_HOME</span></code>：Verdi的安装根目录。</p></li>
+<li><p>把<code class="docutils literal notranslate"><span class="pre">$VCS_HOME/bin</span></code>和<code class="docutils literal notranslate"><span class="pre">$VERDI_HOME/bin</span></code>增加到你的<code class="docutils literal notranslate"><span class="pre">PATH</span></code>下。</p></li>
+</ul>
+<p>把以下路径添加到<code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code>前面来开启PLI特征。</p>
+<div class="highlight-Linux notranslate"><div class="highlight"><pre><span></span>export LD_LIBRARY_PATH=$VERDI_HOME/share/PLI/VCS/LINUX64:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$VERDI_HOME/share/PLI/IUS/LINUX64:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$VERDI_HOME/share/PLI/lib/LINUX64:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$VERDI_HOME/share/PLI/Ius/LINUX64:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$VERDI_HOME/share/PLI/MODELSIM/LINUX64:$LD_LIBRARY_PATH
+</pre></div>
+</div>
+<p>如果你遇到<code class="docutils literal notranslate"><span class="pre">Compilation</span> <span class="pre">of</span> <span class="pre">SharedMemIface.cpp</span> <span class="pre">failed</span></code>错误, 应该先确定你是否正确安装了C++ boost库。头文件和库文件都应该被分别添加到<code class="docutils literal notranslate"><span class="pre">CPLUS_INCLUDE_PATH</span></code>,<code class="docutils literal notranslate"><span class="pre">LIBRARY_PATH</span></code>和<code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code>。</p>
+<p><strong>用户定义的环境的搭建</strong></p>
+<p>有时在运行VCS仿真的时候需要VCS的环境搭建文件<em>synopsys_sim.setup</em>。此外你也可能会想在VCS启动编译前运行一些脚本或代码来搭建环境, 你可以用<em>withVCSSimSetup</em>：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">simConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">SimConfig</span><span class="w"></span>
+<span class="p">.</span><span class="n">withVCS</span><span class="w"></span>
+<span class="p">.</span><span class="n">withVCSSimSetup</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">setupFile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;~/work/myproj/sim/synopsys_sim.setup&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">beforeAnalysis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// this code block will be run before VCS analysis step.</span>
+<span class="w">    </span><span class="s">&quot;pwd&quot;</span><span class="p">.</span><span class="o">!</span><span class="w"></span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Hello, VCS&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>这个方法会把你自己的<em>synopsys_sim.setup</em>复制到VCS工作路径下, 并运行你的脚本。</p>
+<p><strong>VCS Flags</strong></p>
+<p>VCS后端流程包含三个编译流步骤：</p>
+<ul class="simple">
+<li><p>(1) 分析步骤：用<code class="docutils literal notranslate"><span class="pre">vlogan</span></code>和<code class="docutils literal notranslate"><span class="pre">vhdlan</span></code>分析HDL模型。</p></li>
+<li><p>(2) 细化步骤：用<code class="docutils literal notranslate"><span class="pre">vcs</span></code>细化模型并生成可执行硬件模型。</p></li>
+<li><p>(3) 仿真步骤：运行仿真。</p></li>
+</ul>
+<p>每一步, 用户可以通过<code class="docutils literal notranslate"><span class="pre">VCSFlags</span></code>传递一些特定的标志来是能像SDF反标或多线程等特征。</p>
+<p><code class="docutils literal notranslate"><span class="pre">VCSFlags</span></code>由三个参数</p>
+</li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">名称</th>
+<th style="text-align: center;">数据类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>compileFlags</code></td>
+<td style="text-align: center;"><code>List[String]</code></td>
+<td style="text-align: center;">标志传递到<code>vlogan</code>或<code>vhdlan</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>elaborateFlags</code></td>
+<td style="text-align: center;"><code>List[String]</code></td>
+<td style="text-align: center;">标志传递到<code>vcs</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>runFlags</code></td>
+<td style="text-align: center;"><code>List[String]</code></td>
+<td style="text-align: center;">标志传递到可执行硬件模型中</td>
+</tr>
+</tbody>
+</table><p>例如, 你可以同时给编译步骤和细化步骤传递<code class="docutils literal notranslate"><span class="pre">-kdb</span></code>标志来进行Verdi debug：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">VCSFlags</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">compileFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">List</span><span class="p">(</span><span class="s">&quot;-kdb&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="n">elaborateFlags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">List</span><span class="p">(</span><span class="s">&quot;-kdb&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="nc">SimConfig</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">withVCS</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">withFSDBWave</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">workspacePath</span><span class="p">(</span><span class="s">&quot;tb&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="nc">UIntAdder</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span><span class="w"></span>
+
+<span class="p">...</span><span class="w"></span>
+</pre></div>
+</div>
+<p><strong>波形产生</strong></p>
+<p>VCS后端可以生成三种波形形式：<code class="docutils literal notranslate"><span class="pre">VCD</span></code>, <code class="docutils literal notranslate"><span class="pre">VPD</span></code>和<code class="docutils literal notranslate"><span class="pre">FSDB</span></code>(Verdi所需的)。</p>
+<p>你可以通过以下<code class="docutils literal notranslate"><span class="pre">SpinalSImConfig</span></code>方法使能他们：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">方法</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>withWave</code></td>
+<td style="text-align: center;">使能<code>VCS</code>波形</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>withVPDWave</code></td>
+<td style="text-align: center;">使能<code>VPD</code>波形</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>withFSDBWave</code></td>
+<td style="text-align: center;">使能<code>FSDB</code>波形</td>
+</tr>
+</tbody>
+</table><p>同样的, 你可以通过<code class="docutils literal notranslate"><span class="pre">withWaveDepth(depth:</span> <span class="pre">Int)</span></code>控制波形轨迹的深度。</p>
+<p><strong>用黑盒仿真</strong></p>
+<p>有时, IP供应商会以Verilog/VHDL的格式给你提供设计实例, 如果你想要把他们集成在你的SpinalHDL设计中, 由如下两种方式：</p>
+<ul class="simple">
+<li><p>(1) 在<code class="docutils literal notranslate"><span class="pre">Blackbox</span></code>定义时, 用<code class="docutils literal notranslate"><span class="pre">addRTLPath(path:String)</span></code>把外部的Verilog/VHDL文件赋值给黑盒。</p></li>
+<li><p>(2) 用<code class="docutils literal notranslate"><span class="pre">SpinalConfig</span></code>中的<code class="docutils literal notranslate"><span class="pre">mergeRTLSource(fileName:</span> <span class="pre">String=null)</span></code>方法</p></li>
+</ul>
+<ol>
+<li><p>Verilator的搭建和安装(Setup and installation of Verilator)</p>
+<p>在Linux和Windows平台上均支持SpinalSim + Verilator。</p>
+<p><strong>Scala</strong></p>
+<p>不要忘记在<code class="docutils literal notranslate"><span class="pre">build.sbt</span></code>文件中增加以下语句：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="n">fork</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+</pre></div>
+</div>
+<p>并且你还要在Scala testbench中引入如下库：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="n">_</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="nn">sim</span><span class="p">.</span><span class="n">_</span>
+</pre></div>
+</div>
+<p><strong>Linux</strong></p>
+<p>你也需要一个最近版本安装的Verilator：</p>
+<div class="highlight-Linux notranslate"><div class="highlight"><pre><span></span>sudo apt-get install git make autoconf g++ flex bison  # First time prerequisites
+git clone http://git.veripool.org/git/verilator   # Only first time
+unsetenv VERILATOR_ROOT  # For csh; ignore error if on bash
+unset VERILATOR_ROOT  # For bash
+cd verilator
+git pull        # Make sure we&#39;re up-to-date
+git checkout v4.040
+autoconf        # Create ./configure script
+./configure
+make -j$(nproc)
+sudo make install
+echo &quot;DONE&quot;
+</pre></div>
+</div>
+<p><strong>Windows</strong></p>
+<p>为了让SpinalSim + Verilator能在Windows上工作, 你需要做如下操作：</p>
+<ul class="simple">
+<li><p>安装MSYS2</p></li>
+<li><p>通过MSYS2安装gcc/g++/verilator(为了能从源文件对Verilator编译)</p></li>
+<li><p>在Windows<code class="docutils literal notranslate"><span class="pre">PATH</span></code>下增加MSY2的<code class="docutils literal notranslate"><span class="pre">bin</span></code>和<code class="docutils literal notranslate"><span class="pre">usr\bin</span></code>(i.e.:<code class="docutils literal notranslate"><span class="pre">C:\msys64\usr\bin;C:\msys64\mingw64\bin</span></code>)</p></li>
+<li><p>检查JAVA_HOME环境变量是否指向JDK安装文件夹(i.e.:<code class="docutils literal notranslate"><span class="pre">C:\Program</span> <span class="pre">Files\Java\jdk-13.0.2</span></code>)</p></li>
+</ul>
+<p>之后你应该可以不再用MSYS2就能从Scala工程中运行SpinalSim + Verilator了。</p>
+<p>从新安装的64bits MSYS2 MinGW, 你还需要在MSYS2 MinGW 64-bits shell下运行如下指令(一行一行敲)：</p>
+<p><strong>从MinGW包管理器中</strong></p>
+<div class="highlight-linux notranslate"><div class="highlight"><pre><span></span>pacman -Syuu
+# Close the MSYS2 shell once you&#39;re asked to
+pacman -Syuu
+pacman -S --needed base-devel mingw-w64-x86_64-toolchain \
+                git flex\
+                mingw-w64-x86_64-cmake
+
+git clone http://git.veripool.org/git/verilator
+unset VERILATOR_ROOT
+cd verilator
+git pull
+git checkout v4.040
+autoconf
+./configure
+export CPLUS_INCLUDE_PATH=/usr/include:$CPLUS_INCLUDE_PATH
+export PATH=/usr/bin/core_perl:$PATH
+cp /usr/include/FlexLexer.h ./src
+
+make -j$(nproc)
+make install
+echo &quot;DONE&quot;
+# Add C:\msys64\usr\bin;C:\msys64\mingw64\bin to your Windows PATH
+</pre></div>
+</div>
+<blockquote>
+<div><p>重要：确保你的<code class="docutils literal notranslate"><span class="pre">PATH</span></code>环境变量指向JDK 1.8而且不包含JRE的安装。</p>
+</div></blockquote>
+<blockquote>
+<div><p>重要：把MSYS2<code class="docutils literal notranslate"><span class="pre">bin</span></code>文件夹添加到你Windows<code class="docutils literal notranslate"><span class="pre">PATH</span></code>下会产生一些副作用。这就是为什么要把他们放在<code class="docutils literal notranslate"><span class="pre">PATH</span></code>的最后部分, 这样能减少他们的优先级。</p>
+</div></blockquote>
+</li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E7%AE%80%E4%BB%8B.html" class="btn btn-neutral float-left" title="介绍(Introduction)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E5%90%AF%E5%8A%A8%E4%BB%BF%E7%9C%9F.html" class="btn btn-neutral float-right" title="启动仿真(Boot a Simulation)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

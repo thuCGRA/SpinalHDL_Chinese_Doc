@@ -1,0 +1,233 @@
+## 安装指南(Installation instructions)
+
+### 一、Scala
+
+为了能启动SpinalSim, 以下语句需要添加到你的build.sbt文件中：
+
+```Scala
+fork := true
+```
+
+同样的以下导入也需要添加在testbench源文件中：
+
+```Scala
+import spinal.core._
+import spinal.core.sim._
+```
+
+### 二、后端相关的安装指南(Backend-dependent installation instructions)
+
+1. GHDL的搭建和安装(Setup and installation of GHDL)
+
+   尽管GHDL在linux分发包系统中广泛应用, SpinalHDL在GHDL v0.37后才支持基于GHDL的代码bug修正功能, 因此推荐从源安装GHDL。进程间boost的C++库也应该被安装, 这个库包含在像分式debian的libboost-dev包中。需要进程间boost来生成共享存储的通信接口。
+
+   **Linux**
+
+   ```Linux
+   sudo apt-get install build-essential libboost-dev git
+   sudo apt-get install gnat # Ada compiler used to buid GHDL
+   git clone https://github.com/ghdl/ghdl.git
+   cd ghdl
+   mkdir build
+   cd build
+   ../configure
+   make
+   sudo make install
+   ```
+
+   同样的与你的Java版本相应的openjdk包也应该被安装。
+
+   Windows安装与更多的配置选择, 可参考https://ghdl.github.io/ghdl/getting.html
+
+2. Icarus的搭建和安装(Setup and installation of Icarus)
+
+   在大多数最近的分发包linux系统中, 一个最近版本的Icarus Verilog通过该系统被广泛应用。进程间boost的C++库也应该被安装, 这个库包含在像分布式debian的libboost-dev包中。需进程间boost来生成共享存储的通信接口。
+
+   **Linux**
+
+   ```Linux
+   sudo apt-get install build-essential libboost-dev iverilog
+   ```
+
+   同样的与你的Java版本相应的openjdk包也应该被安装。
+
+   Windows安装与更多的配置选择, 可参考https://iverilog.fandom.com/wiki/Installation_Guide
+
+3. VCS仿真配置(VCS Simulation Configuration)
+
+   **环境变量**
+
+   你应该先定义如下环境变量：
+
+   + `VCS_HOME`：VCS的安装根目录。
+   + `VERDI_HOME`：Verdi的安装根目录。
+   + 把`$VCS_HOME/bin`和`$VERDI_HOME/bin`增加到你的`PATH`下。
+
+   把以下路径添加到`LD_LIBRARY_PATH`前面来开启PLI特征。
+
+   ```Linux
+   export LD_LIBRARY_PATH=$VERDI_HOME/share/PLI/VCS/LINUX64:$LD_LIBRARY_PATH
+   export LD_LIBRARY_PATH=$VERDI_HOME/share/PLI/IUS/LINUX64:$LD_LIBRARY_PATH
+   export LD_LIBRARY_PATH=$VERDI_HOME/share/PLI/lib/LINUX64:$LD_LIBRARY_PATH
+   export LD_LIBRARY_PATH=$VERDI_HOME/share/PLI/Ius/LINUX64:$LD_LIBRARY_PATH
+   export LD_LIBRARY_PATH=$VERDI_HOME/share/PLI/MODELSIM/LINUX64:$LD_LIBRARY_PATH
+   ```
+
+   如果你遇到`Compilation of SharedMemIface.cpp failed`错误, 应该先确定你是否正确安装了C++ boost库。头文件和库文件都应该被分别添加到`CPLUS_INCLUDE_PATH`,`LIBRARY_PATH`和`LD_LIBRARY_PATH`。
+
+   **用户定义的环境的搭建**
+
+   有时在运行VCS仿真的时候需要VCS的环境搭建文件*synopsys_sim.setup*。此外你也可能会想在VCS启动编译前运行一些脚本或代码来搭建环境, 你可以用*withVCSSimSetup*：
+
+   ```Scala
+   val simConfig = SimConfig
+   .withVCS
+   .withVCSSimSetup(
+       setupFile = "~/work/myproj/sim/synopsys_sim.setup",
+       beforeAnalysis = () => { // this code block will be run before VCS analysis step.
+       "pwd".!
+       println("Hello, VCS")
+       }
+   )
+   ```
+   
+   这个方法会把你自己的*synopsys_sim.setup*复制到VCS工作路径下, 并运行你的脚本。
+
+   **VCS Flags**
+
+   VCS后端流程包含三个编译流步骤：
+
+   + (1) 分析步骤：用`vlogan`和`vhdlan`分析HDL模型。
+   + (2) 细化步骤：用`vcs`细化模型并生成可执行硬件模型。
+   + (3) 仿真步骤：运行仿真。
+
+   每一步, 用户可以通过`VCSFlags`传递一些特定的标志来是能像SDF反标或多线程等特征。
+
+   `VCSFlags`由三个参数
+
+   |       名称       |    数据类型    |             描述             |
+   | :--------------: | :------------: | :--------------------------: |
+   |  `compileFlags`  | `List[String]` | 标志传递到`vlogan`或`vhdlan` |
+   | `elaborateFlags` | `List[String]` |       标志传递到`vcs`        |
+   |    `runFlags`    | `List[String]` |  标志传递到可执行硬件模型中  |
+
+   例如, 你可以同时给编译步骤和细化步骤传递`-kdb`标志来进行Verdi debug：
+
+   ```Scala
+   val flags = VCSFlags(
+       compileFlags = List("-kdb"),
+       elaborateFlags = List("-kdb")
+   )
+
+   val config =
+   SimConfig
+       .withVCS(flags)
+       .withFSDBWave
+       .workspacePath("tb")
+       .compile(UIntAdder(8))
+
+   ...
+   ```
+
+   **波形产生**
+
+   VCS后端可以生成三种波形形式：`VCD`, `VPD`和`FSDB`(Verdi所需的)。
+
+   你可以通过以下`SpinalSImConfig`方法使能他们：
+
+   |      方法      |      描述      |
+   | :------------: | :------------: |
+   |   `withWave`   | 使能`VCS`波形  |
+   | `withVPDWave`  | 使能`VPD`波形  |
+   | `withFSDBWave` | 使能`FSDB`波形 |
+
+   同样的, 你可以通过`withWaveDepth(depth: Int)`控制波形轨迹的深度。
+
+   **用黑盒仿真**
+
+   有时, IP供应商会以Verilog/VHDL的格式给你提供设计实例, 如果你想要把他们集成在你的SpinalHDL设计中, 由如下两种方式：
+
+   + (1) 在`Blackbox`定义时, 用`addRTLPath(path:String)`把外部的Verilog/VHDL文件赋值给黑盒。
+   + (2) 用`SpinalConfig`中的`mergeRTLSource(fileName: String=null)`方法
+
+4. Verilator的搭建和安装(Setup and installation of Verilator)
+
+   在Linux和Windows平台上均支持SpinalSim + Verilator。
+
+   **Scala**
+
+   不要忘记在`build.sbt`文件中增加以下语句：
+
+   ```Scala
+   fork := true
+   ```
+
+   并且你还要在Scala testbench中引入如下库：
+
+   ```Scala
+   import spinal.core._
+   import spinal.core.sim._
+   ```
+
+   **Linux**
+
+   你也需要一个最近版本安装的Verilator：
+
+   ```Linux
+   sudo apt-get install git make autoconf g++ flex bison  # First time prerequisites
+   git clone http://git.veripool.org/git/verilator   # Only first time
+   unsetenv VERILATOR_ROOT  # For csh; ignore error if on bash
+   unset VERILATOR_ROOT  # For bash
+   cd verilator
+   git pull        # Make sure we're up-to-date
+   git checkout v4.040
+   autoconf        # Create ./configure script
+   ./configure
+   make -j$(nproc)
+   sudo make install
+   echo "DONE"
+   ```
+
+   **Windows**
+
+   为了让SpinalSim + Verilator能在Windows上工作, 你需要做如下操作：
+
+   + 安装MSYS2
+   + 通过MSYS2安装gcc/g++/verilator(为了能从源文件对Verilator编译)
+   + 在Windows`PATH`下增加MSY2的`bin`和`usr\bin`(i.e.:`C:\msys64\usr\bin;C:\msys64\mingw64\bin`)
+   + 检查JAVA_HOME环境变量是否指向JDK安装文件夹(i.e.:`C:\Program Files\Java\jdk-13.0.2`)
+
+   之后你应该可以不再用MSYS2就能从Scala工程中运行SpinalSim + Verilator了。
+
+   从新安装的64bits MSYS2 MinGW, 你还需要在MSYS2 MinGW 64-bits shell下运行如下指令(一行一行敲)：
+
+   **从MinGW包管理器中**
+
+   ```linux
+   pacman -Syuu
+   # Close the MSYS2 shell once you're asked to
+   pacman -Syuu
+   pacman -S --needed base-devel mingw-w64-x86_64-toolchain \
+                   git flex\
+                   mingw-w64-x86_64-cmake
+
+   git clone http://git.veripool.org/git/verilator
+   unset VERILATOR_ROOT
+   cd verilator
+   git pull
+   git checkout v4.040
+   autoconf
+   ./configure
+   export CPLUS_INCLUDE_PATH=/usr/include:$CPLUS_INCLUDE_PATH
+   export PATH=/usr/bin/core_perl:$PATH
+   cp /usr/include/FlexLexer.h ./src
+
+   make -j$(nproc)
+   make install
+   echo "DONE"
+   # Add C:\msys64\usr\bin;C:\msys64\mingw64\bin to your Windows PATH
+   ```
+
+   > 重要：确保你的`PATH`环境变量指向JDK 1.8而且不包含JRE的安装。
+
+   > 重要：把MSYS2`bin`文件夹添加到你Windows`PATH`下会产生一些副作用。这就是为什么要把他们放在`PATH`的最后部分, 这样能减少他们的优先级。

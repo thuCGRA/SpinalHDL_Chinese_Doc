@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>工具(Utils) &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="Stub (存根)" href="%E5%AD%98%E6%A0%B9.html" />
+    <link rel="prev" title="简介" href="%E7%AE%80%E4%BB%8B.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">其他语言特征(Other language features)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E7%AE%80%E4%BB%8B.html">简介</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">工具(Utils)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">一、 总览</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cloning-hardware-datatypes">二、克隆硬件数据类型(Cloning hardware datatypes)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#passing-a-datatype-as-construction-parameter">三、传递数据类型作为结构参数(Passing a datatype as construction parameter)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#frequency-and-time">四、频率与时间(Frequency and time)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#binary-prefix">五、二进制前缀(Binary prefix)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AD%98%E6%A0%B9.html">Stub (存根)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%96%AD%E8%A8%80.html">Assertions(断言)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%8A%A5%E5%91%8A.html">Report(报告)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%B1%9E%E6%80%A7.html">ScopeProperty(作用域属性)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E6%8B%9F%E4%B8%8EIO%E5%8F%A3.html">Analog and inout (模拟与IO口)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="VHDL%E5%92%8CVerilog%E7%94%9F%E6%88%90.html">VHDL和Verilog生成(VHDL and Verilog generation)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">其他语言特征(Other language features)</a> &raquo;</li>
+      <li>工具(Utils)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/其它语言特征/工具.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="utils">
+<h1>工具(Utils)<a class="headerlink" href="#utils" title="此标题的永久链接"></a></h1>
+<section id="id1">
+<h2>一、 总览<a class="headerlink" href="#id1" title="此标题的永久链接"></a></h2>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">句式</th>
+<th style="text-align: center;">返回<br>类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>widthOf(x : BitVector)</code></td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;">返回一个类型为Bits/UInt/SInt的信号的位宽</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>log2Up(x : BigInt)</code></td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;">返回表示输入状态<code>x</code>所需要的位数</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>isPow2(x : BigInt)</code></td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: center;">当<code>x</code>为2的指数时, 返回<code>True</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>roundUp(</code><br><code>that : BigInt,</code><br><code>by : BigInt)</code></td>
+<td style="text-align: center;">BigInt</td>
+<td style="text-align: center;">返回参数<code>by</code>乘参数<code>that</code>的结果</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>Cat(x : Data*)</code></td>
+<td style="text-align: center;">Bits</td>
+<td style="text-align: center;">连接所有的参数, 其中第一个参数会放置在最高有效位(MSB), 最后一个参数放置在最低有效位(LSB)</td>
+</tr>
+</tbody>
+</table></section>
+<section id="cloning-hardware-datatypes">
+<h2>二、克隆硬件数据类型(Cloning hardware datatypes)<a class="headerlink" href="#cloning-hardware-datatypes" title="此标题的永久链接"></a></h2>
+<p>用户可以通过<code class="docutils literal notranslate"><span class="pre">cloneOf(x)</span></code>函数克隆给定的硬件数据类型。该函数将会返回一个拥有相同Scala类型和参数的新实例。例如：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plusOne</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">UInt</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">UInt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// 将会生成一个和`value`同位宽的UInt类型</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cloneOf</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">temp</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">temp</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c1">// treePlusOne 将会成为一个8比特的值</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">treePlusOne</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plusOne</span><span class="p">(</span><span class="nc">U</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>注意！：若对一个<code class="docutils literal notranslate"><span class="pre">Bundle</span></code>类型使用<code class="docutils literal notranslate"><span class="pre">cloneOf(x)</span></code>函数功能, 需要确保该<code class="docutils literal notranslate"><span class="pre">Bundle</span></code>是一个<code class="docutils literal notranslate"><span class="pre">case</span></code>类, 否则需要在<code class="docutils literal notranslate"><span class="pre">Bundle</span></code>内部重写克隆函数。</strong></p>
+</div></blockquote>
+</section>
+<section id="passing-a-datatype-as-construction-parameter">
+<h2>三、传递数据类型作为结构参数(Passing a datatype as construction parameter)<a class="headerlink" href="#passing-a-datatype-as-construction-parameter" title="此标题的永久链接"></a></h2>
+<p>许多可重用的硬件要求能够被一些数据类型所参数化。例如如果用户想要定义一个FIFO或者移位寄存器, 则需要一个参数来定义该硬件所需的负载。</p>
+<ol>
+<li><p>传统方式</p>
+<p>以定义一个<code class="docutils literal notranslate"><span class="pre">ShiftRegister</span></code>元件为例, 介绍传统的传递数据类型方式如下：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ShiftRegister</span><span class="p">[</span><span class="nc">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="nc">Data</span><span class="p">](</span><span class="n">dataType</span><span class="p">:</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="n">depth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">input</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="p">(</span><span class="n">cloneOf</span><span class="p">(</span><span class="n">dataType</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="p">(</span><span class="n">cloneOf</span><span class="p">(</span><span class="n">dataType</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//需要在Case Class内部重写`cloneof`函数</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>实例化该元件的代码为：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">shiftReg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ShiftRegister</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">32</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>在上述例子中, 硬件的数据类型（位宽）直接作为构造参数传递。因此每次需要例化或是用该datatype时, 都需要使用<code class="docutils literal notranslate"><span class="pre">cloneOf</span></code>函数对其datatype进行定义。这种方式并不安全因为常<code class="docutils literal notranslate"><span class="pre">cloneOf</span></code>函数会被遗忘。</p>
+</li>
+<li><p>更安全的方式</p>
+<p>以更安全的方式来传递数据类型的例子如下：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ShiftRegister</span><span class="p">[</span><span class="nc">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="nc">Data</span><span class="p">](</span><span class="n">dataType</span><span class="p">:</span><span class="w"> </span><span class="nc">HardType</span><span class="p">[</span><span class="nc">T</span><span class="p">],</span><span class="w"> </span><span class="n">depth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">input</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="p">(</span><span class="n">dataType</span><span class="p">())</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="p">(</span><span class="n">dataType</span><span class="p">())</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>实例化该元件的代码为：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">shiftReg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ShiftRegister</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">32</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>在上述的更安全的方法中, 使用了<code class="docutils literal notranslate"><span class="pre">HardType</span></code>去封装数据类型<code class="docutils literal notranslate"><span class="pre">T</span></code>, 可以看成是<code class="docutils literal notranslate"><span class="pre">T</span></code>的蓝图(blueprint)。这种方式相比于传统方式更加简单, 因为每次例化使用该datatype时, 只需要调用<code class="docutils literal notranslate"><span class="pre">HardType</span></code>的<code class="docutils literal notranslate"><span class="pre">apply</span></code>函数即可。此外, 从用户的角度来看, 这种机制是完全透明的, 因为硬件数据类型可以隐式转换为<code class="docutils literal notranslate"><span class="pre">HardType</span></code>。</p>
+</li>
+</ol>
+</section>
+<section id="frequency-and-time">
+<h2>四、频率与时间(Frequency and time)<a class="headerlink" href="#frequency-and-time" title="此标题的永久链接"></a></h2>
+<p>SpinalHDL有专门的语法来定义频率和时间值:</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">frequency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="nc">MHz</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">timeoutLimit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="n">ms</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">period</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="n">us</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">periodCycles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">frequency</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">period</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">timeoutCycles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">frequency</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">timeoutLimit</span><span class="w"></span>
+</pre></div>
+</div>
+<p>对一个时间定义, 可以利用如下后缀得到一个<code class="docutils literal notranslate"><span class="pre">TimeNumber</span></code>: <code class="docutils literal notranslate"><span class="pre">fs,</span> <span class="pre">ps,</span> <span class="pre">ns,</span> <span class="pre">us,</span> <span class="pre">ms,</span> <span class="pre">sec,</span> <span class="pre">mn,</span> <span class="pre">hr</span></code>; 可以利用如下后缀得到一个<code class="docutils literal notranslate"><span class="pre">HertzNumber</span></code>: <code class="docutils literal notranslate"><span class="pre">Hz,</span> <span class="pre">KHz,</span> <span class="pre">MHz,</span> <span class="pre">GHz,</span> <span class="pre">THz</span></code>。</p>
+<p><code class="docutils literal notranslate"><span class="pre">TimeNumber</span></code>和<code class="docutils literal notranslate"><span class="pre">HertzNumber</span></code>是基于<code class="docutils literal notranslate"><span class="pre">PhysicalNumber</span></code>类, 该类在Scala中利用<code class="docutils literal notranslate"><span class="pre">BigDecimal</span></code>存储数据。</p>
+</section>
+<section id="binary-prefix">
+<h2>五、二进制前缀(Binary prefix)<a class="headerlink" href="#binary-prefix" title="此标题的永久链接"></a></h2>
+<p>SpinalHDL允许根据IEC, 来使用二进制前缀表示法定义整数。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">memSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">512</span><span class="w"> </span><span class="nc">MiB</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">dpRamSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="nc">KiB</span><span class="w"></span>
+</pre></div>
+</div>
+<p>可使用的所有二进制前缀如下：
+|  二进制前缀   |           表示值            |
+| :———–: | :————————-: |
+| <code class="docutils literal notranslate"><span class="pre">Byte,</span> <span class="pre">Bytes</span></code> |              1              |
+|     <code class="docutils literal notranslate"><span class="pre">KiB</span></code>     |       1024 == 1 &lt;&lt; 10       |
+|     <code class="docutils literal notranslate"><span class="pre">MiB</span></code>     | 1024<sup>2</sup> == 1 &lt;&lt; 20 |
+|     <code class="docutils literal notranslate"><span class="pre">GiB</span></code>     | 1024<sup>3</sup> == 1 &lt;&lt; 30 |
+|     <code class="docutils literal notranslate"><span class="pre">TiB</span></code>     | 1024<sup>4</sup> == 1 &lt;&lt; 40 |
+|     <code class="docutils literal notranslate"><span class="pre">PiB</span></code>     | 1024<sup>5</sup> == 1 &lt;&lt; 50 |
+|     <code class="docutils literal notranslate"><span class="pre">EiB</span></code>     | 1024<sup>6</sup> == 1 &lt;&lt; 60 |
+|     <code class="docutils literal notranslate"><span class="pre">ZiB</span></code>     | 1024<sup>7</sup> == 1 &lt;&lt; 70 |
+|     <code class="docutils literal notranslate"><span class="pre">YiB</span></code>     | 1024<sup>8</sup> == 1 &lt;&lt; 80 |</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E7%AE%80%E4%BB%8B.html" class="btn btn-neutral float-left" title="简介" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E5%AD%98%E6%A0%B9.html" class="btn btn-neutral float-right" title="Stub (存根)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

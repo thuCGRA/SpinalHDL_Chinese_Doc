@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>时钟域(Clock domains) &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="VHDL例化和Verilog IP(Instantiate VHDL and Verilog IP)" href="VHDL%E4%BE%8B%E5%8C%96%E5%92%8CVerilogIP.html" />
+    <link rel="prev" title="函数(Function)" href="%E5%87%BD%E6%95%B0.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">结构(Structuring)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E5%9D%97%E5%92%8C%E5%B1%82%E6%AC%A1.html">模块和层次(Component and hierarchy)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%8C%BA%E5%9F%9F.html">区域(Area)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%87%BD%E6%95%B0.html">函数(Function)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">时钟域(Clock domains)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">一、简介(Introduction)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#instantiation">二、例化(Instantiation)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clock-domain-crossing">三、跨时钟域(Clock domain crossing)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clocking-areas">四、特殊的时序区域(clocking areas)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="VHDL%E4%BE%8B%E5%8C%96%E5%92%8CVerilogIP.html">VHDL例化和Verilog IP(Instantiate VHDL and Verilog IP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BF%9D%E7%95%99%E5%90%8D%E7%A7%B0.html">保留名称(Preserving names)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%8F%82%E6%95%B0%E5%8C%96.html">参数化(Parametrization)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">结构(Structuring)</a> &raquo;</li>
+      <li>时钟域(Clock domains)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/结构/时钟域.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="clock-domains">
+<h1>时钟域(Clock domains)<a class="headerlink" href="#clock-domains" title="此标题的永久链接"></a></h1>
+<section id="introduction">
+<h2>一、简介(Introduction)<a class="headerlink" href="#introduction" title="此标题的永久链接"></a></h2>
+<p>在SpinalHDL中, 时钟和复位信号能结合起来构成时钟域(clock domain)。时钟域可以应用于设计的某些区域中, 例化在这些区域中的所有同步单元都会隐式地使用这些时钟域。</p>
+<p>时钟域的应用的工作模式类似于堆栈, 这意味着你在一个给定的时钟域中仍然可以在本地施加另一个时钟域。</p>
+<p>需要注意的是, 一个寄存器在它被创建的时候捕捉时钟域, 而非它被赋值的时候。所以请确保在你所希望的<code class="docutils literal notranslate"><span class="pre">ClockingArea</span></code>中创建寄存器。</p>
+</section>
+<section id="instantiation">
+<h2>二、例化(Instantiation)<a class="headerlink" href="#instantiation" title="此标题的永久链接"></a></h2>
+<p>定义时钟域的语句如下所示(使用EBNF语句)：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="nc">ClockDomain</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">clock</span><span class="p">:</span><span class="w"> </span><span class="nc">Bool</span><span class="w"></span>
+<span class="w">    </span><span class="p">[,</span><span class="w"> </span><span class="n">reset</span><span class="p">:</span><span class="w"> </span><span class="nc">Bool</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">[,</span><span class="w"> </span><span class="n">softReset</span><span class="p">:</span><span class="w"> </span><span class="nc">Bool</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">[,</span><span class="w"> </span><span class="n">clockEnable</span><span class="p">:</span><span class="w"> </span><span class="nc">Bool</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">[,</span><span class="w"> </span><span class="n">frequency</span><span class="p">:</span><span class="w"> </span><span class="nc">IClockDomainFrequency</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">[,</span><span class="w"> </span><span class="n">config</span><span class="p">:</span><span class="w"> </span><span class="nc">ClockDomainConfig</span><span class="p">]</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>在这个定义中包含五个参数：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">变量</th>
+<th style="text-align: center;">描述</th>
+<th style="text-align: center;">默认</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>clock</code></td>
+<td style="text-align: center;">定义该时钟域的时钟</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>reset</code></td>
+<td style="text-align: center;">复位信号。如果存在需要复位信号但没有提供它的时钟域的寄存器, 就会报错</td>
+<td style="text-align: center;">null</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>softReset</code></td>
+<td style="text-align: center;">推断额外同步复位的复位</td>
+<td style="text-align: center;">null</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>clockEnable</code></td>
+<td style="text-align: center;">该信号的目的在于取消整个时钟域的时钟, 而不用在每个同步单元上手动取消</td>
+<td style="text-align: center;">null</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>frequency</code></td>
+<td style="text-align: center;">允许你在给定的时钟域中设定频率, 并且之后在设计中读取</td>
+<td style="text-align: center;">UnknownFrequency</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>config</code></td>
+<td style="text-align: center;">设定信号的极性和reset的实质</td>
+<td style="text-align: center;">Current config</td>
+</tr>
+</tbody>
+</table><p>以下例子给出在设计中定义特定时钟域的实例：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">coreClock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">coreReset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+
+<span class="c1">//定义新的时钟域</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">coreClockDomain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">(</span><span class="n">coreClock</span><span class="p">,</span><span class="w"> </span><span class="n">coreReset</span><span class="p">)</span><span class="w"></span>
+
+<span class="c1">//在设计的某个区域内应用该时钟域</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">coreArea</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">ClockingArea</span><span class="p">(</span><span class="n">coreClockDomain</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">coreClockedRegister</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">coreClock</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">coreReset</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">coreArea_coreClockedRegister</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">counter</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">coreClock</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">posedge</span><span class="w"> </span><span class="n">coreReset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">coreReset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">coreArea_coreClockedRegister</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0000</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">io_cond1</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">        </span><span class="n">coreArea_coreClockedRegister</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0010</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+<p>当一个<em>Area</em>不需要时钟时(门控), 也可以直接应用时钟域：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Counters</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">enable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">freeCount</span><span class="p">,</span><span class="w"> </span><span class="n">gatedCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">UInt</span><span class="w"> </span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">freeCounter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">CounterFreeRun</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">freeCount</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">freeCounter</span><span class="p">.</span><span class="n">value</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">gatedClk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">readClockWire</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">enable</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">gated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">(</span><span class="n">gatedClk</span><span class="p">,</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">readResetWire</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//这里在门控加法器中应用门控时钟域</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">gatedCounter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gated</span><span class="p">(</span><span class="nc">CounterFreeRun</span><span class="p">(</span><span class="mi">16</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">gatedCount</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">gatedCounter</span><span class="p">.</span><span class="n">value</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="k">module</span><span class="w"> </span><span class="n">Counters</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_enable</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">     </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_freeCount</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">     </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_gatedCount</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">clk</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">reset</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">_zz_freeCounter_valueNext</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">0</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">_zz_freeCounter_valueNext_1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">_zz_gatedCounter_valueNext</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">0</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">_zz_gatedCounter_valueNext_1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">freeCounter_willIncrement</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">freeCounter_willClear</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">freeCounter_valueNext</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">freeCounter_value</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">freeCounter_willOverflowIfInc</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">freeCounter_willOverflow</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">gatedClk</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">gatedCounter_willIncrement</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">gatedCounter_willClear</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">gatedCounter_valueNext</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">gatedCounter_value</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">gatedCounter_willOverflowIfInc</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">gatedCounter_willOverflow</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">_zz_freeCounter_valueNext_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">freeCounter_willIncrement</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">_zz_freeCounter_valueNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mh">3</span><span class="mi">&#39;d0</span><span class="p">,</span><span class="w"> </span><span class="n">_zz_freeCounter_valueNext_1</span><span class="p">};</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">_zz_gatedCounter_valueNext_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gatedCounter_willIncrement</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">_zz_gatedCounter_valueNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mh">3</span><span class="mi">&#39;d0</span><span class="p">,</span><span class="w"> </span><span class="n">_zz_gatedCounter_valueNext_1</span><span class="p">};</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">freeCounter_willClear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">freeCounter_willOverflowIfInc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">freeCounter_value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b1111</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">freeCounter_willOverflow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">freeCounter_willOverflowIfInc</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">freeCounter_willIncrement</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">freeCounter_valueNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">freeCounter_value</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">_zz_freeCounter_valueNext</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">freeCounter_willClear</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">freeCounter_valueNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0000</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">freeCounter_willIncrement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_freeCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">freeCounter_value</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">gatedClk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">clk</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">io_enable</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">gatedCounter_willClear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">gatedCounter_willOverflowIfInc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">gatedCounter_value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b1111</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">gatedCounter_willOverflow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">gatedCounter_willOverflowIfInc</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">gatedCounter_willIncrement</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">gatedCounter_valueNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">gatedCounter_value</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">_zz_gatedCounter_valueNext</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">gatedCounter_willClear</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">gatedCounter_valueNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0000</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">gatedCounter_willIncrement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_gatedCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gatedCounter_value</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">posedge</span><span class="w"> </span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">freeCounter_value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0000</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">freeCounter_value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">freeCounter_valueNext</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">gatedClk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">posedge</span><span class="w"> </span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">gatedCounter_value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0000</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">gatedCounter_value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">gatedCounter_valueNext</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="k">endmodule</span><span class="w"></span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>配置(Configuration)</p></li>
+</ol>
+<p>除了生成器参数(constructor parameters), 以下针对每个时钟域的设置可以通过<code class="docutils literal notranslate"><span class="pre">ClockDomainConfig</span></code>类进行配置：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">性质</th>
+<th style="text-align: center;">有效值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>clockEdge</code></td>
+<td style="text-align: center;"><code>RISING</code>, <code>FALLING</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>resetKind</code></td>
+<td style="text-align: center;">在一些FPGA(FF的值通过bitstream加载)中支持的<code>ASYNC</code>, <code>SYNC</code>和<code>BOOT</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>resetActiveLevel</code></td>
+<td style="text-align: center;"><code>HIGH</code>, <code>LOW</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>softResetActiveLevel</code></td>
+<td style="text-align: center;"><code>HIGH</code>, <code>LOW</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>clockEnableActiveLevel</code></td>
+<td style="text-align: center;"><code>HIGH</code>, <code>LOW</code></td>
+</tr>
+</tbody>
+</table><div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CustomClockExample</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">clk</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">resetn</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">result</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//配置时钟域</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">myClockDomain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">clock</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">clk</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">reset</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">resetn</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">config</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomainConfig</span><span class="p">(</span><span class="w"></span>
+<span class="w">            </span><span class="n">clockEdge</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="nc">RISING</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="n">resetKind</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="nc">ASYNC</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="n">resetActiveLevel</span><span class="w"> </span><span class="o">=</span><span class="nc">LOW</span><span class="w"></span>
+<span class="w">        </span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//定义用myClockDomain的区域</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">myArea</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">ClockingArea</span><span class="p">(</span><span class="n">myClockDomain</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">myReg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">myReg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">myReg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">io</span><span class="p">.</span><span class="n">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">myReg</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="k">module</span><span class="w"> </span><span class="n">CustomClockExample</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_clk</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_resetn</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">     </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_result</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">myArea_myReg</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myArea_myReg</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">io_clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">negedge</span><span class="w"> </span><span class="n">io_resetn</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">io_resetn</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">myArea_myReg</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0111</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">myArea_myReg</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">(</span><span class="n">myArea_myReg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0001</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+<p>默认地, 一个<code class="docutils literal notranslate"><span class="pre">ClockDomain</span></code>应用于整个设计, 这个全局时钟的默认配置如下：</p>
+<ul class="simple">
+<li><p>Clock: 上升沿</p></li>
+<li><p>Reset: asynchronous, active high</p></li>
+<li><p>没有时钟使能</p></li>
+</ul>
+<p>对应如下的<code class="docutils literal notranslate"><span class="pre">ClockDomainConfig</span></code>：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">defaultCC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomainConfig</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">clockEdge</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="nc">RISING</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">resetKind</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="nc">ASYNC</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">resetActiveLevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">HIGH</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<ol>
+<li><p>内部时钟(Internal clock)</p>
+<p>创建时钟域的另一种语句如下：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="nc">ClockDomain</span><span class="p">.</span><span class="n">internal</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="nc">String</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="n">config</span><span class="p">:</span><span class="w"> </span><span class="nc">ClockDomainConfig</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="n">withReset</span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="n">withSoftReset</span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="n">withClockEnable</span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="n">frequency</span><span class="p">:</span><span class="w"> </span><span class="nc">IClockDomainFrequency</span><span class="p">]</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>该定义有以下六个参数：</p>
+</li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">变量</th>
+<th style="text-align: center;">描述</th>
+<th style="text-align: center;">默认</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>name</code></td>
+<td style="text-align: center;">clk和reset信号的名字</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>config</code></td>
+<td style="text-align: center;">给定信号的极性以及复位信号的特点</td>
+<td style="text-align: center;">Current config</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>withReset</code></td>
+<td style="text-align: center;">增加复位信号</td>
+<td style="text-align: center;">true</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>withSoftReset</code></td>
+<td style="text-align: center;">增加软件复位信号</td>
+<td style="text-align: center;">false</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>withClockEnable</code></td>
+<td style="text-align: center;">增加时钟使能</td>
+<td style="text-align: center;">false</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>frequency</code></td>
+<td style="text-align: center;">时钟域频率</td>
+<td style="text-align: center;">UnknownFrequency</td>
+</tr>
+</tbody>
+</table><p>这种方法的优势在于用已知的/给定的名字创建时钟域和复位信号而非继承一个时钟域。</p>
+<p>一旦时钟域被创建, 你需要给<code class="docutils literal notranslate"><span class="pre">ClockDomain</span></code>的信号赋值, 赋值方式如下：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">InternalClockWithPllExample</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">clk100M</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">aReset</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">result</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//myClockDomain.clock会被命名为myClockName_clk</span>
+<span class="w">    </span><span class="c1">//myClockDomain.reset会被命名为myClockName_reset</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">myClockDomain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">.</span><span class="n">interna</span><span class="p">(</span><span class="s">&quot;myClockName&quot;</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//例化PLL(可能是黑盒)</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">pll</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Pll</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="n">pll</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">clkIn</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">clk100M</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//给myClockDomain信号赋值</span>
+<span class="w">    </span><span class="n">myClockDomain</span><span class="p">.</span><span class="n">clock</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">pll</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">clockOut</span><span class="w"></span>
+<span class="w">    </span><span class="n">myClockDomain</span><span class="p">.</span><span class="n">reset</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">aReset</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">pll</span><span class="p">.</span><span class="n">io</span><span class="w">     </span><span class="c1">//有问题：这里缺少语句</span>
+
+<span class="w">    </span><span class="c1">//之后在myCLockDomain可以任你发挥</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">myArea</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">ClockingArea</span><span class="p">(</span><span class="n">myClockDomain</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">myReg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">myReg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">myReg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">io</span><span class="p">.</span><span class="n">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">myReg</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<ol>
+<li><p>外部时钟(External clock)</p>
+<p>你可以定义一个在由外部驱动的时钟域, 这个外部驱动可能来自于任何地方。它会自动在顶层给所有这些时序同步单元增加时钟和复位wire。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="nc">ClockDomain</span><span class="p">.</span><span class="n">external</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="nc">String</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="n">config</span><span class="p">:</span><span class="w"> </span><span class="nc">ClockDomainConfig</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="n">withReset</span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="n">withSoftReset</span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="n">withClockEnable</span><span class="p">:</span><span class="w"> </span><span class="nc">Bollean</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="n">frequency</span><span class="p">:</span><span class="w"> </span><span class="nc">IClockDomainFrequency</span><span class="p">]</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">ClockDomain.external</span></code>函数的变量和<code class="docutils literal notranslate"><span class="pre">ClockDomainin.internal</span></code>函数中完全一样。以下是使用<code class="docutils literal notranslate"><span class="pre">ClockDomain.external</span></code>的例子：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ExternalClockExample</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//在顶层你有两个信号： myClockName_clk和myClockName_reset</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">myClockDomain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">.</span><span class="n">external</span><span class="p">(</span><span class="s">&quot;myClockName&quot;</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">myArea</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">ClockingArea</span><span class="p">(</span><span class="n">myClockDomain</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">myReg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">myReg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">myReg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">io</span><span class="p">.</span><span class="n">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">myReg</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="k">module</span><span class="w"> </span><span class="n">CustomClockExample</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">input</span><span class="w">               </span><span class="n">io_clk</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="k">input</span><span class="w">               </span><span class="n">io_resetn</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="k">output</span><span class="w">     </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_result</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="k">input</span><span class="w">               </span><span class="n">myClockName_clk</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="k">input</span><span class="w">               </span><span class="n">myClockName_reset</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">tt_io_result</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">ExternalClockExample</span><span class="w"> </span><span class="n">tt</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_result</span><span class="w">         </span><span class="p">(</span><span class="n">tt_io_result</span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]),</span><span class="w"> </span><span class="c1">//o</span>
+<span class="w">    </span><span class="p">.</span><span class="n">myClockName_clk</span><span class="w">   </span><span class="p">(</span><span class="n">myClockName_clk</span><span class="w">  </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">myClockName_reset</span><span class="w"> </span><span class="p">(</span><span class="n">myClockName_reset</span><span class="p">)</span><span class="w">  </span><span class="c1">//i</span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="k">endmodule</span><span class="w"></span>
+
+<span class="k">module</span><span class="w"> </span><span class="n">ExternalClockExample</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">output</span><span class="w">     </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_result</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="k">input</span><span class="w">               </span><span class="n">myClockName_clk</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="k">input</span><span class="w">               </span><span class="n">myClockName_reset</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">myArea_myReg</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">assign</span><span class="w"> </span><span class="n">io_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myArea_myReg</span><span class="p">;</span><span class="w"></span>
+<span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">myClockName_clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">posedge</span><span class="w"> </span><span class="n">myClockName_reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">myClockName_reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">        </span><span class="n">myArea_myReg</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0111</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">        </span><span class="n">myArea_myReg</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">(</span><span class="n">myArea_myReg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0001</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+
+<span class="k">endmodule</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>HDL生成中的信号优先级(Signal priorities in HDL generation)</p>
+<p>在当前版本, reset和时钟使能信号有不同的性质, 其顺序是：<code class="docutils literal notranslate"><span class="pre">asyncReset</span></code>, <code class="docutils literal notranslate"><span class="pre">clockEnable</span></code>, <code class="docutils literal notranslate"><span class="pre">syncReset</span></code>和<code class="docutils literal notranslate"><span class="pre">softReset</span></code>。</p>
+<p>请注意<code class="docutils literal notranslate"><span class="pre">clockEnable</span></code>比<code class="docutils literal notranslate"><span class="pre">syncReset</span></code>的优先级更高。如果在没有时钟使能的时候进行同步复位(尤其是在仿真的开始), 门寄存器不会被复位。</p>
+<p>这里有一个例子：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">clockedArea</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">ClockEnableArea</span><span class="p">(</span><span class="n">clockEnable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">reg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">input</span><span class="p">)</span><span class="w"> </span><span class="n">init</span><span class="w"> </span><span class="nc">False</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>这会产生如下VerilogHDL代码：</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">clockedArea_newClockEnable</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">resetn</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">            </span><span class="n">clockedArea_reg</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">            </span><span class="n">clockedArea_reg</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">io_input</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>如果这个行为是有问题的, 一个变通方法是用<code class="docutils literal notranslate"><span class="pre">when</span></code>语句而不是<code class="docutils literal notranslate"><span class="pre">ClockDomain.enable</span></code>作为时钟使能, 这在未来会得到改进。</p>
+</div></blockquote>
+</li>
+<li><p>上下文(Context)</p>
+<p>无论在哪, 你都可以通过调用<code class="docutils literal notranslate"><span class="pre">ClockDomain.current</span></code>取回时钟域。</p>
+<p>返回的<code class="docutils literal notranslate"><span class="pre">ClockDomain</span></code>实例有如下可以调用的函数：</p>
+</li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">函数名</th>
+<th style="text-align: center;">描述</th>
+<th style="text-align: center;">返回类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">frequency.getValue</td>
+<td style="text-align: center;">返回时钟域频率</td>
+<td style="text-align: center;">Double</td>
+</tr>
+<tr>
+<td style="text-align: center;">hasReset</td>
+<td style="text-align: center;">返回时钟域是否有复位信号</td>
+<td style="text-align: center;">Boolean</td>
+</tr>
+<tr>
+<td style="text-align: center;">hasSoftReset</td>
+<td style="text-align: center;">返回时钟域是否有软件复位信号</td>
+<td style="text-align: center;">Boolean</td>
+</tr>
+<tr>
+<td style="text-align: center;">hasClockEnable</td>
+<td style="text-align: center;">返回时钟域是否有时钟使能信号</td>
+<td style="text-align: center;">Boolean</td>
+</tr>
+<tr>
+<td style="text-align: center;">readClockWire</td>
+<td style="text-align: center;">返回时钟信号派生的信号</td>
+<td style="text-align: center;">Bool</td>
+</tr>
+<tr>
+<td style="text-align: center;">readResetWire</td>
+<td style="text-align: center;">返回软件复位信号派生的信号</td>
+<td style="text-align: center;">Bool</td>
+</tr>
+<tr>
+<td style="text-align: center;">readSoftResetWire</td>
+<td style="text-align: center;">返回复位信号派生的信号</td>
+<td style="text-align: center;">Bool</td>
+</tr>
+<tr>
+<td style="text-align: center;">readClockEnableWire</td>
+<td style="text-align: center;">返回时钟使能信号派生的信号</td>
+<td style="text-align: center;">Bool</td>
+</tr>
+<tr>
+<td style="text-align: center;">isResetActive</td>
+<td style="text-align: center;">当复位有效返回True</td>
+<td style="text-align: center;">Bool</td>
+</tr>
+<tr>
+<td style="text-align: center;">isSoftResetActive</td>
+<td style="text-align: center;">当软件复位有效返回True</td>
+<td style="text-align: center;">Bool</td>
+</tr>
+<tr>
+<td style="text-align: center;">isClockEnableActive</td>
+<td style="text-align: center;">当时钟使能有效返回True</td>
+<td style="text-align: center;">Bool</td>
+</tr>
+</tbody>
+</table><p>如下是一个例子, UART控制器使用它的频率规格设置始终分频：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">coreClockDomain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">(</span><span class="n">coreClock</span><span class="p">,</span><span class="w"> </span><span class="n">coreReset</span><span class="p">,</span><span class="w"> </span><span class="n">frequency</span><span class="o">=</span><span class="nc">FixedFrequency</span><span class="p">(</span><span class="mf">100e6</span><span class="p">))</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">coreArea</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">ClockingArea</span><span class="p">(</span><span class="n">coreClockDomain</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">ctrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">UartCtrl</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="n">ctrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">config</span><span class="p">.</span><span class="n">clockDivider</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">(</span><span class="n">coreClk</span><span class="p">.</span><span class="n">frequency</span><span class="p">.</span><span class="n">getValue</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">57.6e3</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">8</span><span class="p">).</span><span class="n">toInt</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="clock-domain-crossing">
+<h2>三、跨时钟域(Clock domain crossing)<a class="headerlink" href="#clock-domain-crossing" title="此标题的永久链接"></a></h2>
+<p>SpinalHDL会在编译时检查有没有未定义的跨时钟域的信号的读取, 如果你想要读取另一个<code class="docutils literal notranslate"><span class="pre">ClockDomain</span></code>区域的信号, 你应该给目标信号增加<code class="docutils literal notranslate"><span class="pre">crossClockDomain</span></code>标签, 如下例所示：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">//             _____                        _____             _____</span>
+<span class="c1">//            |     |  (crossClockDomain)  |     |           |     |</span>
+<span class="c1">//  dataIn --&gt;|     |---------------------&gt;|     |----------&gt;|     |--&gt; dataOut</span>
+<span class="c1">//            | FF  |                      | FF  |           | FF  |</span>
+<span class="c1">//  clkA   --&gt;|     |              clkB --&gt;|     |   clkB --&gt;|     |</span>
+<span class="c1">//  rstA   --&gt;|_____|              rstB --&gt;|_____|   rstB --&gt;|_____|</span>
+
+<span class="c1">//补全时钟和复位引脚所通过哪个模块IO给定的</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CrossingExample</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">clkA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">rstA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">clkB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">rstB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">dataIn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">dataOut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//clkA时钟域下的样本输入</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">area_clkA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">ClockingArea</span><span class="p">(</span><span class="nc">ClockDomain</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">clkA</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">rstA</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">reg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">dataIn</span><span class="p">)</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="nc">False</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//两级寄存器避免亚稳态</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">area_clkB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">ClockingArea</span><span class="p">(</span><span class="nc">ClockDomain</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">clkB</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">rstB</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">buf0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">area_clkA</span><span class="p">.</span><span class="n">reg</span><span class="p">)</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="nc">False</span><span class="p">)</span><span class="w"> </span><span class="n">addTag</span><span class="p">(</span><span class="n">crossClockDomain</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">buf1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">buf0</span><span class="p">)</span><span class="w">          </span><span class="n">init</span><span class="p">(</span><span class="nc">False</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">dataOut</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">area_clkB</span><span class="p">.</span><span class="n">buf1</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c1">//另一种时钟域以参数方式给定的实现方式</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CrossingExample</span><span class="p">(</span><span class="n">clkA</span><span class="p">:</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">,</span><span class="w"> </span><span class="n">clkB</span><span class="p">:</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">dataIn</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">dataOut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"> </span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//clkA时钟域下的样本输入</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">area_clkA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">ClockingArea</span><span class="p">(</span><span class="n">clkA</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">reg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">dataIn</span><span class="p">)</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="nc">False</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//两级寄存器避免亚稳态</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">area_clkB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">ClockingArea</span><span class="p">(</span><span class="n">clkB</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">buf0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">area_clkA</span><span class="p">.</span><span class="n">reg</span><span class="p">)</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="nc">False</span><span class="p">)</span><span class="w"> </span><span class="n">addTap</span><span class="p">(</span><span class="n">crossClockDomain</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">buf1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">buf0</span><span class="p">)</span><span class="w">          </span><span class="n">init</span><span class="p">(</span><span class="nc">False</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">dataOut</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">area_clkB</span><span class="p">.</span><span class="n">buf1</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="k">module</span><span class="w"> </span><span class="n">CrossingExample</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_clkA</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_rstA</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_clkB</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_rstB</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_dataIn</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">              </span><span class="n">io_dataOut</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">reg</span><span class="w">                 </span><span class="n">area_clkA_reg</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="n">async_reg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="kt">reg</span><span class="w">                 </span><span class="n">area_clkB_buf0</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">                 </span><span class="n">area_clkB_buf1</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_dataOut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">area_clkB_buf1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">io_clkA</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">posedge</span><span class="w"> </span><span class="n">io_rstA</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">io_rstA</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">area_clkA_reg</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">area_clkA_reg</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">io_dataIn</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">io_clkB</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">posedge</span><span class="w"> </span><span class="n">io_rstB</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">io_rstB</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">area_clkB_buf0</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="n">area_clkB_buf1</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">area_clkB_buf0</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">area_clkA_reg</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="n">area_clkB_buf1</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">area_clkB_buf0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+
+<span class="k">endmodule</span><span class="w"></span>
+</pre></div>
+</div>
+<p>一般来说, 用2个或更多的触发器驱动目标时钟域可以避免亚稳态的产生。提供在<code class="docutils literal notranslate"><span class="pre">spinal.lib._</span></code>中的<code class="docutils literal notranslate"><span class="pre">BufferCC(input:</span> <span class="pre">T,</span> <span class="pre">init:</span> <span class="pre">T</span> <span class="pre">=</span> <span class="pre">null,</span> <span class="pre">bufferDepth:</span> <span class="pre">Int</span> <span class="pre">=</span> <span class="pre">2)</span></code>函数能例化必要的触发器(触发器的数量取决于<code class="docutils literal notranslate"><span class="pre">bufferDepth</span></code>参数大小)来减轻亚稳态。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CrossingExample</span><span class="p">(</span><span class="n">clkA</span><span class="p">:</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">,</span><span class="w"> </span><span class="n">clkB</span><span class="p">:</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">dataIn</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">dataOut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//clkA时钟域下的样本输入</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">area_clkA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">ClockingArea</span><span class="p">(</span><span class="n">clkA</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">reg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">dataIn</span><span class="p">)</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="nc">False</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//BufferCC避免亚稳态</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">area_clkB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">ClockingArea</span><span class="p">(</span><span class="n">clkB</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">buf1</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">BufferCC</span><span class="p">(</span><span class="n">area_clkA</span><span class="p">.</span><span class="n">reg</span><span class="p">,</span><span class="w"> </span><span class="nc">False</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">dataOut</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">area_clkB</span><span class="p">.</span><span class="n">buf1</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="k">module</span><span class="w"> </span><span class="n">CrossingExample</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_dataIn</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">              </span><span class="n">io_dataOut</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">clk1_clk</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">clk1_reset</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">clk2_clk</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">clk2_reset</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">area_clkA_reg_buffercc_io_dataOut</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">                 </span><span class="n">area_clkA_reg</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">area_clkB_buf1</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">BufferCC</span><span class="w"> </span><span class="n">area_clkA_reg_buffercc</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_dataIn</span><span class="w">  </span><span class="p">(</span><span class="n">area_clkA_reg</span><span class="w">                    </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_dataOut</span><span class="w"> </span><span class="p">(</span><span class="n">area_clkA_reg_buffercc_io_dataOut</span><span class="p">),</span><span class="w"> </span><span class="c1">//o</span>
+<span class="w">    </span><span class="p">.</span><span class="n">clk2_clk</span><span class="w">   </span><span class="p">(</span><span class="n">clk2_clk</span><span class="w">                         </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">clk2_reset</span><span class="w"> </span><span class="p">(</span><span class="n">clk2_reset</span><span class="w">                       </span><span class="p">)</span><span class="w">  </span><span class="c1">//i</span>
+<span class="w">  </span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">area_clkB_buf1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">area_clkA_reg_buffercc_io_dataOut</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_dataOut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">area_clkB_buf1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk1_clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">posedge</span><span class="w"> </span><span class="n">clk1_reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">clk1_reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">area_clkA_reg</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">area_clkA_reg</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">io_dataIn</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+
+<span class="k">endmodule</span><span class="w"></span>
+
+<span class="k">module</span><span class="w"> </span><span class="n">BufferCC</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_dataIn</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">              </span><span class="n">io_dataOut</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">clk2_clk</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">clk2_reset</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="w">  </span><span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="n">async_reg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="kt">reg</span><span class="w">                 </span><span class="n">buffers_0</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="n">async_reg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="kt">reg</span><span class="w">                 </span><span class="n">buffers_1</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_dataOut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffers_1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk2_clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">posedge</span><span class="w"> </span><span class="n">clk2_reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">clk2_reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">buffers_0</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="n">buffers_1</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">buffers_0</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">io_dataIn</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="n">buffers_1</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">buffers_0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+
+<span class="k">endmodule</span><span class="w"></span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>注意：<code class="docutils literal notranslate"><span class="pre">BufferCC</span></code>函数只能用于<code class="docutils literal notranslate"><span class="pre">Bit</span></code>类型, 或像灰度编码计数器(每周期翻转1bit)一样的<code class="docutils literal notranslate"><span class="pre">Bits</span></code>操作, 不能用于多bit跨时钟域处理。对于多bit情况, 推荐使用<code class="docutils literal notranslate"><span class="pre">StreamFifoCC</span></code>以应对高带宽需求, 或用<code class="docutils literal notranslate"><span class="pre">StreamCCByToggle</span></code>在带宽不重要的情况下减少数据源的使用。</p>
+</div></blockquote>
+</section>
+<section id="clocking-areas">
+<h2>四、特殊的时序区域(clocking areas)<a class="headerlink" href="#clocking-areas" title="此标题的永久链接"></a></h2>
+<ol>
+<li><p>慢区域(Slow Area)</p>
+<p><code class="docutils literal notranslate"><span class="pre">SlowArea</span></code>用来创建一个比当前时钟域慢的时钟域：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TopLevel</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="p">:{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="n">counter1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="n">counter2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="n">counter3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//当前使用时钟域：100MHz</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">areaStd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="p">(</span><span class="nc">CounterFreeRun</span><span class="p">(</span><span class="mi">16</span><span class="p">).</span><span class="n">value</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//把当前时钟域减少4倍到25MHz</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">areaDiv4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">SlowArea</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="p">(</span><span class="nc">CounterFreeRun</span><span class="p">(</span><span class="mi">16</span><span class="p">).</span><span class="n">value</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//把当前时钟域减少到50MHz</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">area50MHz</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">SlowArea</span><span class="p">(</span><span class="mi">50</span><span class="w"> </span><span class="nc">MHz</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="p">(</span><span class="nc">CounterFreeRun</span><span class="p">(</span><span class="mi">16</span><span class="p">).</span><span class="n">value</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">counter1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">areaStd</span><span class="p">.</span><span class="n">counter</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">counter2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">areaDiv4</span><span class="p">.</span><span class="n">counter</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">counter3</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">area50MHz</span><span class="p">.</span><span class="n">counter</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="nc">SpinalConfig</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">defaultClockDomainFrequency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">FixedFrequency</span><span class="p">(</span><span class="mi">100</span><span class="w"> </span><span class="nc">MHz</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">).</span><span class="n">generateVhdl</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">TopLevel1</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>BootReset</p>
+<p><code class="docutils literal notranslate"><span class="pre">clockDomain.withBootReset()</span></code>能够把寄存器的resetkinde指定成boot。<code class="docutils literal notranslate"><span class="pre">clockDomain.withSyncReset()</span></code>能够把寄存器的resetkinde指定成Sync-reset。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Top</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bit</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="n">init</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">b</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">clockDomain</span><span class="p">.</span><span class="n">withBootReset</span><span class="p">()</span><span class="w">  </span><span class="n">on</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="n">init</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">c</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">clockDomain</span><span class="p">.</span><span class="n">withSyncReset</span><span class="p">()</span><span class="w">  </span><span class="n">on</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="n">init</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">d</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">clockDomain</span><span class="p">.</span><span class="n">withAsyncReset</span><span class="p">()</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="n">init</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="nc">SpinalVerilog</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">Top</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="k">module</span><span class="w"> </span><span class="n">MyTopLevel</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">      </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_data</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">     </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_a</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">     </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_b</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">     </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_c</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">     </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_d</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">clk</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">reset</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_data_regNext</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_data_regNext_1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_data_regNext_2</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_data_regNext_3</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">initial</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">io_data_regNext_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h0</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">io_data_regNext</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">io_data_regNext_1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">io_data_regNext_2</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">io_data_regNext_3</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">posedge</span><span class="w"> </span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">io_data_regNext</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">8&#39;h0</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="n">io_data_regNext_3</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">8&#39;h0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">io_data_regNext</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">io_data</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="n">io_data_regNext_3</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">io_data</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">io_data_regNext_1</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">io_data</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">io_data_regNext_2</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">8&#39;h0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">io_data_regNext_2</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">io_data</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+
+<span class="k">endmodule</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>重置区域(Reset Area)</p>
+<p><code class="docutils literal notranslate"><span class="pre">ResetArea</span></code>可以用来创建新的时钟域, 在这个时钟域中一个特殊的复位信号和当前时钟域复位信号相结合：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TopLevel</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">specialReset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w">       </span><span class="c1">//需要初始化</span>
+
+<span class="w">    </span><span class="c1">//这个区域的reset由specialReset实现</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">areaRst_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">ResetArea</span><span class="p">(</span><span class="n">specialReset</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="p">(</span><span class="nc">CounterFreeRun</span><span class="p">(</span><span class="mi">16</span><span class="p">).</span><span class="n">value</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//这个区域的复位信号是当前复位和specialReset的结合</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">areaRst_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">ResetArea</span><span class="p">(</span><span class="n">specialReset</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="p">(</span><span class="nc">CounterFreeRun</span><span class="p">(</span><span class="mi">16</span><span class="p">).</span><span class="n">value</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="k">assign</span><span class="w"> </span><span class="n">_zz__zz_io_counter1_1_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_zz_io_counter1</span><span class="p">;</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">_zz__zz_io_counter1_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mh">3</span><span class="mi">&#39;d0</span><span class="p">,</span><span class="w"> </span><span class="n">_zz__zz_io_counter1_1_1</span><span class="p">};</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">_zz__zz_io_counter2_1_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_zz_io_counter2</span><span class="p">;</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">_zz__zz_io_counter2_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mh">3</span><span class="mi">&#39;d0</span><span class="p">,</span><span class="w"> </span><span class="n">_zz__zz_io_counter2_1_1</span><span class="p">};</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">specialReset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">  </span><span class="n">_zz_io_counter1_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">_zz_io_counter1_2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">_zz__zz_io_counter1_1</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">_zz_io_counter1_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0000</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="k">assign</span><span class="w"> </span><span class="n">_zz_io_counter1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">areaRst_2_newReset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">reset</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">specialReset</span><span class="p">);</span><span class="w"></span>
+<span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">  </span><span class="n">_zz_io_counter2_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">_zz_io_counter2_2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">_zz__zz_io_counter2_1</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">_zz_io_counter2_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0000</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="k">assign</span><span class="w"> </span><span class="n">_zz_io_counter2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">io_counter1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_zz_io_counter1_2</span><span class="p">;</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">io_counter2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_zz_io_counter2_2</span><span class="p">;</span><span class="w"></span>
+<span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">posedge</span><span class="w"> </span><span class="n">specialReset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">specialReset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">_zz_io_counter1_2</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0000</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">_zz_io_counter1_2</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">_zz_io_counter1_1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">posedge</span><span class="w"> </span><span class="n">areaRst_2_newReset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">areaRst_2_newReset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">_zz_io_counter2_2</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0000</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">_zz_io_counter2_2</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">_zz_io_counter2_1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>时钟使能区域(ClockEnableArea)</p>
+<p><code class="docutils literal notranslate"><span class="pre">ClockEnableArea</span></code>可以在当前时钟域增加额外的时钟使能：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TopLevel</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">clockEnable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w">        </span><span class="c1">//需要初始化</span>
+
+<span class="w">    </span><span class="c1">//在这个区域增加时钟使能</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">area_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">ClockEnableArea</span><span class="p">(</span><span class="n">clockEnable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="p">(</span><span class="nc">CounterFreeRun</span><span class="p">(</span><span class="mi">16</span><span class="p">).</span><span class="n">value</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="k">assign</span><span class="w"> </span><span class="n">_zz__zz_io_counter1_1_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_zz_io_counter1</span><span class="p">;</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">_zz__zz_io_counter1_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mh">3</span><span class="mi">&#39;d0</span><span class="p">,</span><span class="w"> </span><span class="n">_zz__zz_io_counter1_1_1</span><span class="p">};</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">clockEnable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">area_1_newClockEnable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">clockEnable</span><span class="p">);</span><span class="w"></span>
+<span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">  </span><span class="n">_zz_io_counter1_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">_zz_io_counter1_2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">_zz__zz_io_counter1_1</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">_zz_io_counter1_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0000</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="k">assign</span><span class="w"> </span><span class="n">_zz_io_counter1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">io_counter1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_zz_io_counter1_2</span><span class="p">;</span><span class="w"></span>
+<span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">posedge</span><span class="w"> </span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">_zz_io_counter1_2</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0000</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">area_1_newClockEnable</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">_zz_io_counter1_2</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">_zz_io_counter1_1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E5%87%BD%E6%95%B0.html" class="btn btn-neutral float-left" title="函数(Function)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="VHDL%E4%BE%8B%E5%8C%96%E5%92%8CVerilogIP.html" class="btn btn-neutral float-right" title="VHDL例化和Verilog IP(Instantiate VHDL and Verilog IP)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

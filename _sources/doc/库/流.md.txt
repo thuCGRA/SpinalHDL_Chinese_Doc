@@ -1,0 +1,57 @@
+## Flow
+
+### 一、规范(Specification)
+
+Flow接口是一个简单的有效(valid)/负载(payload)协议, 意味着从端口(slave)无法中断总线。
+
+例如, 它可以用来表示来自UART控制器的数据或者向一个片上存储写数据的请求等。
+
+|  信号   | 类型  |  驱动  |             描述             |    Don't care 条件     |
+| :-----: | :---: | :----: | :--------------------------: | :--------------------: |
+|  valid  | Bool  | Master | 当置高时, 说明负载通过该接口 |                        |
+| payload |   T   | Master |        负载任务的内容        | valid为低时, dont care |
+
+### 二、函数(Functions)
+
+|               句式               |                                     描述                                      | 返回值  | 延迟  |
+| :------------------------------: | :---------------------------------------------------------------------------: | :-----: | :---: |
+|        Flow(type : Data)         |                            建立一个给定类型的Flow                             | Flow[T] |       |
+| master/slave Stream(type : Data) |               建立一个给定类型的Flow, 并根据给定的IO设置初始化                | Flow[T] |       |
+|           x.m2sPipe()            | 返回一个由x通过寄存器驱动的流 <br>valid/ready/payload路径通过一些寄存器分割。 | Flow[T] |   1   |
+|         x << y<br>y >> x         |                                  把y连接到x                                   |         |   0   |
+|        x <-< y<br>y >-> x        |                             通过m2sPipe把y连接到x                             |         |   1   |
+|     x.throwWhen(cond : Bool)     |      返回一个连接到x的Flow, 并且当cond为true时抛弃交换任务(Transaction)       | Flow[T] |   0   |
+|            x.toReg()             |                  返回一个当valid置高时加在`payload`的寄存器                   |    T    |       |
+|           x.setIdle()            |          将Flow置为空闲状态：`valid`为`False`并且不关心负载`payload`          |         |       |
+|      x.push(newPayload: T)       |              给予当前Flow一个新的有效负载。`valid`被设置为`True`              |         |       |
+
+### 三、代码实例(code example)
+```Scala
+val request = Flow(Bits(8 bits))
+val answer  = Flow(Bits(8 bits))
+val storage = Reg(Bits(8 bits)) init 0
+
+val fsm = new StateMachine {
+  answer.setIdle()
+
+  val idle: State = new State with EntryPoint {
+    whenIsActive {
+      when(request.valid) {
+        storage := request.payload
+        goto(sendEcho)
+      }
+    }
+  }
+
+  val sendEcho: State = new State {
+    whenIsActive {
+        answer.push(storage)
+        goto(idle)
+    }
+  }
+}
+
+// 等价地
+
+answer <-< request
+```

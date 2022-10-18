@@ -1,0 +1,16 @@
+## 形式后端(Formal backend)
+
+你可以通过如下代码运行一个模块的形式化验证：
+
+```Scala
+import spinal.core.formal._
+FormalConfig.withBMC(15).doVerify(new Component {
+    // Toplevel to verify
+})
+```
+
+同时支持三个模式：
+
++ withBMC(depth)
++ withProve(depth)
++ withCover(depth)

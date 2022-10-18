@@ -1,0 +1,32 @@
+## 无驱动检测(no driver on)
+
+### 一、简介
+
+SpinalHDL将会检查设计中所有使用的组合逻辑信号都有相应的赋值连线声明。
+
+### 二、例子
+
+下述代码：
+```Scala
+class TopLevel extends Component {
+  val result = out(UInt(8 bits))
+  val a = UInt(8 bits)
+  result := a
+}
+```
+会产生如下报错：
+```
+NO DRIVER ON (toplevel/a :  UInt[8 bits]), defined at
+  ***
+  Source file location of the toplevel/a definition via the stack trace
+  ***
+```
+修复如下：
+```Scala
+class TopLevel extends Component {
+  val result = out(UInt(8 bits))
+  val a = UInt(8 bits)
+  a := 42
+  result := a
+}
+```
