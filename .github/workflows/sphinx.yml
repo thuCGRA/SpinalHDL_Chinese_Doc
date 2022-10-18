@@ -1,0 +1,34 @@
+name: "Linkceck and buildtest on PR"
+
+on:
+  - push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        fetch-depth: 0
+    - name: "setup python"
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: "install dependencies"
+      run: |
+        apt-get update -y && apt-get install -y git
+        pip install -r requirements.txt
+    - uses: ammaraskar/sphinx-problem-matcher@master
+    - name: "check links"
+      run: |
+        cd Sphinx
+        make linkcheck
+    - name: "Test doc building"
+      run: |
+        cd Sphinx
+        make html
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: Sphinx/_build/html
