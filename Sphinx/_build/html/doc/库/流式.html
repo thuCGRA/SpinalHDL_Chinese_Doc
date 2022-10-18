@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>流(Stream) &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="Flow" href="%E6%B5%81.html" />
+    <link rel="prev" title="Utils(实用工具)" href="%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Libraries(库)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E7%AE%80%E4%BB%8B.html">简介</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7.html">Utils(实用工具)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">流(Stream)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#specification">一、规范(Specification)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#semantics">二、语义(Semantics)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">三、函数(Functions)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utils">四、工具(Utils)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%B5%81.html">Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%89%87%E6%AE%B5.html">片段(Fragment)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%8A%B6%E6%80%81%E6%9C%BA.html">状态机(State machine)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="VexRiscv.html">VexRiscv(RV32IM CPU)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BB%8E%E7%AB%AF%E6%80%BB%E7%BA%BF%E5%BA%93.html">从端总线库(Bus Slave Factory)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%BA%A4%E7%A8%8B%E6%A1%86%E6%9E%B6.html">纤程框架(Fiber Framework)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%B3%BB%E7%BB%9F.html">二进制系统(Binary System)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AF%84%E5%AD%98%E5%99%A8%E6%8E%A5%E5%8F%A3.html">寄存器接口(RegIf)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%B8%AD%E6%96%AD%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.html">中断设计规范(Interrupt Design Spec)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%80%BB%E7%BA%BF.html">总线(bus)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Com.html">Com</a></li>
+<li class="toctree-l2"><a class="reference internal" href="IO%E5%8F%A3.html">IO口</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%9B%BE%E5%BD%A2.html">图形(Graphics)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E8%87%AA%E5%8A%A8%E8%AE%BE%E8%AE%A1%E5%B7%A5%E5%85%B7.html">自动设计工具(EDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Misc.html">Misc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Libraries(库)</a> &raquo;</li>
+      <li>流(Stream)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/库/流式.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="stream">
+<h1>流(Stream)<a class="headerlink" href="#stream" title="此标题的永久链接"></a></h1>
+<section id="specification">
+<h2>一、规范(Specification)<a class="headerlink" href="#specification" title="此标题的永久链接"></a></h2>
+<p>Stream接口是一个用来承载负载(payload)的简单握手协议。例如, 它可以用来对FIFO压入或弹出数据、发送请求给UART控制器等等。
+|  信号   | 类型  |  驱动  |                      描述                      |    Don’t care 条件     |
+| :—–: | :—: | :—-: | :——————————————–: | :——————–: |
+|  valid  | Bool  | Master |          当置高时, 说明负载通过该接口          |                        |
+|  ready  | Bool  | Slave  | 当置低时, 表明该slave口不接收传输(transaction) | valid为低时, dont care |
+| payload |   T   | Master |                 负载任务的内容                 | valid为低时, dont care |</p>
+<p><img alt="../../_images/Lib-Stream-Spec.png" src="../../_images/Lib-Stream-Spec.png" /></p>
+<p>在SpinalHDL中有如下应用例子：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">StreamFifo</span><span class="p">[</span><span class="nc">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="nc">Data</span><span class="p">](</span><span class="n">dataType</span><span class="p">:</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="n">depth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">push</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slave</span><span class="w"> </span><span class="nc">Stream</span><span class="w"> </span><span class="p">(</span><span class="n">dataType</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">master</span><span class="w"> </span><span class="nc">Stream</span><span class="w"> </span><span class="p">(</span><span class="n">dataType</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">StreamArbiter</span><span class="p">[</span><span class="nc">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="nc">Data</span><span class="p">](</span><span class="n">dataType</span><span class="p">:</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="n">portCount</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">inputs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Vec</span><span class="p">(</span><span class="n">slave</span><span class="w"> </span><span class="nc">Stream</span><span class="w"> </span><span class="p">(</span><span class="n">dataType</span><span class="p">),</span><span class="n">portCount</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">master</span><span class="w"> </span><span class="nc">Stream</span><span class="w"> </span><span class="p">(</span><span class="n">dataType</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>备注：当<code class="docutils literal notranslate"><span class="pre">valid</span></code>高而<code class="docutils literal notranslate"><span class="pre">ready</span></code>低时, 每个slave可以又或不可以允许有效负载发生变化(视情况而定)。例如:</strong></p>
+</div></blockquote>
+<ul class="simple">
+<li><p>没有锁逻辑的优先级仲裁器可以从一个输入切换到另一个输入(这将改变负载)</p></li>
+<li><p>UART控制器可以直接使用写端口来驱动UART引脚, 并且只在传输结束时完成数据交换(consume the transaction)。需要注意。</p></li>
+</ul>
+</section>
+<section id="semantics">
+<h2>二、语义(Semantics)<a class="headerlink" href="#semantics" title="此标题的永久链接"></a></h2>
+<p>当手动读取或驱动一个流中的信号时需要牢记：</p>
+<ul class="simple">
+<li><p>当<code class="docutils literal notranslate"><span class="pre">valid</span></code>被置为有效后, 它只有当目前的负载已经被使用后才可以被置为无效。这意味着<code class="docutils literal notranslate"><span class="pre">valid</span></code>只有在slave口通过置高<code class="docutils literal notranslate"><span class="pre">ready</span></code>来完成一次读操作后的下一个周期, 才可以被置为0。</p></li>
+<li><p>与<code class="docutils literal notranslate"><span class="pre">valid</span></code>相反的是, <code class="docutils literal notranslate"><span class="pre">ready</span></code>是可以随时改变的</p></li>
+<li><p>数据的传输只有当<code class="docutils literal notranslate"><span class="pre">valid</span></code>和<code class="docutils literal notranslate"><span class="pre">ready</span></code>同时置高时才会发生</p></li>
+<li><p>一个流的<code class="docutils literal notranslate"><span class="pre">valid</span></code>一定不能和<code class="docutils literal notranslate"><span class="pre">ready</span></code>以组合的方式连接, 它们之间的任何路径都应该是通过寄存器的。</p></li>
+<li><p>推荐在<code class="docutils literal notranslate"><span class="pre">valid</span></code>和<code class="docutils literal notranslate"><span class="pre">ready</span></code>之间没有任何依赖(连接路径)</p></li>
+</ul>
+</section>
+<section id="functions">
+<h2>三、函数(Functions)<a class="headerlink" href="#functions" title="此标题的永久链接"></a></h2>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">句式</th>
+<th style="text-align: center;">描述</th>
+<th style="text-align: center;">返回值</th>
+<th style="text-align: center;">延迟</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Stream(type : Data)</td>
+<td style="text-align: center;">建立一个给定类型的流</td>
+<td style="text-align: center;">Stream[T]</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;">master/slave Stream(type : Data)</td>
+<td style="text-align: center;">建立一个给定类型的流, 并根据给定的IO设置初始化</td>
+<td style="text-align: center;">Stream[T]</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;">x.fire</td>
+<td style="text-align: center;">当消息在总线上完成了传递或者说握手完成(valid &amp;&amp; ready)则返回true</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;">x.isStall</td>
+<td style="text-align: center;">当消息堵塞在总线上或者说握手未完成(valid &amp;&amp; !ready)则返回true</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;">x.queue(size:Int)</td>
+<td style="text-align: center;">返回一个通过FIFO与x相连的流</td>
+<td style="text-align: center;">Stream[T]</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.m2sPipe()<br>x.stage()</td>
+<td style="text-align: center;">返回一个由x通过寄存器驱动的流 <br>Cost = (payload width + 1) flop flop</td>
+<td style="text-align: center;">Stream[T]</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.s2mPipe()</td>
+<td style="text-align: center;">返回一个由x驱动的流。<br>ready路径通过寄存器阶段分割。 <br>Cost = (payload width + 1) flop flop</td>
+<td style="text-align: center;">Stream[T]</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.halfPipe()</td>
+<td style="text-align: center;">返回一个由x驱动的流。<br>valid/ready/payload路径通过一些寄存器分割。 <br>Cost = (payload width + 2) flip flop, bandwidth divided by two</td>
+<td style="text-align: center;">Stream[T]</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr>
+<td style="text-align: center;">x &lt;&lt; y<br>y &gt;&gt; x</td>
+<td style="text-align: center;">把y连接到x</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr>
+<td style="text-align: center;">x &lt;-&lt; y<br>y &gt;-&gt; x</td>
+<td style="text-align: center;">通过m2sPipe把y连接到x</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr>
+<td style="text-align: center;">x <!--< y<br-->y &gt;/&gt; x</td>
+<td style="text-align: center;">通过s2mPipe把y连接到x</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr>
+<td style="text-align: center;">x &lt;-/&lt; y <br> &gt;/-&gt; x</td>
+<td style="text-align: center;">通过s2mPipe().m2sPipe()把y连接到x, 意味着x和y之间无组合路径</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.haltWhen(cond : Bool)</td>
+<td style="text-align: center;">返回一个连接到x的流, 并且当cond为true时停顿</td>
+<td style="text-align: center;">Stream[T]</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.throwWhen(cond : Bool)</td>
+<td style="text-align: center;">返回一个连接到x的流, 并且当cond为true时抛弃需要交换的数据</td>
+<td style="text-align: center;">Stream[T]</td>
+<td style="text-align: center;">0</td>
+</tr>
+</tbody>
+</table><p>下方的代码将会产生如下图所示的逻辑电路：
+<img alt="stream_throw_m2spipe" src="../../_images/stream_throw_m2spipe.svg" /></p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RGB</span><span class="p">(</span><span class="n">channelWidth</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">red</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">channelWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">green</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">channelWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">blue</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">channelWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">isBlack</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Bool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">red</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">green</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">blue</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">RGB</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">sink</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">RGB</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span><span class="w"></span>
+<span class="n">sink</span><span class="w"> </span><span class="o">&lt;-&lt;</span><span class="w"> </span><span class="n">source</span><span class="p">.</span><span class="n">throwWhen</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">payload</span><span class="p">.</span><span class="n">isBlack</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>上述Scala代码生成的Verilog电路如下：</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="c1">// Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3</span>
+<span class="c1">// Component : RGBStream</span>
+
+<span class="k">module</span><span class="w"> </span><span class="n">RGBStream</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">clk</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">reset</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">source_valid</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">                 </span><span class="n">source_ready</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">source_payload_red</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">source_payload_green</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">source_payload_blue</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">sink_valid</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">sink_ready</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">sink_payload_red</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">sink_payload_green</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">sink_payload_blue</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">when_Stream_l408</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">                 </span><span class="n">source_thrown_valid</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">                 </span><span class="n">source_thrown_ready</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">source_thrown_payload_red</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">source_thrown_payload_green</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">source_thrown_payload_blue</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">source_thrown_m2sPipe_valid</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">source_thrown_m2sPipe_ready</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">source_thrown_m2sPipe_payload_red</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">source_thrown_m2sPipe_payload_green</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">source_thrown_m2sPipe_payload_blue</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">                 </span><span class="n">source_thrown_rValid</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">source_thrown_rData_red</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">source_thrown_rData_green</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">source_thrown_rData_blue</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">when_Stream_l342</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">when_Stream_l408</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(((</span><span class="n">source_payload_red</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">8&#39;h0</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">source_payload_green</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">8&#39;h0</span><span class="p">))</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">source_payload_blue</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">8&#39;h0</span><span class="p">));</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">source_thrown_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source_valid</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">when_Stream_l408</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">source_thrown_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">source_ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source_thrown_ready</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">when_Stream_l408</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">source_ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">source_thrown_payload_red</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source_payload_red</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">source_thrown_payload_green</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source_payload_green</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">source_thrown_payload_blue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source_payload_blue</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">source_thrown_ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source_thrown_m2sPipe_ready</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">when_Stream_l342</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">source_thrown_ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">when_Stream_l342</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="w"> </span><span class="n">source_thrown_m2sPipe_valid</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">source_thrown_m2sPipe_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source_thrown_rValid</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">source_thrown_m2sPipe_payload_red</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source_thrown_rData_red</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">source_thrown_m2sPipe_payload_green</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source_thrown_rData_green</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">source_thrown_m2sPipe_payload_blue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source_thrown_rData_blue</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">sink_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source_thrown_m2sPipe_valid</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">source_thrown_m2sPipe_ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sink_ready</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">sink_payload_red</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source_thrown_m2sPipe_payload_red</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">sink_payload_green</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source_thrown_m2sPipe_payload_green</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">sink_payload_blue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source_thrown_m2sPipe_payload_blue</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">posedge</span><span class="w"> </span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">source_thrown_rValid</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">source_thrown_ready</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">        </span><span class="n">source_thrown_rValid</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">source_thrown_valid</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">source_thrown_ready</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">source_thrown_rData_red</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">source_thrown_payload_red</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="n">source_thrown_rData_green</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">source_thrown_payload_green</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="n">source_thrown_rData_blue</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">source_thrown_payload_blue</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+
+<span class="k">endmodule</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="utils">
+<h2>四、工具(Utils)<a class="headerlink" href="#utils" title="此标题的永久链接"></a></h2>
+<p>Stream中有许多工具可以与用户设计中的流总线(Stream bus)结合, 本章将会介绍他们。</p>
+<ol>
+<li><p>流式FIFO(StreamFifo)</p>
+<p>用户可以在每个流上调用.queue(size)来获得一个缓冲流(buffered stream)。但是也可以实例化FIFO组件本身：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">streamA</span><span class="p">,</span><span class="n">streamB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="c1">//...</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">myFifo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">StreamFifo</span><span class="p">(</span><span class="w"></span>
+<span class="n">dataType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="w"></span>
+<span class="n">depth</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="n">myFifo</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">push</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">streamA</span><span class="w"></span>
+<span class="n">myFifo</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">pop</span><span class="w">  </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">streamB</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="k">module</span><span class="w"> </span><span class="n">StreamFifo</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_push_valid</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">              </span><span class="n">io_push_ready</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">      </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_push_payload</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">              </span><span class="n">io_pop_valid</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_pop_ready</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">     </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_pop_payload</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_flush</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">     </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_occupancy</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">     </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_availability</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">clk</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">reset</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">_zz_logic_ram_port0</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">6</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">_zz_logic_pushPtr_valueNext</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">0</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">_zz_logic_pushPtr_valueNext_1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">6</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">_zz_logic_popPtr_valueNext</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">0</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">_zz_logic_popPtr_valueNext_1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">_zz_logic_ram_port</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">_zz_io_pop_payload</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">6</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">_zz_io_availability</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">                 </span><span class="n">_zz_1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">                 </span><span class="n">logic_pushPtr_willIncrement</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">                 </span><span class="n">logic_pushPtr_willClear</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">6</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">logic_pushPtr_valueNext</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">6</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">logic_pushPtr_value</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">logic_pushPtr_willOverflowIfInc</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">logic_pushPtr_willOverflow</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">                 </span><span class="n">logic_popPtr_willIncrement</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">                 </span><span class="n">logic_popPtr_willClear</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">6</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">logic_popPtr_valueNext</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">6</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">logic_popPtr_value</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">logic_popPtr_willOverflowIfInc</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">logic_popPtr_willOverflow</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">logic_ptrMatch</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">                 </span><span class="n">logic_risingOccupancy</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">logic_pushing</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">logic_popping</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">logic_empty</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">logic_full</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">                 </span><span class="n">_zz_io_pop_valid</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">when_Stream_l1078</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">6</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">logic_ptrDif</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w"> </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">logic_ram</span><span class="w"> </span><span class="p">[</span><span class="mh">0</span><span class="o">:</span><span class="mh">127</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">_zz_logic_pushPtr_valueNext_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">logic_pushPtr_willIncrement</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">_zz_logic_pushPtr_valueNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mh">6</span><span class="mi">&#39;d0</span><span class="p">,</span><span class="w"> </span><span class="n">_zz_logic_pushPtr_valueNext_1</span><span class="p">};</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">_zz_logic_popPtr_valueNext_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">logic_popPtr_willIncrement</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">_zz_logic_popPtr_valueNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mh">6</span><span class="mi">&#39;d0</span><span class="p">,</span><span class="w"> </span><span class="n">_zz_logic_popPtr_valueNext_1</span><span class="p">};</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">_zz_io_availability</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">logic_popPtr_value</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">logic_pushPtr_value</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">_zz_io_pop_payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">_zz_io_pop_payload</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">_zz_logic_ram_port0</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">logic_ram</span><span class="p">[</span><span class="n">logic_popPtr_valueNext</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">_zz_1</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">logic_ram</span><span class="p">[</span><span class="n">logic_pushPtr_value</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">io_push_payload</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">_zz_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">logic_pushing</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">_zz_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">logic_pushPtr_willIncrement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">logic_pushing</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">logic_pushPtr_willIncrement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">logic_pushPtr_willClear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">io_flush</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">logic_pushPtr_willClear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">logic_pushPtr_willOverflowIfInc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">logic_pushPtr_value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">7&#39;h7f</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">logic_pushPtr_willOverflow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">logic_pushPtr_willOverflowIfInc</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">logic_pushPtr_willIncrement</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">logic_pushPtr_valueNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">logic_pushPtr_value</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">_zz_logic_pushPtr_valueNext</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">logic_pushPtr_willClear</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">logic_pushPtr_valueNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">7&#39;h0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">logic_popPtr_willIncrement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">logic_popping</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">logic_popPtr_willIncrement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">logic_popPtr_willClear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">io_flush</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">logic_popPtr_willClear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">logic_popPtr_willOverflowIfInc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">logic_popPtr_value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">7&#39;h7f</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">logic_popPtr_willOverflow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">logic_popPtr_willOverflowIfInc</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">logic_popPtr_willIncrement</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">logic_popPtr_valueNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">logic_popPtr_value</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">_zz_logic_popPtr_valueNext</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">logic_popPtr_willClear</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">logic_popPtr_valueNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">7&#39;h0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">logic_ptrMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">logic_pushPtr_value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">logic_popPtr_value</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">logic_pushing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">io_push_valid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">io_push_ready</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">logic_popping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">io_pop_valid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">io_pop_ready</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">logic_empty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">logic_ptrMatch</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="w"> </span><span class="n">logic_risingOccupancy</span><span class="p">));</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">logic_full</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">logic_ptrMatch</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">logic_risingOccupancy</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_push_ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="w"> </span><span class="n">logic_full</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_pop_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="o">!</span><span class="w"> </span><span class="n">logic_empty</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="w"> </span><span class="p">(</span><span class="n">_zz_io_pop_valid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="w"> </span><span class="n">logic_full</span><span class="p">))));</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_pop_payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_zz_logic_ram_port0</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">when_Stream_l1078</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">logic_pushing</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">logic_popping</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">logic_ptrDif</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">logic_pushPtr_value</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">logic_popPtr_value</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_occupancy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{(</span><span class="n">logic_risingOccupancy</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">logic_ptrMatch</span><span class="p">),</span><span class="n">logic_ptrDif</span><span class="p">};</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_availability</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{((</span><span class="o">!</span><span class="w"> </span><span class="n">logic_risingOccupancy</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">logic_ptrMatch</span><span class="p">),</span><span class="n">_zz_io_availability</span><span class="p">};</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">posedge</span><span class="w"> </span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">logic_pushPtr_value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">7&#39;h0</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="n">logic_popPtr_value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">7&#39;h0</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="n">logic_risingOccupancy</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="n">_zz_io_pop_valid</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">logic_pushPtr_value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">logic_pushPtr_valueNext</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="n">logic_popPtr_value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">logic_popPtr_valueNext</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="n">_zz_io_pop_valid</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">(</span><span class="n">logic_popPtr_valueNext</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">logic_pushPtr_value</span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">when_Stream_l1078</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">        </span><span class="n">logic_risingOccupancy</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">logic_pushing</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="k">end</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">io_flush</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">        </span><span class="n">logic_risingOccupancy</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+
+<span class="k">endmodule</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+</ol>
+<pre><code>|  参数名  | 类型  |           描述           |
+| :------: | :---: | :----------------------: |
+| dataType |   T   | 流式FIFO上负载数据的类型 |
+|  depth   |  Int  |    存储数据的存储大小    |
+</code></pre><pre><code>|  IO口名   |              类型              |             描述             |
+| :-------: | :----------------------------: | :--------------------------: |
+|   push    |           Stream[T]            |   用来向流式FIFO中压入数据   |
+|    pop    |           Stream[T]            |   用来从流式FIFO中弹出数据   |
+|   flush   |              Bool              | 用来清空流式FIFO中的所有数据 |
+| occupancy | UInt of log2Up(depth + 1) bits |     反映内部存储占用情况     |
+</code></pre><ol>
+<li><p>流式FIFOCC(StreamFifoCC)</p>
+<p>用户可以通过如下方式定义一个双时钟域FIFO：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">clockA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">(</span><span class="o">???</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">clockB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">(</span><span class="o">???</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">streamA</span><span class="p">,</span><span class="n">streamB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="c1">//...</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">myFifo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">StreamFifoCC</span><span class="p">(</span><span class="w"></span>
+<span class="n">dataType</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="w"></span>
+<span class="n">depth</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"></span>
+<span class="n">pushClock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clockA</span><span class="p">,</span><span class="w"></span>
+<span class="n">popClock</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">clockB</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="n">myFifo</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">push</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">streamA</span><span class="w"></span>
+<span class="n">myFifo</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">pop</span><span class="w">  </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">streamB</span><span class="w"></span>
+</pre></div>
+</div>
+<p>|  参数名   |    类型     |           描述           |
+| :——-: | :———: | :———————-: |
+| dataType  |      T      | 流式FIFO上负载数据的类型 |
+|   depth   |     Int     |    存储数据的存储大小    |
+| pushClock | ClockDomain |  存入数据端使用的时钟域  |
+| popClock  | ClockDomain |  取出数据端使用的时钟域  |</p>
+</li>
+</ol>
+<pre><code>|    IO口名     |              类型              |                 描述                 |
+| :-----------: | :----------------------------: | :----------------------------------: |
+|     push      |           Stream[T]            |       用来向流式FIFO中压入数据       |
+|      pop      |           Stream[T]            |       用来从流式FIFO中弹出数据       |
+| pushOccupancy | UInt of log2Up(depth + 1) bits | 反映内部存储占用情况(从存入数据角度) |
+| popOccupancy  | UInt of log2Up(depth + 1) bits | 反映内部存储占用情况(从取出数据角度) |
+</code></pre><ol>
+<li><p>StreamCCByToggle</p>
+<p>该方法基于信号切换来生成连接跨时钟域的流的组件。这种方法生成的跨时钟域桥占用较小的面积, 但同时其带宽较低。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">clockA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">(</span><span class="o">???</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">clockB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">(</span><span class="o">???</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">streamA</span><span class="p">,</span><span class="n">streamB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="c1">//...</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">bridge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">StreamCCByToggle</span><span class="p">(</span><span class="w"></span>
+<span class="n">dataType</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="w"></span>
+<span class="n">inputClock</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">clockA</span><span class="p">,</span><span class="w"></span>
+<span class="n">outputClock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clockB</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="n">bridge</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">input</span><span class="w">  </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">streamA</span><span class="w"></span>
+<span class="n">bridge</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">output</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">streamB</span><span class="w"></span>
+</pre></div>
+</div>
+<p>|   参数名    |    类型     |           描述           |
+| :———: | :———: | :———————-: |
+|  dataType   |      T      | 流式FIFO上负载数据的类型 |
+| inputClock  | ClockDomain |  存入数据端使用的时钟域  |
+| outputClock | ClockDomain |  取出数据端使用的时钟域  |</p>
+</li>
+</ol>
+<pre><code>| IO口名 |   类型    |           描述           |
+| :----: | :-------: | :----------------------: |
+| input  | Stream[T] | 用来向流式FIFO中压入数据 |
+| output | Stream[T] | 用来从流式FIFO中弹出数据 |
+
+另外用户也可使用更简短的语句来直接生成所需的跨时钟流：
+```Scala
+val clockA = ClockDomain(???)
+val clockB = ClockDomain(???)
+val streamA = Stream(Bits(8 bits))
+val streamB = StreamCCByToggle(
+input       = streamA,
+inputClock  = clockA,
+outputClock = clockB
+)
+```
+</code></pre><ol>
+<li>流位宽适应器(StreamWidthAdapter)</li>
+</ol><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>该组件会使得输入流与输出流的位宽相匹配。当输出流`outStream`的负载的位宽比`inStream`的位宽更大时, 会通过将多个输入传输任务结合成一个的操作来匹配输出的大位宽；相反, 如果输出位宽大于输入位宽, 则一个输入的传输任务会被分割成多个输出传输任务以匹配输出的小位宽。
+
+在最好的情况下, 输入`inStream`负载的位宽应该是输出`outStream`负载的整数倍, 如下方代码所示：
+```Scala
+val inStream = Stream(Bits(8 bits))
+val outStream = Stream(Bits(16 bits))
+val adapter = StreamWidthAdapter(inStream, outStream)
+```
+
+Verilog:
+
+```Verilog
+module MyTopLevel (
+  input               io_cond0,
+  input               io_cond1,
+  output              io_flag,
+  output     [7:0]    io_state,
+  input               clk,
+  input               reset
+);
+
+  wire       [15:0]   _zz_outStream_payload_1;
+  wire                inStream_valid;
+  wire                inStream_ready;
+  wire       [7:0]    inStream_payload;
+  wire                outStream_valid;
+  wire                outStream_ready;
+  wire       [15:0]   outStream_payload;
+  wire                inStream_fire;
+  reg                 _zz_inStream_ready;
+  reg        [0:0]    _zz_inStream_ready_1;
+  reg        [0:0]    _zz_inStream_ready_2;
+  wire                _zz_inStream_ready_3;
+  reg        [7:0]    _zz_outStream_payload;
+  wire                inStream_fire_1;
+
+  assign _zz_outStream_payload_1 = {inStream_payload,_zz_outStream_payload};
+  assign inStream_fire = (inStream_valid &amp;&amp; inStream_ready);
+  always @(*) begin
+    _zz_inStream_ready = 1&#39;b0;
+    if(inStream_fire) begin
+      _zz_inStream_ready = 1&#39;b1;
+    end
+  end
+
+  assign _zz_inStream_ready_3 = (_zz_inStream_ready_2 == 1&#39;b1);
+  always @(*) begin
+    _zz_inStream_ready_1 = (_zz_inStream_ready_2 + _zz_inStream_ready);
+    if(1&#39;b0) begin
+      _zz_inStream_ready_1 = 1&#39;b0;
+    end
+  end
+
+  assign inStream_fire_1 = (inStream_valid &amp;&amp; inStream_ready);
+  assign outStream_valid = (inStream_valid &amp;&amp; _zz_inStream_ready_3);
+  assign outStream_payload = _zz_outStream_payload_1;
+  assign inStream_ready = (! ((! outStream_ready) &amp;&amp; _zz_inStream_ready_3));
+  always @(posedge clk or posedge reset) begin
+    if(reset) begin
+      _zz_inStream_ready_2 &lt;= 1&#39;b0;
+    end else begin
+      _zz_inStream_ready_2 &lt;= _zz_inStream_ready_1;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(inStream_fire_1) begin
+      _zz_outStream_payload &lt;= inStream_payload;
+    end
+  end
+
+
+endmodule
+```
+如上方例子所示, 两个`inStream`的传输将会被结合成一个`outStream`传输, 并且第一个`inStream`的传输会被默认放置在输出负载的低比特。
+
+如果输入传输任务负载的期望顺序和默认设置不同, 这里有一个例子：
+```Scala
+val inStream = Stream(Bits(8 bits))
+val outStream = Stream(Bits(16 bits))
+val adapter = StreamWidthAdapter(inStream, outStream, order = SlicesOrder.HIGHER_FIRST)
+```
+同时还有一个与`ORDER`具有相同效果的名为`endianness`的传统参数。当`endianness`的值为`LITTLE`时, 它和`order`的`LOWER_FIRST`值等同。同理其`BIG`值和`HIGHER_FIRST`等同。`padding`参数是一个可选择的布尔逻辑值, 其可以决定该适应器能否接受输入与输出负载位宽之间的非整数倍数关系。
+</pre></div>
+</div>
+<ol>
+<li><p>流仲裁器(StreamArbiter)</p>
+<p>当用户有多个流而且希望能够仲裁它们并驱动单个流, 这时可以使用StreamArbiterFactory。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">streamA</span><span class="p">,</span><span class="w"> </span><span class="n">streamB</span><span class="p">,</span><span class="w"> </span><span class="n">streamC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">arbitredABC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">StreamArbiterFactory</span><span class="p">.</span><span class="n">roundRobin</span><span class="p">.</span><span class="n">onArgs</span><span class="p">(</span><span class="n">streamA</span><span class="p">,</span><span class="w"> </span><span class="n">streamB</span><span class="p">,</span><span class="w"> </span><span class="n">streamC</span><span class="p">)</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">streamD</span><span class="p">,</span><span class="w"> </span><span class="n">streamE</span><span class="p">,</span><span class="w"> </span><span class="n">streamF</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">arbitredDEF</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">StreamArbiterFactory</span><span class="p">.</span><span class="n">lowerFirst</span><span class="p">.</span><span class="n">noLock</span><span class="p">.</span><span class="n">onArgs</span><span class="p">(</span><span class="n">streamD</span><span class="p">,</span><span class="w"> </span><span class="n">streamE</span><span class="p">,</span><span class="w"> </span><span class="n">streamF</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>|    仲裁函数     |                             描述                              |
+| :————-: | :———————————————————–: |
+|   lowerFirst    |                   低端口的优先级大于高端口                    |
+|   roundRobin    |                         公平轮询仲裁                          |
+| sequentialOrder | 按照顺序次序遍历任务。第一个传输来自于端口零, 然后依次执行… |</p>
+<p>|     锁函数      |                                                 描述                                                  |
+| :————-: | :—————————————————————————————————: |
+|     noLock      |                     端口选择在每个周期都可以改变, 即使被选择的端口的传输没有执行                      |
+| transactionLock |                                 端口选择被锁定直到端口的数据交换完成                                  |
+|  fragmentLock   | 可用来仲裁Stream[Flow[T]]。在这个模式下, 端口选择被锁定直到被选择的端口完成信号突发(burst)(last=True) |</p>
+</li>
+</ol>
+<pre><code>|          生成函数           |  返回值   |
+| :-------------------------: | :-------: |
+| on(inputs : Seq[Stream[T]]) | Stream[T] |
+| onArgs(inputs : Stream[T]*) | Stream[T] |
+</code></pre><ol>
+<li>StreamJoin</li>
+</ol><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>该工具接受多个输入流, 并等待它们全部触发, 随后全部通过所有输入流。
+```Scala
+val cmdJoin = Stream(Cmd())
+cmdJoin.arbitrationFrom(StreamJoin.arg(cmdABuffer, cmdBBuffer))
+```
+</pre></div>
+</div>
+<ol>
+<li><p>流式叉(StreamFork)</p>
+<p>StreamFork将会对每个输入数据进行克隆并分配到所有的输出流中。如果同步为true, 则所有的输出流会同时激活, 意味着流会停滞直到所有的输出流准备就绪。如果同步信号为false, 则在额外的一个触发器的开销下, 每次只有一个输出流准备就绪。输入的流将会被堵塞直到所有的输出流已经处理过每个项目。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">inputStream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="p">(</span><span class="n">outputstream1</span><span class="p">,</span><span class="w"> </span><span class="n">outputstream2</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">StreamFork2</span><span class="p">(</span><span class="n">inputStream</span><span class="p">,</span><span class="w"> </span><span class="n">synchronous</span><span class="o">=</span><span class="kc">false</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>或者是：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">inputStream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">outputStreams</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">StreamFork</span><span class="p">(</span><span class="n">inputStream</span><span class="p">,</span><span class="n">portCount</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">synchronous</span><span class="o">=</span><span class="kc">true</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>流顺序调度器(StreamDispatcherSequencial)</p>
+<p>该工具会将其输入流以顺序次序路由(route)给<code class="docutils literal notranslate"><span class="pre">outputCount</span></code>流。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">inputStream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">dispatchedStreams</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">StreamDispatcherSequencial</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">inputStream</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">outputCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7.html" class="btn btn-neutral float-left" title="Utils(实用工具)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E6%B5%81.html" class="btn btn-neutral float-right" title="Flow" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

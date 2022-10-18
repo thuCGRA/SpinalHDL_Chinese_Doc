@@ -1,0 +1,541 @@
+## 高级实例
+
+### 一、JTAG TAP
+
+1. 简介
+
+   > **重要：本章节的目的是为了展示一个JTAG TAP的非常规实现方法**
+
+   > **重要：该实现并不简单，它混合了面向对象编程、抽象接口解耦、硬件生成和硬件描述。当然，简单的JTAG TAP实现只需要一个简单的硬件描述就可以完成，但这里的目标实际上是更进步，创建一个可重用和可扩展的JTAG TAP生成器**
+
+   > **本章节将会解释JTAG是如何工作的。也可见https://www.fpga4fun.com/JTAG.html的手册**
+
+   常用的HDL和Spinal之间的一个很大的区别是，SpinalHDL允许用户定义硬件生成器/构建器。这与描述硬件非常不同。以下面的例子为例，因为生成/构建/描述之间的区别看起来像是“玩弄字”，或者可以用不同的方式解释。
+
+   
+   下面的例子是一个JTAG TAP，它允许JTAG主程序读取`switchs`/`keys`的输入和写入`leds`的输出。通过使用UID 0x87654321，主服务器也可以识别这个TAP。
+
+   ```Scala
+   class SimpleJtagTap extends Component {
+     val io = new Bundle {
+       val jtag    = slave(Jtag())
+       val switchs = in  Bits(8 bits)
+       val keys    = in  Bits(4 bits)
+       val leds    = out Bits(8 bits)
+     }
+
+     val tap = new JtagTap(io.jtag, 8)
+     val idcodeArea  = tap.idcode(B"x87654321") (instructionId=4)
+     val switchsArea = tap.read(io.switchs)     (instructionId=5)
+     val keysArea    = tap.read(io.keys)        (instructionId=6)
+     val ledsArea    = tap.write(io.leds)       (instructionId=7)
+   }
+   ```
+
+   可见，创建了一个JtagTap，然后调用一些Generator/Builder函数(idcode、read、write)来创建每个JTAG指令。这就是所说的“硬件生成器/构建器”，然后这些生成器/构建器被用户用来描述硬件。最重要的一点是，在通常的HDL中，用户只能描述硬件，这意味着许多繁琐的工作。
+
+   该JTAG TAP教程基于https://github.com/SpinalHDL/SpinalHDL/tree/master/lib/src/main/scala/spinal/lib/com/jtag实现。
+
+2. JTAG总线
+
+   首先我们要定义一个JTAG总线类
+   ```Scala
+   case class Jtag() extends Bundle with IMasterSlave {
+     val tms = Bool()
+     val tdi = Bool()
+     val tdo = Bool()
+
+     override def asMaster() : Unit = {
+       out(tdi, tms)
+       in(tdo)
+     }
+   }
+   ```
+   该总线未包含TCK引脚因为时钟域会提供
+
+3. JTAG状态机
+
+   根据https://www.fpga4fun.com/JTAG2.html的指导定义JTAG状态机
+   ```Scala
+   object JtagState extends SpinalEnum {
+     val RESET, IDLE,
+         IR_SELECT, IR_CAPTURE, IR_SHIFT, IR_EXIT1, IR_PAUSE, IR_EXIT2, IR_UPDATE,
+         DR_SELECT, DR_CAPTURE, DR_SHIFT, DR_EXIT1, DR_PAUSE, DR_EXIT2, DR_UPDATE = newElement()
+   }
+
+   class JtagFsm(jtag: Jtag) extends Area {
+     import JtagState._
+     val stateNext = JtagState()
+     val state = RegNext(stateNext) randBoot()
+
+     stateNext := state.mux(
+       default    -> (jtag.tms ? RESET     | IDLE),           //RESET
+       IDLE       -> (jtag.tms ? DR_SELECT | IDLE),
+       IR_SELECT  -> (jtag.tms ? RESET     | IR_CAPTURE),
+       IR_CAPTURE -> (jtag.tms ? IR_EXIT1  | IR_SHIFT),
+       IR_SHIFT   -> (jtag.tms ? IR_EXIT1  | IR_SHIFT),
+       IR_EXIT1   -> (jtag.tms ? IR_UPDATE | IR_PAUSE),
+       IR_PAUSE   -> (jtag.tms ? IR_EXIT2  | IR_PAUSE),
+       IR_EXIT2   -> (jtag.tms ? IR_UPDATE | IR_SHIFT),
+       IR_UPDATE  -> (jtag.tms ? DR_SELECT | IDLE),
+       DR_SELECT  -> (jtag.tms ? IR_SELECT | DR_CAPTURE),
+       DR_CAPTURE -> (jtag.tms ? DR_EXIT1  | DR_SHIFT),
+       DR_SHIFT   -> (jtag.tms ? DR_EXIT1  | DR_SHIFT),
+       DR_EXIT1   -> (jtag.tms ? DR_UPDATE | DR_PAUSE),
+       DR_PAUSE   -> (jtag.tms ? DR_EXIT2  | DR_PAUSE),
+       DR_EXIT2   -> (jtag.tms ? DR_UPDATE | DR_SHIFT),
+       DR_UPDATE  -> (jtag.tms ? DR_SELECT | IDLE)
+     )
+   }
+   ```
+
+   > **注意：`state`中的`randBoot()`将会被随机状态初始化。仅是为了仿真用**
+
+4. JTAG TAP
+
+   下面将不用任何指令，只用最基本的指令寄存器控制和旁路控制来实现JTAG TAP的核
+
+   ```Scala
+   class JtagTap(val jtag: Jtag, instructionWidth: Int) extends Area{
+     val fsm = new JtagFsm(jtag)
+     val instruction = Reg(Bits(instructionWidth bits))
+     val instructionShift = Reg(Bits(instructionWidth bits))
+     val bypass = Reg(Bool)
+
+     jtag.tdo := bypass
+
+     switch(fsm.state) {
+       is(JtagState.IR_CAPTURE) {
+         instructionShift := instruction
+       }
+       is(JtagState.IR_SHIFT) {
+         instructionShift := (jtag.tdi ## instructionShift) >> 1
+         jtag.tdo := instructionShift.lsb
+       }
+       is(JtagState.IR_UPDATE) {
+         instruction := instructionShift
+       }
+       is(JtagState.DR_SHIFT) {
+         bypass := jtag.tdi
+       }
+     }
+   }
+   ```
+
+5. JTAG指令
+
+   JTAG TAP核心已经完成，可以考虑如何通过可重用的方式实现JTAG指令。
+
+   - JTAG TAP类的接口
+
+       首先，需要定义一条指令如何与JTAG TAP核心交互。当然可以直接使用JtagTap区域，但这不是很好，因为在某些情况下，JTAG TAP核心是由另一个IP提供的(例如Altera虚拟JTAG)。
+
+       所以定义一个JTAP TAP核与指令间的简单抽象接口：
+       ```Scala
+       trait JtagTapAccess {
+         def getTdi : Bool()
+         def getTms : Bool()
+         def setTdo(value : Bool) : Unit
+
+         def getState : JtagState.T
+         def getInstruction() : Bits
+         def setInstruction(value : Bits) : Unit
+       }
+       ```
+       随后让JtagTap实现该抽象接口：
+       ```Scala
+       class JtagTap(val jtag: Jtag, ...) extends Area with JtagTapAccess{
+         ...
+
+         //JtagTapAccess impl
+         override def getTdi: Bool = jtag.tdi
+         override def setTdo(value: Bool): Unit = jtag.tdo := value
+         override def getTms: Bool = jtag.tms
+
+         override def getState: JtagState.T = fsm.state
+         override def getInstruction(): Bits = instruction
+         override def setInstruction(value: Bits): Unit = instruction := value
+       }
+       ```
+
+   - 基类
+
+       为JTAG指令定义一个有用的基类，根据所选指令和JTAG TAP的状态提供一些回调(doCapture/doShift/doUpdate/doReset):
+
+       ```Scala
+       class JtagInstruction(tap: JtagTapAccess,val instructionId: Bits) extends Area {
+         def doCapture(): Unit = {}
+         def doShift(): Unit = {}
+         def doUpdate(): Unit = {}
+         def doReset(): Unit = {}
+
+         val instructionHit = tap.getInstruction === instructionId
+
+         Component.current.addPrePopTask(() => {
+           when(instructionHit) {
+             when(tap.getState === JtagState.DR_CAPTURE) {
+               doCapture()
+             }
+             when(tap.getState === JtagState.DR_SHIFT) {
+               doShift()
+             }
+             when(tap.getState === JtagState.DR_UPDATE) {
+               doUpdate()
+             }
+           }
+           when(tap.getState === JtagState.RESET) {
+             doReset()
+           }
+         })
+       }
+       ```
+       > **注意：关于Component.current.addPrePopTask(…)：这允许用户在当前组件构造结束时调用给定的代码。由于JtagInstruction面向对象的特性，doCapture, doShift, doUpdate和doReset不应该在子类构造之前调用(因为子类会使用它作为回调来执行一些逻辑)**
+
+   - 读指令
+
+       实现一条允许JTAG读取信号的指令。
+       ```Scala
+       class JtagInstructionRead[T <: Data](data: T) (tap: JtagTapAccess,instructionId: Bits)extends JtagInstruction(tap,instructionId) {
+         val shifter = Reg(Bits(data.getBitsWidth bits))
+
+         override def doCapture(): Unit = {
+           shifter := data.asBits
+         }
+
+         override def doShift(): Unit = {
+           shifter := (tap.getTdi ## shifter) >> 1
+           tap.setTdo(shifter.lsb)
+         }
+       }
+       ```
+
+   - 写指令
+
+       实现一条指令，允许JTAG写入寄存器(同时读取其当前值)。
+       ```Scala
+       class JtagInstructionWrite[T <: Data](data: T) (tap: JtagTapAccess,instructionId: Bits) extends JtagInstruction(tap,instructionId) {
+         val shifter,store = Reg(Bits(data.getBitsWidth bits))
+
+         override def doCapture(): Unit = {
+           shifter := store
+         }
+         override def doShift(): Unit = {
+           shifter := (tap.getTdi ## shifter) >> 1
+           tap.setTdo(shifter.lsb)
+         }
+         override def doUpdate(): Unit = {
+           store := shifter
+         }
+
+         data.assignFromBits(store)
+       }
+       ```
+
+   - Idcode指令
+
+       实现向JTAG返回idcode的指令，并且，当复位时，将指令寄存器(IR)设置为它自己的instructionId。
+       ```Scala
+       class JtagInstructionIdcode[T <: Data](value: Bits)(tap: JtagTapAccess, instructionId: Bits)extends JtagInstruction(tap,instructionId) {
+         val shifter = Reg(Bits(32 bits))
+
+         override def doShift(): Unit = {
+           shifter := (tap.getTdi ## shifter) >> 1
+           tap.setTdo(shifter.lsb)
+         }
+
+         override def doReset(): Unit = {
+           shifter := value
+           tap.setInstruction(instructionId)
+         }
+       }
+       ```
+
+6. 用户友好型包装(User friendly wrapper)
+
+   向JtagTapAccess添加一些用户友好的函数，使指令实例化更容易。
+   ```Scala
+   trait JtagTapAccess {
+     ...
+
+     def idcode(value: Bits)(instructionId: Bits) =
+       new JtagInstructionIdcode(value)(this,instructionId)
+
+     def read[T <: Data](data: T)(instructionId: Bits)   =
+       new JtagInstructionRead(data)(this,instructionId)
+
+     def write[T <: Data](data: T,  cleanUpdate: Boolean = true, readable: Boolean = true)(instructionId: Bits) =
+       new JtagInstructionWrite[T](data,cleanUpdate,readable)(this,instructionId)
+   }
+   ```
+
+7. 使用演示
+
+   现在，可以非常容易地创建应用程序特定的JTAG TAP，而不需要编写任何逻辑或任何互连。
+   ```Scala
+   class SimpleJtagTap extends Component {
+     val io = new Bundle {
+       val jtag    = slave(Jtag())
+       val switchs = in  Bits(8 bits)
+       val keys    = in  Bits(4 bits)
+       val leds    = out Bits(8 bits)
+     }
+
+     val tap = new JtagTap(io.jtag, 8)
+     val idcodeArea  = tap.idcode(B"x87654321") (instructionId=4)
+     val switchsArea = tap.read(io.switchs)     (instructionId=5)
+     val keysArea    = tap.read(io.keys)        (instructionId=6)
+     val ledsArea    = tap.write(io.leds)       (instructionId=7)
+   }
+   ```
+   这种方式(生成硬件)也可以应用于，例如，生成一个APB/AHB/AXI从端总线。
+
+### 二、内存映射UART(Memory mapped UART)
+
+1. 简介
+
+   该例子将会以之前的Uart例子来实现一个内存映射的UART。
+
+2. 规范
+
+   该实现将基于一个带RX FIFO的APB3总线。
+
+   以下是寄存器映射表：
+   |     名称     |        类型         | 接入  | 地址  |                             描述                             |
+   | :----------: | :-----------------: | :---: | :---: | :----------------------------------------------------------: |
+   | clockDivider |        UInt         |  RW   |   0   |                    设置UartCtrl时钟分频器                    |
+   |    frame     | UartCtrlFrameConfig |  RW   |   4   |               设置数据长度，校验位和停止位配置               |
+   |   writeCmd   |        Bits         |   W   |   8   |                   向UartCtrl发送一条写命令                   |
+   |  writeBusy   |        Bool         |   R   |   8   |      当一条新的writeCmd可以被发送时，操作Bit 0 => zero       |
+   |     read     |     Bool / Bits     |   R   |  12   | Bits 7 downto 0 => rx payload <br>Bit 31 => rx payload valid |
+   
+3. 实现
+
+   在该实现中，Apb3SlaveFactory工具将会被使用。它允许用户用优美的语法定义一个APB3从端。可以从https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Librariesbus_slave_factory.html#bus-slave-factory找到该工具的文档。
+
+   首先，我们只需要定义控制器将要使用的`Apb3Config`。它被定义为Scala object里的一个函数。
+   ```Scala
+   object Apb3UartCtrl{
+     def getApb3Config = Apb3Config(
+       addressWidth = 4,
+       dataWidth    = 32
+     )
+   }
+   ```
+   随后我们可以定义一个`Apb3UartCtrl`组件来实例化一个`UartCtrl`并且在它和APB3总线之间创建一个内存映射逻辑：
+   ![](../../img/memory_mapped_uart.svg)
+
+   ```Scala
+   class Apb3UartCtrl(uartCtrlConfig : UartCtrlGenerics, rxFifoDepth : Int) extends Component{
+     val io = new Bundle{
+       val bus =  slave(Apb3(Apb3UartCtrl.getApb3Config))
+       val uart = master(Uart())
+     }
+
+     //实例化一个简单的uart控制器
+     val uartCtrl = new UartCtrl(uartCtrlConfig)
+     io.uart <> uartCtrl.io.uart
+
+     // 建立一个被io.bus驱动的apb3SlaveFactory实例
+     val busCtrl = Apb3SlaveFactory(io.bus)
+
+     // 请求busCtrl以在地址0创建一个可读写寄存器并且驱动uartCtrl.io.config.clockDivider
+     busCtrl.driveAndRead(uartCtrl.io.config.clockDivider,address = 0)
+
+     // 与上面做同样的事，但是是驱动地址4的uartCtrl.io.config.frame
+     busCtrl.driveAndRead(uartCtrl.io.config.frame,address = 4)
+
+     // 请求busCtrl以在地址8创建一个可写Flow[Bits]
+     // 随后将其转化为Stream并且使用寄存器连接到uartCtrl.io.write
+     busCtrl.createAndDriveFlow(Bits(uartCtrlConfig.dataWidthMax bits),address = 8).toStream >-> uartCtrl.io.write
+
+     // 为了避免在上面的流到流转换之间丢失写命令，使uartCtrl.io.write的占用在地址8处可读
+     busCtrl.read(uartCtrl.io.write.valid,address = 8)
+
+     // 读取uartCtrl.io并转换成流，随后连接到64个元素的FIFO的输入。然后使用非阻塞协议使FIFO的输出在地址12处可读
+     // (Bit 7 downto 0 => read data <br> Bit 31 => read data valid )
+     busCtrl.readStreamNonBlocking(uartCtrl.io.read.toStream.queue(rxFifoDepth),
+                                   address = 12, validBitOffset = 31, payloadBitOffset = 0)
+   }
+   ```
+   > **重要：是的，以上就是全部。它同样是可综合的。Apb3SlaveFactory工具并不是硬编码到SpinalHDL编译器中的东西。它是用SpinalHDL规则硬件描述语法实现的。**
+
+### 三、Pinesec
+
+原著未撰写
+
+### 四、计时器(Timer)
+
+1. 简介
+
+   计时器模块可能是最基本的硬件部件之一。但即使对于一个计时器，也可以用SpinalHDL做一些有趣的事情。这个例子将定义一个简单的计时器组件，它集成了一个总线桥接工具。
+
+2. 计时器
+
+   首先从`Timer`组件开始。
+
+   - 规范
+
+       该`Timer`组件将有一个单独的构造参数：
+       | 名称  | 类型  |           描述           |
+       | :---: | :---: | :----------------------: |
+       | width |  Int  | 指明时间计数器的比特位宽 |
+
+       并且有一些输入/输出：
+       | 名称  | 方向  | 类型  |                          描述                           |
+       | :---: | :---: | :---: | :-----------------------------------------------------: |
+       | tick  |  in   | Bool  |       当`tick`为True时，计时器会一直计数到`limit`       |
+       | clear |  in   | Bool  | 当`tick`为True时，计时器设置为零。`Clear`优先于`tick`。 |
+
+   - 实现
+
+       ```Scala
+       case class Timer(width : Int) extends Component{
+         val io = new Bundle{
+           val tick      = in Bool()
+           val clear     = in Bool()
+           val limit     = in UInt(width bits)
+
+           val full  = out Bool()
+           val value     = out UInt(width bits)
+         }
+
+         val counter = Reg(UInt(width bits))
+         when(io.tick && !io.full){
+           counter := counter + 1
+         }
+         when(io.clear){
+           counter := 0
+         }
+
+         io.full := counter === io.limit && io.tick
+         io.value := counter
+       }
+       ```
+
+3. 桥接函数(Bridging function)
+
+   可以从这个例子的主要目的开始:定义一个总线桥接函数。为此，将使用两种技术:
+
+       - 利用https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Libraries/bus_slave_factory.html#bus-slave-factory下的`BusSlaveFactory`工具
+       - 在`Timer`组件内部定义一个函数，可以从父组件调用该函数，以抽象的方式驱动`Timer`的IO。
+
+
+   - 规范
+
+       |    名称     |      类型       |                     描述                      |
+       | :---------: | :-------------: | :-------------------------------------------: |
+       |   busCtrl   | BusSlaveFactory | 函数将使用`BusSlaveFactory`实例创建桥接逻辑。 |
+       | baseAddress |     BigInt      |          桥接逻辑应该被映射的基地址           |
+       |    ticks    |    Seq[Bool]    |           可用作tick信号的逻辑资源            |
+       |   clears    |    Seq[Bool]    |           可用作clear信号的逻辑资源           |
+
+       该寄存器映射会假设总线系统是32比特位宽：
+       |     名称     | 接入  |    位宽     | 地址偏移 | 比特偏移 |
+       | :----------: | :---: | :---------: | :------: | :------: |
+       | ticksEnable  |  RW   | len(ticks)  |    0     |    0     |
+       | clearsEnable |  RW   | len(clears) |    0     |    16    |
+       |    limit     |  RW   |    width    |    4     |    0     |
+       |    value     |   R   |    width    |    8     |    0     |
+       |    clear     |   W   |             |    8     |          |
+
+   - 实现
+
+       将桥接函数加入`Timer`组件
+       ```Scala
+       case class Timer(width : Int) extends Component{
+         val io = new Bundle{
+           val tick      = in Bool()
+           val clear     = in Bool()
+           val limit     = in UInt(width bits)
+
+           val full  = out Bool()
+           val value     = out UInt(width bits)
+         }
+
+         // 之前定义的逻辑
+         // ....
+
+         // 使用Scala函数名(arg1,arg2)(arg3,arg3)的函数圆形
+         // 可以以更优雅的方式调用函数
+         // 该函数同样返回一个area, 可以保持生成的Verilog内的信号名.
+         def driveFrom(busCtrl : BusSlaveFactory,baseAddress : BigInt)(ticks : Seq[Bool],clears : Seq[Bool]) = new Area {
+           //Address 0 => clear/tick masks + bus
+           val ticksEnable  = busCtrl.createReadWrite(Bits(ticks.length bits),baseAddress + 0,0) init(0)
+           val clearsEnable = busCtrl.createReadWrite(Bits(clears.length bits),baseAddress + 0,16) init(0)
+           val busClearing  = False
+
+           io.clear := (clearsEnable & clears.asBits).orR | busClearing
+           io.tick  := (ticksEnable  & ticks.asBits ).orR
+
+           //Address 4 => read/write limit (+ auto clear)
+           busCtrl.driveAndRead(io.limit,baseAddress + 4)
+           busClearing setWhen(busCtrl.isWriting(baseAddress + 4))
+
+           //Address 8 => read timer value / write => clear timer value
+           busCtrl.read(io.value,baseAddress + 8)
+           busClearing setWhen(busCtrl.isWriting(baseAddress + 8))
+         }
+       }
+       ```
+
+   - 使用
+
+       下面是一些演示代码，它非常接近于Pinsec SoC计时器模块中使用的代码。基本上，它实例化了以下元素:
+
+           - 一个16比特的预分频器
+           - 一个32比特的计数器
+           - 三个16比特的计数器
+
+       然后，通过使用Apb3SlaveFactory和在计时器中定义的函数，它在APB3总线和所有实例化组件之间创建桥接逻辑。
+
+       ```Scala
+       val io = new Bundle{
+         val apb = Apb3(ApbConfig(addressWidth = 8, dataWidth = 32))
+         val interrupt = in Bool()
+         val external = new Bundle{
+           val tick  = Bool()
+           val clear = Bool()
+         }
+       }
+
+       //预分频器和计时器很相似, 它主要集成了一些自动预载逻辑
+       val prescaler = Prescaler(width = 16)
+
+       val timerA = Timer(width = 32)
+       val timerB,timerC,timerD = Timer(width = 16)
+
+       val busCtrl = Apb3SlaveFactory(io.apb)
+       val prescalerBridge = prescaler.driveFrom(busCtrl,0x00)
+
+       val timerABridge = timerA.driveFrom(busCtrl,0x40)(
+         // 第一个单元是True,  这允许你有一个计时器总是在计数的模式。
+         ticks  = List(True, prescaler.io.overflow),
+         // 通过将计时器完全循环到清除，允许用户创建一个自动重新加载模式。
+         clears = List(timerA.io.full)
+       )
+
+       val timerBBridge = timerB.driveFrom(busCtrl,0x50)(
+         //external.tick允许创建一个脉冲计数模式
+         ticks  = List(True, prescaler.io.overflow, io.external.tick),
+         //external.clear允许创建一个超时模式
+         clears = List(timerB.io.full, io.external.clear)
+       )
+
+       val timerCBridge = timerC.driveFrom(busCtrl,0x60)(
+         ticks  = List(True, prescaler.io.overflow, io.external.tick),
+         clears = List(timerC.io.full, io.external.clear)
+       )
+
+       val timerDBridge = timerD.driveFrom(busCtrl,0x70)(
+         ticks  = List(True, prescaler.io.overflow, io.external.tick),
+         clears = List(timerD.io.full, io.external.clear)
+       )
+
+       val interruptCtrl = InterruptCtrl(4)
+       val interruptCtrlBridge = interruptCtrl.driveFrom(busCtrl,0x10)
+       interruptCtrl.io.inputs(0) := timerA.io.full
+       interruptCtrl.io.inputs(1) := timerB.io.full
+       interruptCtrl.io.inputs(2) := timerC.io.full
+       interruptCtrl.io.inputs(3) := timerD.io.full
+       io.interrupt := interruptCtrl.io.pendings.orR
+       ```

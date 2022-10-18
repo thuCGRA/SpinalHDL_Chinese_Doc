@@ -1,0 +1,163 @@
+## 寄存器(Registers)
+
+### 一、简介(Introduction)
+
+在SpinalHDL中创建寄存器与VHDL和Verilog中区别很大。
+
+在SpinalHDL中, 没有process/always块, 寄存器在声明的时候就清晰地定义出来。这种和传统事件驱动HDL的不同带来了巨大的影响：
+
++ 你可以在同一区域对寄存器和wire赋值, 意味着代码不需要再分成process/always块
++ 这让很多事情变得灵活多变, 参考Functions
+
+时钟和复位是分别处理的, 参考时钟域章节。
+
+### 二、例化(Instantiation)
+
+有四种方式例化寄存器：
+
+|                   语句                   |                     描述                     |
+| :--------------------------------------: | :------------------------------------------: |
+|             Reg(type: Data)              |               给定类型的寄存器               |
+|        RegInit(resetValue: Data)         | 当复位信号有效, 复位值是`resetValue`的寄存器 |
+|         RegNext(nextValue: Data)         |      每周期采样给定`nextValue`的寄存器       |
+| RegNextWhen(nextValue: Data, cond: Bool) |   当条件触发时采样给定`nextValue`的寄存器    |
+
+以下是一些寄存器声明的例子：
+
+```Scala
+//4 bits UInt寄存器
+val reg1 = Reg(UInt(4 bits))
+
+//每周期采样reg1的寄存器
+val reg2 = RegNext(reg1 + 1)
+
+//当复位信号有效初始化为0的4 bits寄存器
+val reg3 = RegInit(U"0000")
+reg3 := reg2
+when(reg2 === 5) {
+    reg3 := 0xF
+}
+
+//当条件真时采样reg3的寄存器
+val reg4 = RegNextWhen(reg3, cond)
+```
+
+以上代码会产生如下电路图：
+
+![register](../../img/register.svg)
+
+> 备注：上述的`reg3`例子展示了如何给`RegInit`赋值。同样的方法也适用于给其他寄存器类型赋值(`Reg`, `RegNext`, `RegNextWhen`)。正如在组合逻辑赋值中, 最后被赋值的语句有效, 但是如果没有赋值语句, 寄存器会保留原值。
+
+同样的, `RegNext`是在`Reg`语句上建立的抽象层次, 以下两种时序代码是完全等价的：
+
+```Scala
+//标准方式
+val something = Bool()
+val value = Reg(Bool())
+value := something
+
+//简短方式
+val something = Bool()
+val value = RegNext(something)
+```
+
+### 三、复位值(Reset value)
+
+除了`RegInit(value: Data)`语句可以直接创建带有复位值的寄存器, 也可以通过在寄存器上调用`init(value: Data)`函数设置复位值。
+
+```Scala
+//当reset发生被初始化为0的UInt 4bits寄存器
+val reg1 = Reg(UInt(4 bits)) init(0)
+```
+
+如果你有一个包含包(Bundle)的寄存器, 你可以对包的每一个元素用`init`函数。
+
+```Scala
+case class ValidRGB() extends Bundle {
+    val valid   = Bool()
+    val r, g, b = UInt(8 bits)
+}
+
+val reg = Reg(ValidRGB())
+reg.valid init(False)       //只有寄存器包有效, 才会有复位值
+```
+
+### 四、仿真下的例化(Initialization value for simulation)
+
+对于在RTL中不需要复位值但是在仿真时需要初始值的寄存器(避免传递x值), 你可以通过调用`randBoot()`函数产生随机初始值。
+
+```Scala
+//随机初始化的UInt寄存器
+val reg1 = Reg(UInt(4 bits)) randBoot()
+```
+
+### 五、寄存器向量(Register vectors)
+
+对于wire, 可以用`Vec`定义寄存器向量。
+
+```Scala
+val vecReg1 = Vec(Reg(UInt(8 bits)), 4)
+val vecReg2 = Vec.fill(8)(Reg(Bool()))
+```
+
+像往常一样可以用`init`方法初始化, 该方法可以和`foreach`迭代结合作用在寄存器上。
+
+```Scala
+val vecReg1 = Vec(Reg(UInt(8 bits)) init(0), 4)
+val vecReg2 = Vec.fill(8)(Reg(Bool()))
+vecReg2.foreach(_ init(False))
+```
+
+对于当`init`值未知时初始化必须被推迟的情况, 可以用以下函数：
+
+```Scala
+case class ShiftRegister[T <: Data](dataType: hardType[T], depth: Int, initFunc: T => Unit) extends Component{
+    val io = new Bundle {
+        val input   = in(dataType())
+        val output  = out(dataType())
+    }
+
+    val regs = Vec.fill(depth)(Reg(dataType()))
+    regs.foreach(initFunc)
+
+    for(i <- 1 to (depth-1)) {
+        regs(i) := regs(i-1)
+    }
+
+    regs(0) := io.input
+    io.ouutput := regs(depth-1)
+}
+
+object SRConsumer {
+    def initIdleFlow[T <: Data](flow: Flow[T]): Unit = {
+        flow.valid init(False)
+    }
+}
+
+class SRConsumer() extends Component {
+    //...
+    val sr = ShiftRegister(Flow(UInt(8 bits)), 4, SRConsumer.initIdleFlow[UInt])
+}
+```
+
+### 六、把线类型转化为寄存器(Transforming a wire into a register)
+
+有时把wire转换为register很有用。例如当你用包(Bundle), 如果你想让产生一些寄存器类型输出, 你可能更倾向于写成`io.myBundle.PORT := newValue`而不是用`val PORT = Reg(...)`来声明寄存器, 并把他们的输出与`io.myBundle.PORT := PORT`端口连接起来。为了实现这个, 你只需要在你想要转换为寄存器的端口使用`.setAsReg()`：
+
+```Scala
+val io = new Bundle {
+    val apb = master(Apb3(apb3Config))
+}
+
+io.apb.PADDR.setAsReg()
+io.apb.PWRITE.setAsReg() init (False)
+
+when(someCondition) {
+    io.apb.PWRITE := True
+}
+```
+
+> 在上述代码你需要注意的是, 你也可以给定一个初始值
+
+> 备注：寄存器的时钟域用的是wire的时钟域, 并不取决于`.setAsReg()`在哪里调用。
+> 在上述例子中, wire定义在`io`包中, 和模块有着相同的时钟域。即便`io.apb.PADDR.setAsReg()`在有着不同时钟域的`ClockingArea`中书写, 寄存器还是会采用模块的时钟而非`ClockingArea`的时钟。

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scala指导手册(Scala Guide) &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="对VHDL的支持(Help for VHDL people)" href="%E5%AF%B9VHDL%E7%9A%84%E6%94%AF%E6%8C%81.html" />
+    <link rel="prev" title="目的(Motivation)" href="%E7%9B%AE%E7%9A%84.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">开始入门(Getting Started)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E8%A1%A8%E7%8E%B0.html">表现(Presentation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%9B%AE%E7%9A%84.html">目的(Motivation)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Scala指导手册(Scala Guide)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basics">简介(Basics)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">一、基础</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coding-conventions">二、代码约束(Coding conventions)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">三、交互</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AF%B9VHDL%E7%9A%84%E6%94%AF%E6%8C%81.html">对VHDL的支持(Help for VHDL people)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">开始入门(Getting Started)</a> &raquo;</li>
+      <li>Scala指导手册(Scala Guide)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/开始入门/Scala指导手册.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="scala-scala-guide">
+<h1>Scala指导手册(Scala Guide)<a class="headerlink" href="#scala-scala-guide" title="此标题的永久链接"></a></h1>
+<section id="basics">
+<h2>简介(Basics)<a class="headerlink" href="#basics" title="此标题的永久链接"></a></h2>
+<p>Scala是一款功能强大的编程语言, 它的产生受到了很多其他独特语言的影响, 但这些语言常常不为大多数程序员所使用。这也会阻碍scala新人们对scala概念和它背后的设计抉择。</p>
+<p>下面会介绍Scala, 并常识为新人们提供学习SpinalHDL的基本Scala语法。</p>
+</section>
+<section id="id1">
+<h2>一、基础<a class="headerlink" href="#id1" title="此标题的永久链接"></a></h2>
+<ol>
+<li><p>数据类型(Types)</p>
+<p>在Scala中, 有五种主要类型：</p>
+<p>| 数据类型 |     举例      |         描述          |
+| :——: | :———–: | :——————-: |
+| Boolean  |  true, false  |
+|   Int    |    3, 0*32    |    32bits integer     |
+|  Float   |     3.14f     | 32bits floating point |
+|  Doublt  |     3.14      | 64bits floating point |
+|  String  | “Hello world” |     UTF-16 string     |</p>
+</li>
+<li><p>变量(Variables)</p>
+<p>在Scala中, 使用<code class="docutils literal notranslate"><span class="pre">var</span></code>关键字来定义变量, 即<code class="docutils literal notranslate"><span class="pre">val/var</span> <span class="pre">变量名:</span> <span class="pre">变量类型</span> <span class="pre">=</span> <span class="pre">初始值</span></code>。var在Scala中是变量的声明, 而val是常量的声明, 但是在SpinalHDL中可以用<code class="docutils literal notranslate"><span class="pre">:=</span></code>对va量赋值：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="w"></span>
+<span class="n">number</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">4</span><span class="w"></span>
+<span class="n">println</span><span class="p">(</span><span class="n">number</span><span class="p">)</span><span class="w"> </span><span class="c1">//10</span>
+</pre></div>
+</div>
+<p>Scala能够自动推断数据类型, 在给变量赋初值的时候你不必指明数据类型。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="c1">//number的数据类型在编译过程中推断为Int</span>
+</pre></div>
+</div>
+<p>然而, 在Scala中使用var并不常见。取而代之的, 由<code class="docutils literal notranslate"><span class="pre">val</span></code>定义的常量更加常用：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">two</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">three</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">six</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">two</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">three</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>函数(Functions)</p>
+<p>例如, 如果想定义一个两个参数和大于0时返回<code class="docutils literal notranslate"><span class="pre">true</span></code>的函数, , 你可以这样做：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sumBiggerThanZero</span><span class="p">(</span><span class="n">a</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">):</span><span class="w"> </span><span class="nc">Boolean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>在调用函数的时候, 用以下方式：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="n">sumBiggerThanZero</span><span class="p">(</span><span class="mf">2.3f</span><span class="p">,</span><span class="w"> </span><span class="mf">5.4f</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>你也可以通过加入参数的名字来给特定参数赋值,  这在参数较多的函数中十分有效：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="n">sumBiggerThanZero</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.3f</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">5.4f</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<ol>
+<li><p>返回(Return)</p>
+<p><code class="docutils literal notranslate"><span class="pre">return</span></code>关键字并不是必要的, 当缺省时, Scala会把最后一行函数作为返回值的声明：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sumBiggerThanZero</span><span class="p">(</span><span class="n">a</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">):</span><span class="w"> </span><span class="nc">Boolean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>返回类型推断(Return type inferation)</p>
+<p>Scala能够自动推断返回类型, 无须声明：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sumBiggerThanZero</span><span class="p">(</span><span class="n">a</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>花括号(Cuely braces)</p>
+<p>如果你的函数内只有一条声明, Scala函数不需要花括号：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sumBiggerThanZero</span><span class="p">(</span><span class="n">a</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>无返回值的函数(Function that returns nothing)</p>
+<p>如果想要让一个函数不返回任何值, 返回类型应该设置为<code class="docutils literal notranslate"><span class="pre">Uint</span></code>, 这等价于C/C++中的<code class="docutils literal notranslate"><span class="pre">void</span></code>类型</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">printer</span><span class="p">():</span><span class="w"> </span><span class="nc">Uint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;1234&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;5678&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>参数的默认值(Argument default values)</p>
+<p>你可以给函数中的每个参数指定一个默认值：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sumBiggerThanZero</span><span class="p">(</span><span class="n">a</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>应用(Apply)</p>
+<p>名为<code class="docutils literal notranslate"><span class="pre">apply</span></code>的函数是一类特殊的函数, 你可以不输入名字就能调用他们：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Array</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="n">index</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">):</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Array</span><span class="p">()</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">array</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="c1">//array(4)指一个数组, apply(4)的返回值所7</span>
+</pre></div>
+</div>
+<p>这种概念也适用于Scala中的<code class="docutils literal notranslate"><span class="pre">object</span></code>(静态)</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span><span class="w"> </span><span class="nc">MajorityVote</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="n">value</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">):</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">MajorityVote</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="c1">//会调用MajorityVote.apply(4)</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+<li><p>对象(Object)</p></li>
+</ol>
+<p>在Scala中, 没有<code class="docutils literal notranslate"><span class="pre">static</span></code>关键字, 取而代之的是<code class="docutils literal notranslate"><span class="pre">object</span></code>。每一个定义在<code class="docutils literal notranslate"><span class="pre">object</span></code>中的定义都是静态的。</p>
+<p>下面这个例子定义了一个叫做<code class="docutils literal notranslate"><span class="pre">pow2</span></code>的静态函数, 该函数以浮点数作为参数输入, 返回值类型也是浮点数。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span><span class="w"> </span><span class="nc">MathUtils</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">pow2</span><span class="p">(</span><span class="n">value</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">):</span><span class="w"> </span><span class="nc">Float</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">value</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>然后可以通过以下书写方式调用：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="nc">MathUtils</span><span class="p">.</span><span class="n">pow2</span><span class="p">(</span><span class="mf">42.0f</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>入口点(Entry point(main))</p></li>
+</ol>
+<p>Scala程序的入口点(主函数)应该作为一个名为<code class="docutils literal notranslate"><span class="pre">main</span></code>的函数定义在一个对象当中</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span><span class="w"> </span><span class="nc">MyTopLevelMain</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Hello World&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>类(Class)</p></li>
+</ol>
+<p>类的语法与Java非常相似。假设你想要定义一个把三个浮点数(r, g, b)作为结构体参数的<code class="docutils literal notranslate"><span class="pre">Color</span></code>类：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Color</span><span class="p">(</span><span class="n">r</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">getGrayLevel</span><span class="p">():</span><span class="w"> </span><span class="nc">Float</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.3f</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.4f</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.4f</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>之后, 从上一个例子中实例化类并使用<code class="docutils literal notranslate"><span class="pre">getGrayLevel</span></code>函数：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">blue</span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">grayLevelOfBlue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blue</span><span class="p">.</span><span class="n">getGrayLevel</span><span class="p">()</span><span class="w"></span>
+</pre></div>
+</div>
+<p>需要注意的是, 如果你想从类的外部访问类中的结构体参数, 这个结构体参数应该被定义成<code class="docutils literal notranslate"><span class="pre">val</span></code>类型：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Color</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="n">r</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">,</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">g</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">,</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">b</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">blue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">redLevelOfBlue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blue</span><span class="p">.</span><span class="n">r</span><span class="w"></span>
+</pre></div>
+</div>
+<ol>
+<li><p>继承(Inheritance)</p>
+<p>作为例子, 假设你想要定义两个类, <code class="docutils literal notranslate"><span class="pre">Rectangle</span></code>和<code class="docutils literal notranslate"><span class="pre">Square</span></code>, 并延伸出类<code class="docutils literal notranslate"><span class="pre">Shape</span></code>：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Shape</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">getArea</span><span class="p">():</span><span class="w"> </span><span class="nc">Float</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Square</span><span class="p">(</span><span class="n">sideLength</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Shape</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">getArea</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sideLength</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sideLength</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Rectangle</span><span class="p">(</span><span class="n">width</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Shape</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">getArea</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">width</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">height</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>用例类(Case class)</p>
+<p>用例类(Case class)是声明类的另一种方式。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Rectangle</span><span class="p">(</span><span class="n">width</span><span class="p">:</span><span class="w"> </span><span class="nc">Float</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">:;</span><span class="w"> </span><span class="nc">Float</span><span class="p">)</span><span class="w"> </span><span class="n">wxtends</span><span class="w"> </span><span class="nc">Shape</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">getArea</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">width</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">height</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>但是<code class="docutils literal notranslate"><span class="pre">case</span> <span class="pre">class</span></code>和<code class="docutils literal notranslate"><span class="pre">class</span></code>之间有一些区别：</p>
+<ul class="simple">
+<li><p>用例类不需要<code class="docutils literal notranslate"><span class="pre">new</span></code>关键字来实例化</p></li>
+<li><p>用例类中的结构参数外界是可访问的, 不用把他们定义成<code class="docutils literal notranslate"><span class="pre">val</span></code></p></li>
+</ul>
+<p>在SpinalHDL中, 这解释了代码约束背后的原因：一般来说更推荐用<code class="docutils literal notranslate"><span class="pre">case</span> <span class="pre">class</span></code>而不是<code class="docutils literal notranslate"><span class="pre">class</span></code>, 这样能够减少打字数并且一致性更好</p>
+</li>
+<li><p>模板/类型参数化(Templates/Type parameterization)</p>
+<p>假设你想要设计一组给定数据类型的类, 在这个背景下你需要给类提供一个参数类型：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Queue</span><span class="p">[</span><span class="nc">T</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">push</span><span class="p">(</span><span class="n">that</span><span class="p">:</span><span class="w"> </span><span class="nc">T</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">():</span><span class="w"> </span><span class="nc">T</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>如果你想要把<code class="docutils literal notranslate"><span class="pre">T</span></code>类型约束成给定类型的子类(例如<code class="docutils literal notranslate"><span class="pre">Shape</span></code>), 你可以用<code class="docutils literal notranslate"><span class="pre">&lt;:</span> <span class="pre">Shape</span></code>语句实现。<code class="docutils literal notranslate"><span class="pre">&lt;:</span></code>在Scala中表示给类型添加上界, 表示泛型参数必须要从该类(或本身)继承：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Shape</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">getArea</span><span class="p">():</span><span class="w"> </span><span class="nc">Float</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Rectangle</span><span class="p">()</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Shape</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Queue</span><span class="p">[</span><span class="nc">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="nc">Shape</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">push</span><span class="p">(</span><span class="n">that</span><span class="p">:</span><span class="w"> </span><span class="nc">T</span><span class="p">):</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">():</span><span class="w"> </span><span class="nc">T</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>对于函数也是同理：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">doSomething</span><span class="p">[</span><span class="nc">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="nc">Shape</span><span class="p">](</span><span class="n">shape</span><span class="p">:</span><span class="w"> </span><span class="nc">T</span><span class="p">):</span><span class="w"> </span><span class="nc">Something</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">shape</span><span class="p">.</span><span class="n">getArea</span><span class="p">()</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="coding-conventions">
+<h2>二、代码约束(Coding conventions)<a class="headerlink" href="#coding-conventions" title="此标题的永久链接"></a></h2>
+<ol>
+<li><p>介绍(Introduction)</p>
+<p>SpinalHDL中的代码约束与Scala Style Guide中描述的一样, 有一些额外的实用细节和案例会在下一章中讲解</p>
+<p>https://docs.scala-lang.org/style/</p>
+</li>
+<li><p>类 vs 用例类(class vs case class)</p>
+<p>当你定义了一个<code class="docutils literal notranslate"><span class="pre">Bundle</span></code>或是一个<code class="docutils literal notranslate"><span class="pre">Component</span></code>, 声明成用例类(case class)更好, 理由如下：</p>
+<ul class="simple">
+<li><p>避免使用<code class="docutils literal notranslate"><span class="pre">new</span></code>关键字, 在某些条件下, 永远不用再使用它总比有时会用到要强。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">case</span> <span class="pre">class</span></code>提供了<code class="docutils literal notranslate"><span class="pre">clone</span></code>函数。后者在SpinalHDL中十分有用, 因为SpinalHDL中会需要克隆<code class="docutils literal notranslate"><span class="pre">Bundle</span></code>, 例如, 当你定义一个新的<code class="docutils literal notranslate"><span class="pre">Reg</span></code>或是一个新的<code class="docutils literal notranslate"><span class="pre">Stream</span></code>之类的东时。</p></li>
+<li><p>结构体参数在外部是直接可见的。</p></li>
+</ul>
+<ol>
+<li><p>[用例]类</p>
+<p>所有类的首字母都应该大写</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Fifo</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Counter</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Color</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>伴生对象</p>
+<p>一个伴生对象(companion object)应该首字母大写</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span><span class="w"> </span><span class="nc">Fifo</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="n">that</span><span class="p">:</span><span class="w"> </span><span class="nc">Stream</span><span class="p">[</span><span class="nc">Bits</span><span class="p">]):</span><span class="w"> </span><span class="nc">Stream</span><span class="p">[</span><span class="nc">Bits</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">object</span><span class="w"> </span><span class="nc">MajorityVote</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="n">that</span><span class="p">:</span><span class="w"> </span><span class="nc">Bits</span><span class="p">):</span><span class="w"> </span><span class="nc">UInt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>这种规则有个例外就是, 当伴生对象被用作函数(里面只有<code class="docutils literal notranslate"><span class="pre">apply</span></code>), 并且这些<code class="docutils literal notranslate"><span class="pre">apply</span></code>函数不产生硬件电路：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span><span class="w"> </span><span class="nc">log2</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="n">value</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">):</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+<li><p>函数(Function)</p>
+<p>一个函数总以小写字母开头：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sinTable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="w"> </span><span class="n">until</span><span class="w"> </span><span class="n">sampleCount</span><span class="p">).</span><span class="n">map</span><span class="p">(</span><span class="n">sampleIndex</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">sinValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Math</span><span class="p">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nc">Math</span><span class="p">.</span><span class="nc">PI</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sampleIndex</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">sampleCount</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nc">S</span><span class="p">((</span><span class="n">sinValue</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">((</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">resolutionWidth</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)).</span><span class="n">toInt</span><span class="p">,</span><span class="w"> </span><span class="n">resolutionWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="p">})</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">rom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Mem</span><span class="p">(</span><span class="nc">SInt</span><span class="p">(</span><span class="n">resolutionWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="w"> </span><span class="n">initialContent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sinTable</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>实例(Instances)</p>
+<p>类的实例应该总以小写字母开头</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">fifo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Fifo</span><span class="p">()</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>if/when</p>
+<p>Scala的<code class="docutils literal notranslate"><span class="pre">if</span></code>和SpinalHDL的<code class="docutils literal notranslate"><span class="pre">when</span></code>都一般以如下方式书写：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="n">when</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}.</span><span class="n">elseWhen</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}.</span><span class="n">otherwise</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>例外：</p>
+<ul class="simple">
+<li><p>可以省略<code class="docutils literal notranslate"><span class="pre">otherwise</span></code>前的点</p></li>
+<li><p>如果可以增强代码的可读性, 可以把<code class="docutils literal notranslate"><span class="pre">if</span></code>/<code class="docutils literal notranslate"><span class="pre">when</span></code>的声明写在一行</p></li>
+</ul>
+</li>
+<li><p>switch</p>
+<p>SpinalHDL<code class="docutils literal notranslate"><span class="pre">switch</span></code>一般应该以如下方式书写：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="n">switch</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">is</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">is</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">default</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>如果可以增强代码的可读性, 可以把<code class="docutils literal notranslate"><span class="pre">is</span></code>/<code class="docutils literal notranslate"><span class="pre">default</span></code>声明写在一行</p>
+</li>
+<li><p>参数(Parameters)</p>
+<p>推荐把<code class="docutils literal notranslate"><span class="pre">Component</span></code>/<code class="docutils literal notranslate"><span class="pre">Bundle</span></code>的参数打包到一个用例(case)中, 如下例中<code class="docutils literal notranslate"><span class="pre">RgbConfig</span></code>, 因为：</p>
+<ul class="simple">
+<li><p>更容易携带/操作以对设计进行配置</p></li>
+<li><p>更好的维护性</p></li>
+</ul>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RgbConfig</span><span class="p">(</span><span class="n">rWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"> </span><span class="n">gWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"> </span><span class="n">bWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">getWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rWidth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gWidth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">bWidth</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Rgb</span><span class="p">(</span><span class="n">c</span><span class="p">:</span><span class="w"> </span><span class="nc">RgbConfig</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">rWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">gWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">bWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>但这并不适用于所有情况。例如, 在FIFO中, 把<code class="docutils literal notranslate"><span class="pre">dataType</span></code>参数和<code class="docutils literal notranslate"><span class="pre">depth</span></code>参数打包在一起所不合理的, 因为一般来说, <code class="docutils literal notranslate"><span class="pre">dataType</span></code>所于设计相关的参数, 而<code class="docutils literal notranslate"><span class="pre">depth</span></code>所于配置相的参数</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Fifo</span><span class="p">[</span><span class="nc">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="nc">Data</span><span class="p">](</span><span class="n">dataType</span><span class="p">:</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="n">depth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="id2">
+<h2>三、交互<a class="headerlink" href="#id2" title="此标题的永久链接"></a></h2>
+<ol>
+<li><p>简介(Introduction)</p>
+<p>事实上, SpinalHDL不是一门语言, 更像是常规的Scala库。第一次看到它可能会觉得很奇怪, 但等你用久了就会发现SpinalHDL很好地结合了RTL和Scala。</p>
+<p>你可以通过SpinalHDL库用整个Scala世界帮助你描述硬件电路, 但是为了恰到好处的做到这件事, 你需要理解SpinalHDL如何于Scala交互。</p>
+</li>
+<li><p>SpinalHDL是怎样在API背后工作的(How SpinalHDL works behind the API)</p>
+<p>当你执行SpinalHDL硬件描述, 每当你使用SpinalHDL函数、操作符或类, 都会在内存中建立一个代表你设计的网表的图。</p>
+<p>之后, 当硬件描述完成(顶层<code class="docutils literal notranslate"><span class="pre">Component</span></code>类的实例化), SpinalHDL会再遍历建立好的网表图, 如果一切就绪, SpinalHDL就会把图冲刷掉并把它构建成VHDL或Verilog文件。</p>
+</li>
+<li><p>所有都是引用(Everything is a reference)</p>
+<p>例如, 如果你定义了一个接受<code class="docutils literal notranslate"><span class="pre">Bits</span></code>类型参数的Scala函数, 当你调用它, 它会作为引用传递。因此, 如果你在函数内给这个参数赋值, 它对底层<code class="docutils literal notranslate"><span class="pre">Bits</span></code>对象的影响就会像在函数外赋值一样。</p>
+</li>
+<li><p>硬件类型(Hardware types)</p>
+<p>SpinalHDL中的硬件数据类型所两个事情的结合：</p>
+<ul class="simple">
+<li><p>一个给定Scala类型的实例化</p></li>
+<li><p>那个实例的配置</p></li>
+</ul>
+<p>例如<code class="docutils literal notranslate"><span class="pre">Bits(8bits)</span></code>是Scala类型<code class="docutils literal notranslate"><span class="pre">Bits</span></code>和它的<code class="docutils literal notranslate"><span class="pre">8</span> <span class="pre">bits</span></code>配置(作为结构体参数)的结合</p>
+<p><strong>RGB举例</strong></p>
+<p>我们以一个RGB包举例说明：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Rgb</span><span class="p">(</span><span class="n">rWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"> </span><span class="n">gWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"> </span><span class="n">bWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">rWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">gWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">bWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>这里的硬件数据类型是Scala<code class="docutils literal notranslate"><span class="pre">Rgb</span></code>类和它的<code class="docutils literal notranslate"><span class="pre">rWidth</span></code>, <code class="docutils literal notranslate"><span class="pre">gWidth</span></code>, <code class="docutils literal notranslate"><span class="pre">bWidth</span></code>参数的结合</p>
+<p>以下是这个例子的使用：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">// 定义一个Rgb信号</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">myRgbSignal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Rgb</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+
+<span class="c1">//定义另一个与前一个相同数据类型的Rgb信号</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">myRgbCloned</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cloneOf</span><span class="p">(</span><span class="n">myRgbSignal</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>上述代码生成的Verilog如下所示(位宽有所调整)：</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">myRgbSignal_r</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">myRgbSignal_g</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">myRgbSignal_b</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">myRgbCloned_r</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">myRgbCloned_g</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">myRgbCloned_b</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>你也可以用函数来定义各种各样的类别(typedef)：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">//定义一个类别函数</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">myRgbTypeDef</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Rgb</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+
+<span class="c1">//使用这个类别加工函数产生Rgb信号</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">myRgbFromTypeDef</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myRgbTypeDef</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>产生的RTL中信号的名称(Names of signals in the generated RTL)</p>
+<p>在给产生的RTL中命名信号时, SpinalHDL会用Java映射遍历各个模块的层次, 收集所有存储在类属性中的引用, 并用他们的属性名命名他们。</p>
+<p>每个在函数内定义的本地信号名字会丢失, 如下所示：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">myFunction</span><span class="p">(</span><span class="n">arg</span><span class="p">:</span><span class="w"> </span><span class="nc">UInt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">temp</span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="c1">//你无法在产生的RTL中取回取回temp信号</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">temp</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myFunction</span><span class="p">(</span><span class="nc">U</span><span class="s">&quot;000001&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">42</span><span class="w"></span>
+</pre></div>
+</div>
+<p>如果你想要在产生的RTL中保留内部变量的名字, 可以用<code class="docutils literal notranslate"><span class="pre">Area</span></code>：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">myFunction</span><span class="p">(</span><span class="n">arg</span><span class="p">:</span><span class="w"> </span><span class="nc">UInt</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="c1">//你能在产生的RTL中取回取回temp信号</span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">myFunctionCall</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myFunction</span><span class="p">(</span><span class="nc">U</span><span class="s">&quot;000001&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">//会随着myFunctionCall.temp产生temp信号</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myFunctionCall</span><span class="p">.</span><span class="n">temp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">42</span><span class="w"></span>
+</pre></div>
+</div>
+<p>上述代码会产生如下Verilog：</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">5</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">myFunctionCall_temp</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">5</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">assign</span><span class="w"> </span><span class="n">myFunctionCall_temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mh">6&#39;h01</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">6&#39;h01</span><span class="p">);</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">myFunctionCall_temp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">6&#39;h2a</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>Scala用来加工, SpinalHDL用来描述硬件(Scala is for elaboration, SpinalHDL for hardware description)</p>
+<p>例如, 如果你用Scala的for循环产生硬件电路, 它会产生展开后的VHDL/Verilog形式的结果</p>
+<p>还有, 如果你想要一个常量, 你不应该用SpinalHDL硬件语句, 而应该用Scala的。例如：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">//这是错的, 因为你不能用硬件Bool作为结构参数, 这会导致层次违例</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SubComponent</span><span class="p">(</span><span class="n">activeHigh</span><span class="p">:</span><span class="w"> </span><span class="nc">Bool</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c1">//这是对的, 你可以用Scala的任何语句来参数化硬件电路</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SubComponent</span><span class="p">(</span><span class="n">activeHigh</span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>Scala的细化能力(if, for, 和函数化编程)(Scala elaboration capabilities)</p>
+<p>所有的Scala语法都能用来描述硬件设计, 例如, Scala的<code class="docutils literal notranslate"><span class="pre">if</span></code>语句能用来使能电路的生成：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">counter</span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="n">counter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="k">if</span><span class="p">(</span><span class="n">generateAClearWhenHit42</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">   </span><span class="c1">//加工测试, 好比是是否生成vhdl</span>
+<span class="w">    </span><span class="n">when</span><span class="p">(</span><span class="n">counter</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mi">42</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">      </span><span class="c1">//硬件测试</span>
+<span class="w">        </span><span class="n">counter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>对于Scala的<code class="docutils literal notranslate"><span class="pre">for</span></code>循环也是同理：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="n">when</span><span class="p">(</span><span class="n">something</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//通过使用Scala的for循环置位每一bit</span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="n">idx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="mi">7</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">True</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>上述代码生成的Verilog如下所示：</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="k">assign</span><span class="w"> </span><span class="n">when_Main_l17</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">something</span><span class="p">;</span><span class="w"></span>
+<span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">when_Main_l17</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">[</span><span class="mh">2</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">[</span><span class="mh">3</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">[</span><span class="mh">4</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">[</span><span class="mh">5</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">[</span><span class="mh">6</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">[</span><span class="mh">7</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+<p>同样的, SpinalHDL类型也能使用函数化的编程技术(最好之后能补充通配符的用法)</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">values</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Vec</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">valuesAre42</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">values</span><span class="p">.</span><span class="n">map</span><span class="p">(</span><span class="n">_===</span><span class="mi">42</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">valuesAreAll42</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">valuesAre42</span><span class="p">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">_&amp;&amp;_</span><span class="p">)</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">valuesAreEqualToTheirIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">values</span><span class="p">.</span><span class="n">zipWithIndex</span><span class="p">.</span><span class="n">map</span><span class="p">{</span><span class="w"> </span><span class="k">case</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>上述代码生成的Verilog如下所示：</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">values_0</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">values_1</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">values_2</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">values_3</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">                </span><span class="n">valuesAre42_0</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">                </span><span class="n">valuesAre42_1</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">                </span><span class="n">valuesAre42_2</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">                </span><span class="n">valuesAre42_3</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">                </span><span class="n">valuesAreAll42</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">                </span><span class="n">valuesAreEqualToTheirIndex_0</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">                </span><span class="n">valuesAreEqualToTheirIndex_1</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">                </span><span class="n">valuesAreEqualToTheirIndex_2</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">                </span><span class="n">valuesAreEqualToTheirIndex_3</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">assign</span><span class="w"> </span><span class="n">valuesAre42_0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">values_0</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">8&#39;h2a</span><span class="p">);</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">valuesAre42_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">values_1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">8&#39;h2a</span><span class="p">);</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">valuesAre42_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">values_2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">8&#39;h2a</span><span class="p">);</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">valuesAre42_3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">values_3</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">8&#39;h2a</span><span class="p">);</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">valuesAreAll42</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(((</span><span class="n">valuesAre42_0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">valuesAre42_1</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">valuesAre42_2</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">valuesAre42_3</span><span class="p">);</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">valuesAreEqualToTheirIndex_0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">values_0</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">8&#39;h0</span><span class="p">);</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">valuesAreEqualToTheirIndex_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">values_1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">8&#39;h01</span><span class="p">);</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">valuesAreEqualToTheirIndex_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">values_2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">8&#39;h02</span><span class="p">);</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">valuesAreEqualToTheirIndex_3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">values_3</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">8&#39;h03</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E7%9B%AE%E7%9A%84.html" class="btn btn-neutral float-left" title="目的(Motivation)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E5%AF%B9VHDL%E7%9A%84%E6%94%AF%E6%8C%81.html" class="btn btn-neutral float-right" title="对VHDL的支持(Help for VHDL people)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

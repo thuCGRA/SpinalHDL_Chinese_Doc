@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>其他语言特征(Other language features) &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="简介" href="%E7%AE%80%E4%BB%8B.html" />
+    <link rel="prev" title="位宽不匹配(Width mismatch)" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/%E4%BD%8D%E5%AE%BD%E4%B8%8D%E5%8C%B9%E9%85%8D.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">其他语言特征(Other language features)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E7%AE%80%E4%BB%8B.html">简介</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%B7%A5%E5%85%B7.html">工具(Utils)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AD%98%E6%A0%B9.html">Stub (存根)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%96%AD%E8%A8%80.html">Assertions(断言)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%8A%A5%E5%91%8A.html">Report(报告)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%B1%9E%E6%80%A7.html">ScopeProperty(作用域属性)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E6%8B%9F%E4%B8%8EIO%E5%8F%A3.html">Analog and inout (模拟与IO口)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="VHDL%E5%92%8CVerilog%E7%94%9F%E6%88%90.html">VHDL和Verilog生成(VHDL and Verilog generation)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>其他语言特征(Other language features)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/其它语言特征/index.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="other-language-features">
+<h1>其他语言特征(Other language features)<a class="headerlink" href="#other-language-features" title="此标题的永久链接"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="%E7%AE%80%E4%BB%8B.html">简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%B7%A5%E5%85%B7.html">工具(Utils)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E5%B7%A5%E5%85%B7.html#id1">一、 总览</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%B7%A5%E5%85%B7.html#cloning-hardware-datatypes">二、克隆硬件数据类型(Cloning hardware datatypes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%B7%A5%E5%85%B7.html#passing-a-datatype-as-construction-parameter">三、传递数据类型作为结构参数(Passing a datatype as construction parameter)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%B7%A5%E5%85%B7.html#frequency-and-time">四、频率与时间(Frequency and time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%B7%A5%E5%85%B7.html#binary-prefix">五、二进制前缀(Binary prefix)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%AD%98%E6%A0%B9.html">Stub (存根)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%96%AD%E8%A8%80.html">Assertions(断言)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%8A%A5%E5%91%8A.html">Report(报告)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%B1%9E%E6%80%A7.html">ScopeProperty(作用域属性)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%A8%A1%E6%8B%9F%E4%B8%8EIO%E5%8F%A3.html">Analog and inout (模拟与IO口)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E6%8B%9F%E4%B8%8EIO%E5%8F%A3.html#id1">一、简介</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E6%8B%9F%E4%B8%8EIO%E5%8F%A3.html#analog">二、Analog(模拟)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E6%8B%9F%E4%B8%8EIO%E5%8F%A3.html#inout-io">三、Inout(IO口)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E6%8B%9F%E4%B8%8EIO%E5%8F%A3.html#inoutwrapper-io">四、InOutWrapper(IO口封装)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%A8%A1%E6%8B%9F%E4%B8%8EIO%E5%8F%A3.html#manually-driving-analog-bundles">五、Manually driving Analog bundles(手动驱动模拟束)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="VHDL%E5%92%8CVerilog%E7%94%9F%E6%88%90.html">VHDL和Verilog生成(VHDL and Verilog generation)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="VHDL%E5%92%8CVerilog%E7%94%9F%E6%88%90.html#spinalhdlvhdlverilog-generate-vhdl-and-verilog-from-a-spinalhdl-component">一、从一个SpinalHDL组件生成VHDL或Verilog代码(Generate VHDL and Verilog from a SpinalHDL Component)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="VHDL%E5%92%8CVerilog%E7%94%9F%E6%88%90.html#vhdlverilog-generated-vhdl-and-verilog">二、已生成的VHDL或Verilog(Generated VHDL and Verilog)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="VHDL%E5%92%8CVerilog%E7%94%9F%E6%88%90.html#vhdlverilog-vhdl-and-verilog-attributes">三、VHDL与Verilog属性(VHDL and Verilog attributes)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/%E4%BD%8D%E5%AE%BD%E4%B8%8D%E5%8C%B9%E9%85%8D.html" class="btn btn-neutral float-left" title="位宽不匹配(Width mismatch)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E7%AE%80%E4%BB%8B.html" class="btn btn-neutral float-right" title="简介" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

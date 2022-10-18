@@ -340,9 +340,6 @@
     - [二、配置(Configuration)](#二配置configuration)
     - [三、在同一硬件上运行多个测试用例(Running multiple tests on the same hardware)](#三在同一硬件上运行多个测试用例running-multiple-tests-on-the-same-hardware)
     - [四、从线程中报告仿真的成功或失败(Throw Success or Failure of the simulation from a thread)](#四从线程中报告仿真的成功或失败throw-success-or-failure-of-the-simulation-from-a-thread)
-  - [访问仿真信号(Accessing signals of the simulation)](#访问仿真信号accessing-signals-of-the-simulation)
-    - [一、读写信号(Read and write signals)](#一读写信号read-and-write-signals)
-    - [二、在模块层次访问信号(Accessing signals inside the component's hierarchy)](#二在模块层次访问信号accessing-signals-inside-the-components-hierarchy)
   - [时钟域(Clock domains)](#时钟域clock-domains-1)
     - [一、激励API(Stimulus API)](#一激励apistimulus-api)
     - [二、等待API(Wait API)](#二等待apiwait-api)
@@ -751,7 +748,7 @@ SpinalHDL 是一种用 Scala 编写的硬件描述语言, Scala 是一种使用 
 + IDE方式：获取已经在 IDE 中为你设置的项目并立即开始编程。
 
 1. SBT方式(SBT way)
-
+  
     我们在 Github 上为你准备了一个现成的项目。
 
     + clone或下载"getting started"仓库；
@@ -873,9 +870,13 @@ object AND_Gate {
 
 见PPT
 
+https://github.com/SpinalHDL/SpinalDoc/blob/master/presentation/en/workshop/taste.pdf
+
 ## 表现(Presentation)
 
 见PPT
+
+https://github.com/SpinalHDL/SpinalDoc/blob/master/presentation/en/presentation.pdf
 
 ## Scala指导手册(Scala Guide)
 
@@ -890,15 +891,15 @@ Scala是一款功能强大的编程语言, 它的产生受到了很多其他独�
 
 1. 数据类型(Types)
     
-    在Scala中, 有五种主要类型：
+  在Scala中, 有五种主要类型：
 
-    | 数据类型 |     举例      |         描述          |
-    | :------: | :-----------: | :-------------------: |
-    | Boolean  |  true, false  |
-    |   Int    |    3, 0*32    |    32bits integer     |
-    |  Float   |     3.14f     | 32bits floating point |
-    |  Doublt  |     3.14      | 64bits floating point |
-    |  String  | "Hello world" |     UTF-16 string     |
+  | 数据类型 |     举例      |         描述          |
+  | :------: | :-----------: | :-------------------: |
+  | Boolean  |  true, false  |
+  |   Int    |    3, 0*32    |    32bits integer     |
+  |  Float   |     3.14f     | 32bits floating point |
+  |  Doublt  |     3.14      | 64bits floating point |
+  |  String  | "Hello world" |     UTF-16 string     |
 
 2. 变量(Variables)
 
@@ -12469,88 +12470,6 @@ dut.clockDomain.forkStimulus(period)
 SimTimeout(1000 * period)
 ```
 
-## 访问仿真信号(Accessing signals of the simulation)
-
-### 一、读写信号(Read and write signals)
-
-每个顶层的接口信号都可以通过Scala读写：
-
-|                  语句                  |                            描述                             |
-| :------------------------------------: | :---------------------------------------------------------: |
-|            `Bool.toBoolean`            |           读出硬件`Bool`信号作为Scala`Boolean`值            |
-|       `Bits`/`UInt`/`SInt.toInt`       |           读出硬件`BitVector`信号作为Scala`Int`值           |
-|      `Bits`/`UInt`/`SInt.toLong`       |          读出硬件`BitVector`信号作为Scala`Long`值           |
-|     `Bits`/`UInt`/`SInt.toBigInt`      |         读出硬件`BitVector`信号作为Scala`BigInt`值          |
-|        `SpinalEnumCraft.toEnum`        | 读出硬件`SpinalEnumCraft`信号作为Scala`SpinalEnumElement`值 |
-|           `Bool #= Boolean`            |           用Scala`Boolean`值赋值给硬件`Bool`信号            |
-|      `Bits`/`UInt`/`SInt #= Int`       |           用Scala`Int`值赋值给硬件`BitVector`信号           |
-|      `Bits`/`UInt`/`SInt #= Long`      |          用Scala`Long`值赋值给硬件`BitVector`信号           |
-|     `Bits`/`UInt`/`SInt #= BigInt`     |         用Scala`BigInt`值赋值给硬件`BitVector`信号          |
-| `SpinalEnumCraft #= SpinalEnumElement` | 用Scala`SpinalEnumElement`值赋值给硬件`SpinalEnumCraft`信号 |
-|           `Data.randomize()`           |                    给SpinalHDL值赋随机值                    |
-
-```Scala
-dut.io.a #= 42
-dut.io.a #= 42l
-dut.io.a #= BigInt("101010", 2)
-dut.io.a #= BigInt("0123456789ABCDEF", 16)
-println(dut.io.b.toInt)
-```
-
-### 二、在模块层次访问信号(Accessing signals inside the component's hierarchy)
-
-为了访问在模块层次内部的信号, 你应该先把信号设置成`simPublic`。
-
-你可以直接在硬件描述中增加`simPublic`标签：
-
-```Scala
-object SimAccessSubSignal {
-  import spinal.core.sim._
-
-  class TopLevel extends Component {
-    val counter = Reg(UInt(8 bits)) init(0) simPublic() //这里给counter寄存器增加simPublic标签让其可被访问
-    counter := counter + 1
-  }
-
-  def main(args: Array[String]) {
-    SimConfig.compile(new TopLevel).doSim{dut =>
-      dut.clockDomain.forkStimulus(10)
-
-      for(i <- 0 to 3) {
-        dut.clockDomain.waitSampling()
-        println(dut.counter.toInt)
-      }
-    }
-  }
-}
-```
-
-或者你可以在完成对顶层例化后, 在仿真时增加标签
-
-```Scala
-object SimAccessSubSignal {
-  import spinal.core.sim._
-  class TopLevel extends Component {
-    val counter = Reg(UInt(8 bits)) init(0)
-    counter := counter + 1
-  }
-
-  def main(args: Array[String]) {
-    SimConfig.compile {
-      val dut = new TopLevel
-      dut.counter.simPublic()
-      dut
-    }.doSim{dut =>
-      dut.clockDomain.forkStimulus(10)
-
-      for(i <- 0 to 3) {
-        dut.clockDomain.waitSampling()
-        println(dut.counter.toInt)
-      }
-    }
-  }
-}
-```
 
 ## 时钟域(Clock domains)
 

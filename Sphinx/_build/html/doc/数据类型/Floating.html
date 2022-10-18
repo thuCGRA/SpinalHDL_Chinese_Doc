@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Floating &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="AFix(AFix是最新版Spinal新增的数据结构，不知为何该板块有些代码无法通过编译)" href="AFix.html" />
+    <link rel="prev" title="UFix/SFix" href="Fix.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">数据类型(Data Types)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E7%AE%80%E4%BB%8B.html">简介(Introduction)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bool.html">Bool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bits.html">Bits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Int.html">UInt/SInt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpinalEnum.html">SpinalEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bundle.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Vec.html">Vec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fix.html">UFix/SFix</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Floating</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">一、描述(Description)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#declaration">二、声明(Declaration)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#operators">三、操作符(Operators)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="AFix.html">AFix(AFix是最新版Spinal新增的数据结构，不知为何该板块有些代码无法通过编译)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">数据类型(Data Types)</a> &raquo;</li>
+      <li>Floating</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/数据类型/Floating.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="floating">
+<h1>Floating<a class="headerlink" href="#floating" title="此标题的永久链接"></a></h1>
+<blockquote>
+<div><p>注意：SpinalHDL定点数只是部分支持并部分经过测试的, 如果你发现它有任何bug, 或者你认为有些函数丢失了, 请创建一个Github issue。并且, 请不要在代码中用未在doc中指出的特征。</p>
+</div></blockquote>
+<section id="description">
+<h2>一、描述(Description)<a class="headerlink" href="#description" title="此标题的永久链接"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Floating</span></code>类型对应于IEEE-754编码规则。第二种叫做<code class="docutils literal notranslate"><span class="pre">RecFloating</span></code>的类型能通过对浮点数的重编码简化一些IEEE-754浮点数的边缘案例。</p>
+<p>它由1 bit符号位, 指数区域和底数区域组成。不同区域的宽度定义在IEEE-754或者de-facto标准中。</p>
+<p>使用浮点数时需要先进行如下操作：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">lib</span><span class="p">.</span><span class="nn">experimental</span><span class="p">.</span><span class="nn">math</span><span class="p">.</span><span class="n">_</span>
+</pre></div>
+</div>
+<p><strong>IEEE-754浮点格式(IEEE-754 floating format)</strong></p>
+<p>数字会根据IEEE-754编码：https://en.wikipedia.org/wiki/IEEE_754</p>
+<p><strong>浮点形式重编码(Recoded floating format)</strong></p>
+<p>因为IEEE-754在非正规(denormalized)数字和特殊值的时候有一些不方便的地方, Berkeley提出了另一种浮点数值的编码方式。</p>
+<p>为了能将非正规的数值规范(normalized)地处理, 底数经过了一些修改。</p>
+<p>指数部分比IEEE-754多1 bit。</p>
+<p>符号位没有改变。</p>
+<p>例子可以在这里看到：https://github.com/ucb-bar/berkeley-hardfloat/blob/master/README.md</p>
+<p><strong>零(Zero)</strong></p>
+<p>指数字段的三个前导零被设置为0来代表0的编码。</p>
+<p><strong>非正规数值(Denormalized values)</strong></p>
+<p>非正规的数值也会编码成一般的浮点数, 底数被移位使第一位隐藏, 指数编码为107(十进制)加bit值是1的最高位的序号。</p>
+<p><strong>规范数值(Normalized values)</strong></p>
+<p>重编码的底数和IEEE-754标准的底数完全一致, 指数编码为130(十进制)加最初的指数值。</p>
+<p><strong>无穷大(Infinity)</strong></p>
+<p>重编码的底数值不用关心, 重编码的指数值的最高3 bits值是6(十进制), 剩余部分不用关心。</p>
+<p><strong>NaN</strong></p>
+<p>重编码的规范化底数部分与IEEE-754一致, 重编码的指数部分最高3 bits是7(十进制), 剩余部分不用关心。</p>
+</section>
+<section id="declaration">
+<h2>二、声明(Declaration)<a class="headerlink" href="#declaration" title="此标题的永久链接"></a></h2>
+<p>声明浮点数的语句如下所示：</p>
+<p><strong>IEEE-754数字(IEEE-754 Number)</strong></p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">语法</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Floating(exponentSize: Int, mantissaSize: Int)</td>
+<td style="text-align: center;">带有标准指数和底数长度的IEEE-754浮点数</td>
+</tr>
+<tr>
+<td style="text-align: center;">Floating16()</td>
+<td style="text-align: center;">半精度IEEE-754浮点数</td>
+</tr>
+<tr>
+<td style="text-align: center;">Floating32()</td>
+<td style="text-align: center;">单精度IEEE-754浮点数</td>
+</tr>
+<tr>
+<td style="text-align: center;">Floating64()</td>
+<td style="text-align: center;">双精度IEEE-754浮点数</td>
+</tr>
+<tr>
+<td style="text-align: center;">Floating128()</td>
+<td style="text-align: center;">四精度IEEE-754浮点数</td>
+</tr>
+</tbody>
+</table><table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">语法</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">RecFloating(exponentSize: Int, mantissaSize: Int)</td>
+<td style="text-align: center;">带有标准指数和底数长度的IEEE-754浮点数</td>
+</tr>
+<tr>
+<td style="text-align: center;">RecFloating16()</td>
+<td style="text-align: center;">重编码半精度浮点数</td>
+</tr>
+<tr>
+<td style="text-align: center;">RecFloating32()</td>
+<td style="text-align: center;">重编码单精度浮点数</td>
+</tr>
+<tr>
+<td style="text-align: center;">RecFloating64()</td>
+<td style="text-align: center;">重编码双精度浮点数</td>
+</tr>
+<tr>
+<td style="text-align: center;">RecFloating128()</td>
+<td style="text-align: center;">重编码四精度浮点数</td>
+</tr>
+</tbody>
+</table></section>
+<section id="operators">
+<h2>三、操作符(Operators)<a class="headerlink" href="#operators" title="此标题的永久链接"></a></h2>
+<p>以下所<code class="docutils literal notranslate"><span class="pre">Floating</span></code>和<code class="docutils literal notranslate"><span class="pre">RecFloating</span></code>类型所支持的操作符：</p>
+<p><strong>类型转换(Type cast)</strong>    ##有问题, 前后不一##</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">操作符</th>
+<th style="text-align: center;">描述</th>
+<th style="text-align: center;">返回类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">x.asBits</td>
+<td style="text-align: center;">二进制转换为Bits</td>
+<td style="text-align: center;">Bits(w(x) bits)</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.asBools</td>
+<td style="text-align: center;">转换为Bool数组</td>
+<td style="text-align: center;">Vec(Bool, width(x))</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.toUInt(size: Int)</td>
+<td style="text-align: center;">返回对应的UInt(自带truncation)</td>
+<td style="text-align: center;">UInt</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.toSInt(size: Int)</td>
+<td style="text-align: center;">返回对应的SInt(自带truncation)</td>
+<td style="text-align: center;">SInt</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.fromUInt</td>
+<td style="text-align: center;">返回对应的UFix(自带truncation)</td>
+<td style="text-align: center;">UFix</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.fromUInt</td>
+<td style="text-align: center;">返回对应的SFix(自带truncation)</td>
+<td style="text-align: center;">SFix</td>
+</tr>
+</tbody>
+</table></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Fix.html" class="btn btn-neutral float-left" title="UFix/SFix" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="AFix.html" class="btn btn-neutral float-right" title="AFix(AFix是最新版Spinal新增的数据结构，不知为何该板块有些代码无法通过编译)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

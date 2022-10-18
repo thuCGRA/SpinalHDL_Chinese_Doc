@@ -1,0 +1,85 @@
+## 图形(Graphics)
+
+### 一、颜色
+
+1. RGB
+
+   用户可以使用Rgb包在硬件中建模颜色。这个Rgb包使用RgbConfig类作为参数并指定每个通道的比特数:
+   ```Scala
+   case class RgbConfig(rWidth : Int,gWidth : Int,bWidth : Int){
+       def getWidth = rWidth + gWidth + bWidth
+   }
+
+   case class Rgb(c: RgbConfig) extends Bundle{
+       val r = UInt(c.rWidth bits)
+       val g = UInt(c.gWidth bits)
+       val b = UInt(c.bWidth bits)
+   }
+   ```
+   这些类可以按如下使用：
+   ```Scala
+   val config = RgbConfig(5,6,5)
+   val color = Rgb(config)
+   color.r := 31
+   ```
+
+### 二、VGA
+
+1. VGA总线
+
+   VGA总线通过VGA包定义：
+   ```Scala
+   case class Vga (rgbConfig: RgbConfig) extends Bundle with IMasterSlave{
+       val vSync = Bool()
+       val hSync = Bool()
+
+       val colorEn = Bool()  //High when the frame is inside the color area
+       val color = Rgb(rgbConfig)
+
+       override def asMaster() = this.asOutput()
+   }
+   ```
+
+2. VGA时序(timings)
+
+   VGA时序可以通过使用VgaTimings包在硬件中建模:
+   ```Scala
+   case class VgaTimingsHV(timingsWidth: Int) extends Bundle {
+       val colorStart = UInt(timingsWidth bits)
+       val colorEnd = UInt(timingsWidth bits)
+       val syncStart = UInt(timingsWidth bits)
+       val syncEnd = UInt(timingsWidth bits)
+   }
+
+   case class VgaTimings(timingsWidth: Int) extends Bundle {
+       val h = VgaTimingsHV(timingsWidth)
+       val v = VgaTimingsHV(timingsWidth)
+
+       def setAs_h640_v480_r60 = ...
+       def driveFrom(busCtrl : BusSlaveFactory,baseAddress : Int) = ...
+   }
+   ```
+
+3. VGA控制器
+
+   VGA控制器的定义如下：
+   ```Scala
+   case class VgaCtrl(rgbConfig: RgbConfig, timingsWidth: Int = 12) extends Component {
+       val io = new Bundle {
+           val softReset = in Bool()
+           val timings   = in(VgaTimings(timingsWidth))
+
+           val frameStart = out Bool()
+           val pixels     = slave Stream (Rgb(rgbConfig))
+           val vga        = master(Vga(rgbConfig))
+
+           val error      = out Bool()
+       }
+       // ...
+   }
+   ```
+   `frameStart`是一个信号, 在每一帧的开始脉冲一个周期。
+
+   `pixels`是一种色彩流, 用于在需要时提供给VGA接口。
+
+   当需要对像素进行传输但没有对象时, `error`会拉高。

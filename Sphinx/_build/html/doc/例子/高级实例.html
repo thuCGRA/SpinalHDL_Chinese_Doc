@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>高级实例 &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="prev" title="进阶实例" href="%E8%BF%9B%E9%98%B6%E5%AE%9E%E4%BE%8B.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">例子(Examples)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E7%AE%80%E5%8D%95%E5%AE%9E%E4%BE%8B.html">简单的实例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E8%BF%9B%E9%98%B6%E5%AE%9E%E4%BE%8B.html">进阶实例</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">高级实例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#jtag-tap">一、JTAG TAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uart-memory-mapped-uart">二、内存映射UART(Memory mapped UART)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pinesec">三、Pinesec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timer">四、计时器(Timer)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">例子(Examples)</a> &raquo;</li>
+      <li>高级实例</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/例子/高级实例.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>高级实例<a class="headerlink" href="#id1" title="此标题的永久链接"></a></h1>
+<section id="jtag-tap">
+<h2>一、JTAG TAP<a class="headerlink" href="#jtag-tap" title="此标题的永久链接"></a></h2>
+<ol>
+<li><p>简介</p>
+<blockquote>
+<div><p><strong>重要：本章节的目的是为了展示一个JTAG TAP的非常规实现方法</strong></p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>重要：该实现并不简单，它混合了面向对象编程、抽象接口解耦、硬件生成和硬件描述。当然，简单的JTAG TAP实现只需要一个简单的硬件描述就可以完成，但这里的目标实际上是更进步，创建一个可重用和可扩展的JTAG TAP生成器</strong></p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>本章节将会解释JTAG是如何工作的。也可见https://www.fpga4fun.com/JTAG.html的手册</strong></p>
+</div></blockquote>
+<p>常用的HDL和Spinal之间的一个很大的区别是，SpinalHDL允许用户定义硬件生成器/构建器。这与描述硬件非常不同。以下面的例子为例，因为生成/构建/描述之间的区别看起来像是“玩弄字”，或者可以用不同的方式解释。</p>
+<p>下面的例子是一个JTAG TAP，它允许JTAG主程序读取<code class="docutils literal notranslate"><span class="pre">switchs</span></code>/<code class="docutils literal notranslate"><span class="pre">keys</span></code>的输入和写入<code class="docutils literal notranslate"><span class="pre">leds</span></code>的输出。通过使用UID 0x87654321，主服务器也可以识别这个TAP。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SimpleJtagTap</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">jtag</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">slave</span><span class="p">(</span><span class="nc">Jtag</span><span class="p">())</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">switchs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w">  </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">keys</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w">  </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">leds</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">tap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">JtagTap</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">jtag</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">idcodeArea</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">tap</span><span class="p">.</span><span class="n">idcode</span><span class="p">(</span><span class="nc">B</span><span class="s">&quot;x87654321&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">instructionId</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">switchsArea</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tap</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">switchs</span><span class="p">)</span><span class="w">     </span><span class="p">(</span><span class="n">instructionId</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">keysArea</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">tap</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">keys</span><span class="p">)</span><span class="w">        </span><span class="p">(</span><span class="n">instructionId</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">ledsArea</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">tap</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">leds</span><span class="p">)</span><span class="w">       </span><span class="p">(</span><span class="n">instructionId</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>可见，创建了一个JtagTap，然后调用一些Generator/Builder函数(idcode、read、write)来创建每个JTAG指令。这就是所说的“硬件生成器/构建器”，然后这些生成器/构建器被用户用来描述硬件。最重要的一点是，在通常的HDL中，用户只能描述硬件，这意味着许多繁琐的工作。</p>
+<p>该JTAG TAP教程基于https://github.com/SpinalHDL/SpinalHDL/tree/master/lib/src/main/scala/spinal/lib/com/jtag实现。</p>
+</li>
+<li><p>JTAG总线</p>
+<p>首先我们要定义一个JTAG总线类</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Jtag</span><span class="p">()</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="nc">IMasterSlave</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">tms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">tdi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">tdo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">asMaster</span><span class="p">()</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">out</span><span class="p">(</span><span class="n">tdi</span><span class="p">,</span><span class="w"> </span><span class="n">tms</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">in</span><span class="p">(</span><span class="n">tdo</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>该总线未包含TCK引脚因为时钟域会提供</p>
+</li>
+<li><p>JTAG状态机</p>
+<p>根据https://www.fpga4fun.com/JTAG2.html的指导定义JTAG状态机</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span><span class="w"> </span><span class="nc">JtagState</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">SpinalEnum</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nc">RESET</span><span class="p">,</span><span class="w"> </span><span class="nc">IDLE</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nc">IR_SELECT</span><span class="p">,</span><span class="w"> </span><span class="nc">IR_CAPTURE</span><span class="p">,</span><span class="w"> </span><span class="nc">IR_SHIFT</span><span class="p">,</span><span class="w"> </span><span class="nc">IR_EXIT1</span><span class="p">,</span><span class="w"> </span><span class="nc">IR_PAUSE</span><span class="p">,</span><span class="w"> </span><span class="nc">IR_EXIT2</span><span class="p">,</span><span class="w"> </span><span class="nc">IR_UPDATE</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nc">DR_SELECT</span><span class="p">,</span><span class="w"> </span><span class="nc">DR_CAPTURE</span><span class="p">,</span><span class="w"> </span><span class="nc">DR_SHIFT</span><span class="p">,</span><span class="w"> </span><span class="nc">DR_EXIT1</span><span class="p">,</span><span class="w"> </span><span class="nc">DR_PAUSE</span><span class="p">,</span><span class="w"> </span><span class="nc">DR_EXIT2</span><span class="p">,</span><span class="w"> </span><span class="nc">DR_UPDATE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newElement</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">JtagFsm</span><span class="p">(</span><span class="n">jtag</span><span class="p">:</span><span class="w"> </span><span class="nc">Jtag</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="nc">JtagState</span><span class="p">.</span><span class="n">_</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">stateNext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">JtagState</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">stateNext</span><span class="p">)</span><span class="w"> </span><span class="n">randBoot</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">stateNext</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">state</span><span class="p">.</span><span class="n">mux</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">default</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">RESET</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="nc">IDLE</span><span class="p">),</span><span class="w">           </span><span class="c1">//RESET</span>
+<span class="w">    </span><span class="nc">IDLE</span><span class="w">       </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">DR_SELECT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nc">IDLE</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="nc">IR_SELECT</span><span class="w">  </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">RESET</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="nc">IR_CAPTURE</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="nc">IR_CAPTURE</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">IR_EXIT1</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="nc">IR_SHIFT</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="nc">IR_SHIFT</span><span class="w">   </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">IR_EXIT1</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="nc">IR_SHIFT</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="nc">IR_EXIT1</span><span class="w">   </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">IR_UPDATE</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nc">IR_PAUSE</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="nc">IR_PAUSE</span><span class="w">   </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">IR_EXIT2</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="nc">IR_PAUSE</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="nc">IR_EXIT2</span><span class="w">   </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">IR_UPDATE</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nc">IR_SHIFT</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="nc">IR_UPDATE</span><span class="w">  </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">DR_SELECT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nc">IDLE</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="nc">DR_SELECT</span><span class="w">  </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">IR_SELECT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nc">DR_CAPTURE</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="nc">DR_CAPTURE</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">DR_EXIT1</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="nc">DR_SHIFT</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="nc">DR_SHIFT</span><span class="w">   </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">DR_EXIT1</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="nc">DR_SHIFT</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="nc">DR_EXIT1</span><span class="w">   </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">DR_UPDATE</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nc">DR_PAUSE</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="nc">DR_PAUSE</span><span class="w">   </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">DR_EXIT2</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="nc">DR_PAUSE</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="nc">DR_EXIT2</span><span class="w">   </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">DR_UPDATE</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nc">DR_SHIFT</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="nc">DR_UPDATE</span><span class="w">  </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">DR_SELECT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nc">IDLE</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>注意：<code class="docutils literal notranslate"><span class="pre">state</span></code>中的<code class="docutils literal notranslate"><span class="pre">randBoot()</span></code>将会被随机状态初始化。仅是为了仿真用</strong></p>
+</div></blockquote>
+</li>
+<li><p>JTAG TAP</p>
+<p>下面将不用任何指令，只用最基本的指令寄存器控制和旁路控制来实现JTAG TAP的核</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">JtagTap</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="n">jtag</span><span class="p">:</span><span class="w"> </span><span class="nc">Jtag</span><span class="p">,</span><span class="w"> </span><span class="n">instructionWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Area</span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">fsm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">JtagFsm</span><span class="p">(</span><span class="n">jtag</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">instruction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="n">instructionWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">instructionShift</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="n">instructionWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">bypass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">Bool</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">jtag</span><span class="p">.</span><span class="n">tdo</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">bypass</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">switch</span><span class="p">(</span><span class="n">fsm</span><span class="p">.</span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">is</span><span class="p">(</span><span class="nc">JtagState</span><span class="p">.</span><span class="nc">IR_CAPTURE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">instructionShift</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">instruction</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">is</span><span class="p">(</span><span class="nc">JtagState</span><span class="p">.</span><span class="nc">IR_SHIFT</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">instructionShift</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">(</span><span class="n">jtag</span><span class="p">.</span><span class="n">tdi</span><span class="w"> </span><span class="o">##</span><span class="w"> </span><span class="n">instructionShift</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">      </span><span class="n">jtag</span><span class="p">.</span><span class="n">tdo</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">instructionShift</span><span class="p">.</span><span class="n">lsb</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">is</span><span class="p">(</span><span class="nc">JtagState</span><span class="p">.</span><span class="nc">IR_UPDATE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">instruction</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">instructionShift</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">is</span><span class="p">(</span><span class="nc">JtagState</span><span class="p">.</span><span class="nc">DR_SHIFT</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">bypass</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">jtag</span><span class="p">.</span><span class="n">tdi</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>JTAG指令</p>
+<p>JTAG TAP核心已经完成，可以考虑如何通过可重用的方式实现JTAG指令。</p>
+<ul>
+<li><p>JTAG TAP类的接口</p>
+<p>首先，需要定义一条指令如何与JTAG TAP核心交互。当然可以直接使用JtagTap区域，但这不是很好，因为在某些情况下，JTAG TAP核心是由另一个IP提供的(例如Altera虚拟JTAG)。</p>
+<p>所以定义一个JTAP TAP核与指令间的简单抽象接口：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">trait</span><span class="w"> </span><span class="nc">JtagTapAccess</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">getTdi</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">getTms</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">setTdo</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Bool</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Unit</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">getState</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">JtagState</span><span class="p">.</span><span class="nc">T</span><span class="w"></span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">getInstruction</span><span class="p">()</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Bits</span><span class="w"></span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">setInstruction</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Bits</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Unit</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>随后让JtagTap实现该抽象接口：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">JtagTap</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="n">jtag</span><span class="p">:</span><span class="w"> </span><span class="nc">Jtag</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="nc">JtagTapAccess</span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="p">...</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">//JtagTapAccess impl</span>
+<span class="w">  </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">getTdi</span><span class="p">:</span><span class="w"> </span><span class="nc">Bool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jtag</span><span class="p">.</span><span class="n">tdi</span><span class="w"></span>
+<span class="w">  </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">setTdo</span><span class="p">(</span><span class="n">value</span><span class="p">:</span><span class="w"> </span><span class="nc">Bool</span><span class="p">):</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jtag</span><span class="p">.</span><span class="n">tdo</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">value</span><span class="w"></span>
+<span class="w">  </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">getTms</span><span class="p">:</span><span class="w"> </span><span class="nc">Bool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jtag</span><span class="p">.</span><span class="n">tms</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">getState</span><span class="p">:</span><span class="w"> </span><span class="nc">JtagState</span><span class="p">.</span><span class="nc">T</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fsm</span><span class="p">.</span><span class="n">state</span><span class="w"></span>
+<span class="w">  </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">getInstruction</span><span class="p">():</span><span class="w"> </span><span class="nc">Bits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">instruction</span><span class="w"></span>
+<span class="w">  </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">setInstruction</span><span class="p">(</span><span class="n">value</span><span class="p">:</span><span class="w"> </span><span class="nc">Bits</span><span class="p">):</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">instruction</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">value</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>基类</p>
+<p>为JTAG指令定义一个有用的基类，根据所选指令和JTAG TAP的状态提供一些回调(doCapture/doShift/doUpdate/doReset):</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">JtagInstruction</span><span class="p">(</span><span class="n">tap</span><span class="p">:</span><span class="w"> </span><span class="nc">JtagTapAccess</span><span class="p">,</span><span class="kd">val</span><span class="w"> </span><span class="n">instructionId</span><span class="p">:</span><span class="w"> </span><span class="nc">Bits</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">doCapture</span><span class="p">():</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">doShift</span><span class="p">():</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">doUpdate</span><span class="p">():</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">doReset</span><span class="p">():</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">instructionHit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tap</span><span class="p">.</span><span class="n">getInstruction</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="n">instructionId</span><span class="w"></span>
+
+<span class="w">  </span><span class="nc">Component</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">addPrePopTask</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">when</span><span class="p">(</span><span class="n">instructionHit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">when</span><span class="p">(</span><span class="n">tap</span><span class="p">.</span><span class="n">getState</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nc">JtagState</span><span class="p">.</span><span class="nc">DR_CAPTURE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">doCapture</span><span class="p">()</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="n">when</span><span class="p">(</span><span class="n">tap</span><span class="p">.</span><span class="n">getState</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nc">JtagState</span><span class="p">.</span><span class="nc">DR_SHIFT</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">doShift</span><span class="p">()</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="n">when</span><span class="p">(</span><span class="n">tap</span><span class="p">.</span><span class="n">getState</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nc">JtagState</span><span class="p">.</span><span class="nc">DR_UPDATE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">doUpdate</span><span class="p">()</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">when</span><span class="p">(</span><span class="n">tap</span><span class="p">.</span><span class="n">getState</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nc">JtagState</span><span class="p">.</span><span class="nc">RESET</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">doReset</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">})</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>注意：关于Component.current.addPrePopTask(…)：这允许用户在当前组件构造结束时调用给定的代码。由于JtagInstruction面向对象的特性，doCapture, doShift, doUpdate和doReset不应该在子类构造之前调用(因为子类会使用它作为回调来执行一些逻辑)</strong></p>
+</div></blockquote>
+</li>
+<li><p>读指令</p>
+<p>实现一条允许JTAG读取信号的指令。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">JtagInstructionRead</span><span class="p">[</span><span class="nc">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="nc">Data</span><span class="p">](</span><span class="n">data</span><span class="p">:</span><span class="w"> </span><span class="nc">T</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">tap</span><span class="p">:</span><span class="w"> </span><span class="nc">JtagTapAccess</span><span class="p">,</span><span class="n">instructionId</span><span class="p">:</span><span class="w"> </span><span class="nc">Bits</span><span class="p">)</span><span class="k">extends</span><span class="w"> </span><span class="nc">JtagInstruction</span><span class="p">(</span><span class="n">tap</span><span class="p">,</span><span class="n">instructionId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">shifter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">getBitsWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">doCapture</span><span class="p">():</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">shifter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">asBits</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">doShift</span><span class="p">():</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">shifter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">(</span><span class="n">tap</span><span class="p">.</span><span class="n">getTdi</span><span class="w"> </span><span class="o">##</span><span class="w"> </span><span class="n">shifter</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="n">tap</span><span class="p">.</span><span class="n">setTdo</span><span class="p">(</span><span class="n">shifter</span><span class="p">.</span><span class="n">lsb</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>写指令</p>
+<p>实现一条指令，允许JTAG写入寄存器(同时读取其当前值)。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">JtagInstructionWrite</span><span class="p">[</span><span class="nc">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="nc">Data</span><span class="p">](</span><span class="n">data</span><span class="p">:</span><span class="w"> </span><span class="nc">T</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">tap</span><span class="p">:</span><span class="w"> </span><span class="nc">JtagTapAccess</span><span class="p">,</span><span class="n">instructionId</span><span class="p">:</span><span class="w"> </span><span class="nc">Bits</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">JtagInstruction</span><span class="p">(</span><span class="n">tap</span><span class="p">,</span><span class="n">instructionId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">shifter</span><span class="p">,</span><span class="n">store</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">getBitsWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">doCapture</span><span class="p">():</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">shifter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">store</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">doShift</span><span class="p">():</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">shifter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">(</span><span class="n">tap</span><span class="p">.</span><span class="n">getTdi</span><span class="w"> </span><span class="o">##</span><span class="w"> </span><span class="n">shifter</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="n">tap</span><span class="p">.</span><span class="n">setTdo</span><span class="p">(</span><span class="n">shifter</span><span class="p">.</span><span class="n">lsb</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">doUpdate</span><span class="p">():</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">store</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">shifter</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">data</span><span class="p">.</span><span class="n">assignFromBits</span><span class="p">(</span><span class="n">store</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>Idcode指令</p>
+<p>实现向JTAG返回idcode的指令，并且，当复位时，将指令寄存器(IR)设置为它自己的instructionId。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">JtagInstructionIdcode</span><span class="p">[</span><span class="nc">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="nc">Data</span><span class="p">](</span><span class="n">value</span><span class="p">:</span><span class="w"> </span><span class="nc">Bits</span><span class="p">)(</span><span class="n">tap</span><span class="p">:</span><span class="w"> </span><span class="nc">JtagTapAccess</span><span class="p">,</span><span class="w"> </span><span class="n">instructionId</span><span class="p">:</span><span class="w"> </span><span class="nc">Bits</span><span class="p">)</span><span class="k">extends</span><span class="w"> </span><span class="nc">JtagInstruction</span><span class="p">(</span><span class="n">tap</span><span class="p">,</span><span class="n">instructionId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">shifter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">32</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">doShift</span><span class="p">():</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">shifter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">(</span><span class="n">tap</span><span class="p">.</span><span class="n">getTdi</span><span class="w"> </span><span class="o">##</span><span class="w"> </span><span class="n">shifter</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="n">tap</span><span class="p">.</span><span class="n">setTdo</span><span class="p">(</span><span class="n">shifter</span><span class="p">.</span><span class="n">lsb</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">doReset</span><span class="p">():</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">shifter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">value</span><span class="w"></span>
+<span class="w">    </span><span class="n">tap</span><span class="p">.</span><span class="n">setInstruction</span><span class="p">(</span><span class="n">instructionId</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>用户友好型包装(User friendly wrapper)</p>
+<p>向JtagTapAccess添加一些用户友好的函数，使指令实例化更容易。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">trait</span><span class="w"> </span><span class="nc">JtagTapAccess</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="p">...</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">idcode</span><span class="p">(</span><span class="n">value</span><span class="p">:</span><span class="w"> </span><span class="nc">Bits</span><span class="p">)(</span><span class="n">instructionId</span><span class="p">:</span><span class="w"> </span><span class="nc">Bits</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="nc">JtagInstructionIdcode</span><span class="p">(</span><span class="n">value</span><span class="p">)(</span><span class="bp">this</span><span class="p">,</span><span class="n">instructionId</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">[</span><span class="nc">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="nc">Data</span><span class="p">](</span><span class="n">data</span><span class="p">:</span><span class="w"> </span><span class="nc">T</span><span class="p">)(</span><span class="n">instructionId</span><span class="p">:</span><span class="w"> </span><span class="nc">Bits</span><span class="p">)</span><span class="w">   </span><span class="o">=</span><span class="w"></span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="nc">JtagInstructionRead</span><span class="p">(</span><span class="n">data</span><span class="p">)(</span><span class="bp">this</span><span class="p">,</span><span class="n">instructionId</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">[</span><span class="nc">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="nc">Data</span><span class="p">](</span><span class="n">data</span><span class="p">:</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w">  </span><span class="n">cleanUpdate</span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">readable</span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)(</span><span class="n">instructionId</span><span class="p">:</span><span class="w"> </span><span class="nc">Bits</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="nc">JtagInstructionWrite</span><span class="p">[</span><span class="nc">T</span><span class="p">](</span><span class="n">data</span><span class="p">,</span><span class="n">cleanUpdate</span><span class="p">,</span><span class="n">readable</span><span class="p">)(</span><span class="bp">this</span><span class="p">,</span><span class="n">instructionId</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>使用演示</p>
+<p>现在，可以非常容易地创建应用程序特定的JTAG TAP，而不需要编写任何逻辑或任何互连。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SimpleJtagTap</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">jtag</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">slave</span><span class="p">(</span><span class="nc">Jtag</span><span class="p">())</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">switchs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w">  </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">keys</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w">  </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">leds</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">tap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">JtagTap</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">jtag</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">idcodeArea</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">tap</span><span class="p">.</span><span class="n">idcode</span><span class="p">(</span><span class="nc">B</span><span class="s">&quot;x87654321&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">instructionId</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">switchsArea</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tap</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">switchs</span><span class="p">)</span><span class="w">     </span><span class="p">(</span><span class="n">instructionId</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">keysArea</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">tap</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">keys</span><span class="p">)</span><span class="w">        </span><span class="p">(</span><span class="n">instructionId</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">ledsArea</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">tap</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">leds</span><span class="p">)</span><span class="w">       </span><span class="p">(</span><span class="n">instructionId</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>这种方式(生成硬件)也可以应用于，例如，生成一个APB/AHB/AXI从端总线。</p>
+</li>
+</ol>
+</section>
+<section id="uart-memory-mapped-uart">
+<h2>二、内存映射UART(Memory mapped UART)<a class="headerlink" href="#uart-memory-mapped-uart" title="此标题的永久链接"></a></h2>
+<ol>
+<li><p>简介</p>
+<p>该例子将会以之前的Uart例子来实现一个内存映射的UART。</p>
+</li>
+<li><p>规范</p>
+<p>该实现将基于一个带RX FIFO的APB3总线。</p>
+<p>以下是寄存器映射表：
+|     名称     |        类型         | 接入  | 地址  |                             描述                             |
+| :———-: | :—————–: | :—: | :—: | :———————————————————-: |
+| clockDivider |        UInt         |  RW   |   0   |                    设置UartCtrl时钟分频器                    |
+|    frame     | UartCtrlFrameConfig |  RW   |   4   |               设置数据长度，校验位和停止位配置               |
+|   writeCmd   |        Bits         |   W   |   8   |                   向UartCtrl发送一条写命令                   |
+|  writeBusy   |        Bool         |   R   |   8   |      当一条新的writeCmd可以被发送时，操作Bit 0 =&gt; zero       |
+|     read     |     Bool / Bits     |   R   |  12   | Bits 7 downto 0 =&gt; rx payload <br>Bit 31 =&gt; rx payload valid |</p>
+</li>
+<li><p>实现</p>
+<p>在该实现中，Apb3SlaveFactory工具将会被使用。它允许用户用优美的语法定义一个APB3从端。可以从https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Librariesbus_slave_factory.html#bus-slave-factory找到该工具的文档。</p>
+<p>首先，我们只需要定义控制器将要使用的<code class="docutils literal notranslate"><span class="pre">Apb3Config</span></code>。它被定义为Scala object里的一个函数。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span><span class="w"> </span><span class="nc">Apb3UartCtrl</span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">getApb3Config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Apb3Config</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">addressWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">dataWidth</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="w"></span>
+<span class="w">  </span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>随后我们可以定义一个<code class="docutils literal notranslate"><span class="pre">Apb3UartCtrl</span></code>组件来实例化一个<code class="docutils literal notranslate"><span class="pre">UartCtrl</span></code>并且在它和APB3总线之间创建一个内存映射逻辑：
+<img alt="../../_images/memory_mapped_uart.svg" src="../../_images/memory_mapped_uart.svg" /></p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Apb3UartCtrl</span><span class="p">(</span><span class="n">uartCtrlConfig</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">UartCtrlGenerics</span><span class="p">,</span><span class="w"> </span><span class="n">rxFifoDepth</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">bus</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">slave</span><span class="p">(</span><span class="nc">Apb3</span><span class="p">(</span><span class="nc">Apb3UartCtrl</span><span class="p">.</span><span class="n">getApb3Config</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">uart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">master</span><span class="p">(</span><span class="nc">Uart</span><span class="p">())</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">//实例化一个简单的uart控制器</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">uartCtrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">UartCtrl</span><span class="p">(</span><span class="n">uartCtrlConfig</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="n">io</span><span class="p">.</span><span class="n">uart</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">uartCtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">uart</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// 建立一个被io.bus驱动的apb3SlaveFactory实例</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">busCtrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Apb3SlaveFactory</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">bus</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// 请求busCtrl以在地址0创建一个可读写寄存器并且驱动uartCtrl.io.config.clockDivider</span>
+<span class="w">  </span><span class="n">busCtrl</span><span class="p">.</span><span class="n">driveAndRead</span><span class="p">(</span><span class="n">uartCtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">config</span><span class="p">.</span><span class="n">clockDivider</span><span class="p">,</span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// 与上面做同样的事，但是是驱动地址4的uartCtrl.io.config.frame</span>
+<span class="w">  </span><span class="n">busCtrl</span><span class="p">.</span><span class="n">driveAndRead</span><span class="p">(</span><span class="n">uartCtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">config</span><span class="p">.</span><span class="n">frame</span><span class="p">,</span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// 请求busCtrl以在地址8创建一个可写Flow[Bits]</span>
+<span class="w">  </span><span class="c1">// 随后将其转化为Stream并且使用寄存器连接到uartCtrl.io.write</span>
+<span class="w">  </span><span class="n">busCtrl</span><span class="p">.</span><span class="n">createAndDriveFlow</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="n">uartCtrlConfig</span><span class="p">.</span><span class="n">dataWidthMax</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">).</span><span class="n">toStream</span><span class="w"> </span><span class="o">&gt;-&gt;</span><span class="w"> </span><span class="n">uartCtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">write</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// 为了避免在上面的流到流转换之间丢失写命令，使uartCtrl.io.write的占用在地址8处可读</span>
+<span class="w">  </span><span class="n">busCtrl</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">uartCtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">write</span><span class="p">.</span><span class="n">valid</span><span class="p">,</span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// 读取uartCtrl.io并转换成流，随后连接到64个元素的FIFO的输入。然后使用非阻塞协议使FIFO的输出在地址12处可读</span>
+<span class="w">  </span><span class="c1">// (Bit 7 downto 0 =&gt; read data &lt;br&gt; Bit 31 =&gt; read data valid )</span>
+<span class="w">  </span><span class="n">busCtrl</span><span class="p">.</span><span class="n">readStreamNonBlocking</span><span class="p">(</span><span class="n">uartCtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">read</span><span class="p">.</span><span class="n">toStream</span><span class="p">.</span><span class="n">queue</span><span class="p">(</span><span class="n">rxFifoDepth</span><span class="p">),</span><span class="w"></span>
+<span class="w">                                </span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="n">validBitOffset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">31</span><span class="p">,</span><span class="w"> </span><span class="n">payloadBitOffset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>重要：是的，以上就是全部。它同样是可综合的。Apb3SlaveFactory工具并不是硬编码到SpinalHDL编译器中的东西。它是用SpinalHDL规则硬件描述语法实现的。</strong></p>
+</div></blockquote>
+</li>
+</ol>
+</section>
+<section id="pinesec">
+<h2>三、Pinesec<a class="headerlink" href="#pinesec" title="此标题的永久链接"></a></h2>
+<p>原著未撰写</p>
+</section>
+<section id="timer">
+<h2>四、计时器(Timer)<a class="headerlink" href="#timer" title="此标题的永久链接"></a></h2>
+<ol>
+<li><p>简介</p>
+<p>计时器模块可能是最基本的硬件部件之一。但即使对于一个计时器，也可以用SpinalHDL做一些有趣的事情。这个例子将定义一个简单的计时器组件，它集成了一个总线桥接工具。</p>
+</li>
+<li><p>计时器</p>
+<p>首先从<code class="docutils literal notranslate"><span class="pre">Timer</span></code>组件开始。</p>
+<ul>
+<li><p>规范</p>
+<p>该<code class="docutils literal notranslate"><span class="pre">Timer</span></code>组件将有一个单独的构造参数：
+| 名称  | 类型  |           描述           |
+| :—: | :—: | :———————-: |
+| width |  Int  | 指明时间计数器的比特位宽 |</p>
+<p>并且有一些输入/输出：
+| 名称  | 方向  | 类型  |                          描述                           |
+| :—: | :—: | :—: | :—————————————————–: |
+| tick  |  in   | Bool  |       当<code class="docutils literal notranslate"><span class="pre">tick</span></code>为True时，计时器会一直计数到<code class="docutils literal notranslate"><span class="pre">limit</span></code>       |
+| clear |  in   | Bool  | 当<code class="docutils literal notranslate"><span class="pre">tick</span></code>为True时，计时器设置为零。<code class="docutils literal notranslate"><span class="pre">Clear</span></code>优先于<code class="docutils literal notranslate"><span class="pre">tick</span></code>。 |</p>
+</li>
+<li><p>实现</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Timer</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">tick</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">clear</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">limit</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">full</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="w">  </span><span class="n">when</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">tick</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">io</span><span class="p">.</span><span class="n">full</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="n">counter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="n">when</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">clear</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="n">counter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">io</span><span class="p">.</span><span class="n">full</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">limit</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">tick</span><span class="w"></span>
+<span class="w">  </span><span class="n">io</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">counter</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>桥接函数(Bridging function)</p>
+<p>可以从这个例子的主要目的开始:定义一个总线桥接函数。为此，将使用两种技术:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- 利用https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Libraries/bus_slave_factory.html#bus-slave-factory下的`BusSlaveFactory`工具
+- 在`Timer`组件内部定义一个函数，可以从父组件调用该函数，以抽象的方式驱动`Timer`的IO。
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>规范</p></li>
+</ul>
+</li>
+</ol>
+<pre><code>   |    名称     |      类型       |                     描述                      |
+   | :---------: | :-------------: | :-------------------------------------------: |
+   |   busCtrl   | BusSlaveFactory | 函数将使用`BusSlaveFactory`实例创建桥接逻辑。 |
+   | baseAddress |     BigInt      |          桥接逻辑应该被映射的基地址           |
+   |    ticks    |    Seq[Bool]    |           可用作tick信号的逻辑资源            |
+   |   clears    |    Seq[Bool]    |           可用作clear信号的逻辑资源           |
+</code></pre><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   该寄存器映射会假设总线系统是32比特位宽：
+   |     名称     | 接入  |    位宽     | 地址偏移 | 比特偏移 |
+   | :----------: | :---: | :---------: | :------: | :------: |
+   | ticksEnable  |  RW   | len(ticks)  |    0     |    0     |
+   | clearsEnable |  RW   | len(clears) |    0     |    16    |
+   |    limit     |  RW   |    width    |    4     |    0     |
+   |    value     |   R   |    width    |    8     |    0     |
+   |    clear     |   W   |             |    8     |          |
+</pre></div>
+</div>
+<ul>
+<li><p>实现</p>
+<p>将桥接函数加入<code class="docutils literal notranslate"><span class="pre">Timer</span></code>组件</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Timer</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">tick</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">clear</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">limit</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">full</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// 之前定义的逻辑</span>
+<span class="w">  </span><span class="c1">// ....</span>
+
+<span class="w">  </span><span class="c1">// 使用Scala函数名(arg1,arg2)(arg3,arg3)的函数圆形</span>
+<span class="w">  </span><span class="c1">// 可以以更优雅的方式调用函数</span>
+<span class="w">  </span><span class="c1">// 该函数同样返回一个area, 可以保持生成的Verilog内的信号名.</span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">driveFrom</span><span class="p">(</span><span class="n">busCtrl</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">BusSlaveFactory</span><span class="p">,</span><span class="n">baseAddress</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">BigInt</span><span class="p">)(</span><span class="n">ticks</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Seq</span><span class="p">[</span><span class="nc">Bool</span><span class="p">],</span><span class="n">clears</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Seq</span><span class="p">[</span><span class="nc">Bool</span><span class="p">])</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//Address 0 =&gt; clear/tick masks + bus</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">ticksEnable</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">busCtrl</span><span class="p">.</span><span class="n">createReadWrite</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="n">ticks</span><span class="p">.</span><span class="n">length</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="n">baseAddress</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">clearsEnable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">busCtrl</span><span class="p">.</span><span class="n">createReadWrite</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="n">clears</span><span class="p">.</span><span class="n">length</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="n">baseAddress</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">busClearing</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">False</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">clear</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">(</span><span class="n">clearsEnable</span><span class="w"> </span><span class="n">&amp;</span><span class="w"> </span><span class="n">clears</span><span class="p">.</span><span class="n">asBits</span><span class="p">).</span><span class="n">orR</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">busClearing</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">tick</span><span class="w">  </span><span class="o">:=</span><span class="w"> </span><span class="p">(</span><span class="n">ticksEnable</span><span class="w">  </span><span class="n">&amp;</span><span class="w"> </span><span class="n">ticks</span><span class="p">.</span><span class="n">asBits</span><span class="w"> </span><span class="p">).</span><span class="n">orR</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//Address 4 =&gt; read/write limit (+ auto clear)</span>
+<span class="w">    </span><span class="n">busCtrl</span><span class="p">.</span><span class="n">driveAndRead</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">limit</span><span class="p">,</span><span class="n">baseAddress</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">busClearing</span><span class="w"> </span><span class="n">setWhen</span><span class="p">(</span><span class="n">busCtrl</span><span class="p">.</span><span class="n">isWriting</span><span class="p">(</span><span class="n">baseAddress</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//Address 8 =&gt; read timer value / write =&gt; clear timer value</span>
+<span class="w">    </span><span class="n">busCtrl</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">value</span><span class="p">,</span><span class="n">baseAddress</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">busClearing</span><span class="w"> </span><span class="n">setWhen</span><span class="p">(</span><span class="n">busCtrl</span><span class="p">.</span><span class="n">isWriting</span><span class="p">(</span><span class="n">baseAddress</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">8</span><span class="p">))</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>使用</p>
+<p>下面是一些演示代码，它非常接近于Pinsec SoC计时器模块中使用的代码。基本上，它实例化了以下元素:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="o">-</span> <span class="n">一个16比特的预分频器</span>
+  <span class="o">-</span> <span class="n">一个32比特的计数器</span>
+  <span class="o">-</span> <span class="n">三个16比特的计数器</span>
+</pre></div>
+</div>
+<p>然后，通过使用Apb3SlaveFactory和在计时器中定义的函数，它在APB3总线和所有实例化组件之间创建桥接逻辑。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">apb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Apb3</span><span class="p">(</span><span class="nc">ApbConfig</span><span class="p">(</span><span class="n">addressWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="n">dataWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">))</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">interrupt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">external</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">tick</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">clear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c1">//预分频器和计时器很相似, 它主要集成了一些自动预载逻辑</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">prescaler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Prescaler</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">timerA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Timer</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">timerB</span><span class="p">,</span><span class="n">timerC</span><span class="p">,</span><span class="n">timerD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Timer</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">busCtrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Apb3SlaveFactory</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">apb</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">prescalerBridge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prescaler</span><span class="p">.</span><span class="n">driveFrom</span><span class="p">(</span><span class="n">busCtrl</span><span class="p">,</span><span class="mh">0x00</span><span class="p">)</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">timerABridge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">timerA</span><span class="p">.</span><span class="n">driveFrom</span><span class="p">(</span><span class="n">busCtrl</span><span class="p">,</span><span class="mh">0x40</span><span class="p">)(</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// 第一个单元是True,  这允许你有一个计时器总是在计数的模式。</span>
+<span class="w">  </span><span class="n">ticks</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">List</span><span class="p">(</span><span class="nc">True</span><span class="p">,</span><span class="w"> </span><span class="n">prescaler</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">overflow</span><span class="p">),</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// 通过将计时器完全循环到清除，允许用户创建一个自动重新加载模式。</span>
+<span class="w">  </span><span class="n">clears</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">List</span><span class="p">(</span><span class="n">timerA</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">full</span><span class="p">)</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">timerBBridge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">timerB</span><span class="p">.</span><span class="n">driveFrom</span><span class="p">(</span><span class="n">busCtrl</span><span class="p">,</span><span class="mh">0x50</span><span class="p">)(</span><span class="w"></span>
+<span class="w">  </span><span class="c1">//external.tick允许创建一个脉冲计数模式</span>
+<span class="w">  </span><span class="n">ticks</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">List</span><span class="p">(</span><span class="nc">True</span><span class="p">,</span><span class="w"> </span><span class="n">prescaler</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">overflow</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">external</span><span class="p">.</span><span class="n">tick</span><span class="p">),</span><span class="w"></span>
+<span class="w">  </span><span class="c1">//external.clear允许创建一个超时模式</span>
+<span class="w">  </span><span class="n">clears</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">List</span><span class="p">(</span><span class="n">timerB</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">full</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">external</span><span class="p">.</span><span class="n">clear</span><span class="p">)</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">timerCBridge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">timerC</span><span class="p">.</span><span class="n">driveFrom</span><span class="p">(</span><span class="n">busCtrl</span><span class="p">,</span><span class="mh">0x60</span><span class="p">)(</span><span class="w"></span>
+<span class="w">  </span><span class="n">ticks</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">List</span><span class="p">(</span><span class="nc">True</span><span class="p">,</span><span class="w"> </span><span class="n">prescaler</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">overflow</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">external</span><span class="p">.</span><span class="n">tick</span><span class="p">),</span><span class="w"></span>
+<span class="w">  </span><span class="n">clears</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">List</span><span class="p">(</span><span class="n">timerC</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">full</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">external</span><span class="p">.</span><span class="n">clear</span><span class="p">)</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">timerDBridge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">timerD</span><span class="p">.</span><span class="n">driveFrom</span><span class="p">(</span><span class="n">busCtrl</span><span class="p">,</span><span class="mh">0x70</span><span class="p">)(</span><span class="w"></span>
+<span class="w">  </span><span class="n">ticks</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">List</span><span class="p">(</span><span class="nc">True</span><span class="p">,</span><span class="w"> </span><span class="n">prescaler</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">overflow</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">external</span><span class="p">.</span><span class="n">tick</span><span class="p">),</span><span class="w"></span>
+<span class="w">  </span><span class="n">clears</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">List</span><span class="p">(</span><span class="n">timerD</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">full</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">external</span><span class="p">.</span><span class="n">clear</span><span class="p">)</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">interruptCtrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">InterruptCtrl</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">interruptCtrlBridge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">interruptCtrl</span><span class="p">.</span><span class="n">driveFrom</span><span class="p">(</span><span class="n">busCtrl</span><span class="p">,</span><span class="mh">0x10</span><span class="p">)</span><span class="w"></span>
+<span class="n">interruptCtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">inputs</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">timerA</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">full</span><span class="w"></span>
+<span class="n">interruptCtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">inputs</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">timerB</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">full</span><span class="w"></span>
+<span class="n">interruptCtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">inputs</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">timerC</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">full</span><span class="w"></span>
+<span class="n">interruptCtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">inputs</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">timerD</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">full</span><span class="w"></span>
+<span class="n">io</span><span class="p">.</span><span class="n">interrupt</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">interruptCtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">pendings</span><span class="p">.</span><span class="n">orR</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E8%BF%9B%E9%98%B6%E5%AE%9E%E4%BE%8B.html" class="btn btn-neutral float-left" title="进阶实例" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>片段(Fragment) &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="状态机(State machine)" href="%E7%8A%B6%E6%80%81%E6%9C%BA.html" />
+    <link rel="prev" title="Flow" href="%E6%B5%81.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Libraries(库)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E7%AE%80%E4%BB%8B.html">简介</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7.html">Utils(实用工具)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%B5%81%E5%BC%8F.html">流(Stream)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%B5%81.html">Flow</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">片段(Fragment)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#specification">一、规范(Specification)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">二、函数(Functions)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%8A%B6%E6%80%81%E6%9C%BA.html">状态机(State machine)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="VexRiscv.html">VexRiscv(RV32IM CPU)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BB%8E%E7%AB%AF%E6%80%BB%E7%BA%BF%E5%BA%93.html">从端总线库(Bus Slave Factory)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%BA%A4%E7%A8%8B%E6%A1%86%E6%9E%B6.html">纤程框架(Fiber Framework)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%B3%BB%E7%BB%9F.html">二进制系统(Binary System)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AF%84%E5%AD%98%E5%99%A8%E6%8E%A5%E5%8F%A3.html">寄存器接口(RegIf)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%B8%AD%E6%96%AD%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.html">中断设计规范(Interrupt Design Spec)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%80%BB%E7%BA%BF.html">总线(bus)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Com.html">Com</a></li>
+<li class="toctree-l2"><a class="reference internal" href="IO%E5%8F%A3.html">IO口</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%9B%BE%E5%BD%A2.html">图形(Graphics)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E8%87%AA%E5%8A%A8%E8%AE%BE%E8%AE%A1%E5%B7%A5%E5%85%B7.html">自动设计工具(EDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Misc.html">Misc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Libraries(库)</a> &raquo;</li>
+      <li>片段(Fragment)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/库/片段.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fragment">
+<h1>片段(Fragment)<a class="headerlink" href="#fragment" title="此标题的永久链接"></a></h1>
+<section id="specification">
+<h2>一、规范(Specification)<a class="headerlink" href="#specification" title="此标题的永久链接"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Fragment</span></code>包(Bundle)是利用多个小片段传输一个大集合的概念。例如：</p>
+<ul class="simple">
+<li><p>一张利用<code class="docutils literal notranslate"><span class="pre">Stream[Fragment[Pixel]]</span></code>传输的尺寸为width*height的图片。</p></li>
+<li><p>一个接收来自控制器信号的无流控制协议的UART包可以在<code class="docutils literal notranslate"><span class="pre">Stream[Fragment[Bits]]</span></code>上传输</p></li>
+<li><p>一个AXI突发读模式可以被<code class="docutils literal notranslate"><span class="pre">Stream[Fragment[AxiReadResponse]]</span></code>承载</p></li>
+</ul>
+<p>由<code class="docutils literal notranslate"><span class="pre">Fragment</span></code>包定义的信号是：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">信号</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">驱动</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">fragment</td>
+<td style="text-align: center;">T</td>
+<td style="text-align: center;">Master</td>
+<td style="text-align: center;">当前传输的负载</td>
+</tr>
+<tr>
+<td style="text-align: center;">last</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">Master</td>
+<td style="text-align: center;">当该片段是当前包的最后一个片段时则置高</td>
+</tr>
+</tbody>
+</table><p>可以发现根据规范和上述例子, <code class="docutils literal notranslate"><span class="pre">Fragment</span></code>不会指明传输任务是如何被传输的(用户可以使用Stream, Flow或其他任何协议)。它只会增加足够的信息<code class="docutils literal notranslate"><span class="pre">last</span></code>来告知当前传输是否为给定数据包的第一个, 最后一个还是中间的某一个。</p>
+<blockquote>
+<div><p><strong>注意：协议没有携带’first’比特是因为它可以通过执行’RegNextWhen(bus.last, bus.fire) init(True)’被生成在任何位置</strong></p>
+</div></blockquote>
+</section>
+<section id="functions">
+<h2>二、函数(Functions)<a class="headerlink" href="#functions" title="此标题的永久链接"></a></h2>
+<p>对于<code class="docutils literal notranslate"><span class="pre">Stream[Fragment[T]]</span></code>和<code class="docutils literal notranslate"><span class="pre">Flow[Fragment[T]]</span></code>, 给出了以下函数:
+|   句式    | 返回类型 |                         描述                         |
+| :——-: | :——: | :————————————————–: |
+|  x.first  |   Bool   |  当下一个或当前传输任务是包的第一个子片段时返回True  |
+|  x.tail   |   Bool   | 当下一个或当前传输任务不是包的第一个子片段时返回True |
+| x.isFirst |   Bool   |  当传输任务被提交且是数据包的第一个子片段时返回True  |
+| x.isTail  |   Bool   | 当传输任务被提交且不是数据包的第一个子片段时返回True |
+| x.isLast  |   Bool   | 当传输任务被提交且是数据包的最后一个子片段时返回True |</p>
+<p>对于<code class="docutils literal notranslate"><span class="pre">Stream[Fragment[T]]</span></code>, 下面的函数也是可使用的:
+|            句式            |      返回类型       |                    描述                     |
+| :————————: | :—————–: | :—————————————–: |
+| x.insertHeader(header : T) | Stream[Fragment[T]] | 对每一个<code class="docutils literal notranslate"><span class="pre">x</span></code>的包添加<code class="docutils literal notranslate"><span class="pre">header</span></code>并且返回结果总线 |</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E6%B5%81.html" class="btn btn-neutral float-left" title="Flow" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E7%8A%B6%E6%80%81%E6%9C%BA.html" class="btn btn-neutral float-right" title="状态机(State machine)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

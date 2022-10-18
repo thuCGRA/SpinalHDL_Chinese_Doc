@@ -1,0 +1,849 @@
+## 时钟域(Clock domains)
+
+### 一、简介(Introduction)
+
+在SpinalHDL中, 时钟和复位信号能结合起来构成时钟域(clock domain)。时钟域可以应用于设计的某些区域中, 例化在这些区域中的所有同步单元都会隐式地使用这些时钟域。
+
+时钟域的应用的工作模式类似于堆栈, 这意味着你在一个给定的时钟域中仍然可以在本地施加另一个时钟域。
+
+需要注意的是, 一个寄存器在它被创建的时候捕捉时钟域, 而非它被赋值的时候。所以请确保在你所希望的`ClockingArea`中创建寄存器。
+
+### 二、例化(Instantiation)
+
+定义时钟域的语句如下所示(使用EBNF语句)：
+
+```Scala
+ClockDomain(
+    clock: Bool
+    [, reset: Bool]
+    [, softReset: Bool]
+    [, clockEnable: Bool]
+    [, frequency: IClockDomainFrequency]
+    [, config: ClockDomainConfig]
+)
+```
+
+在这个定义中包含五个参数：
+
+|     变量      |                                 描述                                 |       默认       |
+| :-----------: | :------------------------------------------------------------------: | :--------------: |
+|    `clock`    |                          定义该时钟域的时钟                          |                  |
+|    `reset`    | 复位信号。如果存在需要复位信号但没有提供它的时钟域的寄存器, 就会报错 |       null       |
+|  `softReset`  |                        推断额外同步复位的复位                        |       null       |
+| `clockEnable` | 该信号的目的在于取消整个时钟域的时钟, 而不用在每个同步单元上手动取消 |       null       |
+|  `frequency`  |         允许你在给定的时钟域中设定频率, 并且之后在设计中读取         | UnknownFrequency |
+|   `config`    |                     设定信号的极性和reset的实质                      |  Current config  |
+
+以下例子给出在设计中定义特定时钟域的实例：
+
+```Scala
+val coreClock = Bool()
+val coreReset = Bool()
+
+//定义新的时钟域
+val coreClockDomain = ClockDomain(coreClock, coreReset)
+
+//在设计的某个区域内应用该时钟域
+val coreArea = new ClockingArea(coreClockDomain) {
+    val coreClockedRegister = Reg(UInt(4 bits))
+}
+```
+
+Verilog:
+
+```Verilog
+  wire                coreClock;
+  wire                coreReset;
+  reg        [3:0]    coreArea_coreClockedRegister;
+  reg        [7:0]    counter;
+
+  always @(posedge coreClock or posedge coreReset) begin
+    if(coreReset) begin
+      coreArea_coreClockedRegister <= 4'b0000;
+    end else begin
+      if(io_cond1) begin
+        coreArea_coreClockedRegister <= 4'b0010;
+      end
+    end
+  end
+
+```
+
+当一个*Area*不需要时钟时(门控), 也可以直接应用时钟域：
+
+```Scala
+class Counters extends Component {
+    val io = new Bundle {
+        val enable = in Bool()
+        val freeCount, gatedCount = out UInt (4 bits)
+    }
+
+    val freeCounter = CounterFreeRun(16)
+    io.freeCount := freeCounter.value
+    
+    val gatedClk = ClockDomain.current.readClockWire && io.enable
+    val gated = ClockDomain(gatedClk, ClockDomain.current.readResetWire)
+
+    //这里在门控加法器中应用门控时钟域
+    val gatedCounter = gated(CounterFreeRun(16))
+    io.gatedCount := gatedCounter.value
+}
+```
+
+Verilog:
+
+```Verilog
+module Counters (
+  input               io_enable,
+  output     [3:0]    io_freeCount,
+  output     [3:0]    io_gatedCount,
+  input               clk,
+  input               reset
+);
+
+  wire       [3:0]    _zz_freeCounter_valueNext;
+  wire       [0:0]    _zz_freeCounter_valueNext_1;
+  wire       [3:0]    _zz_gatedCounter_valueNext;
+  wire       [0:0]    _zz_gatedCounter_valueNext_1;
+  wire                freeCounter_willIncrement;
+  wire                freeCounter_willClear;
+  reg        [3:0]    freeCounter_valueNext;
+  reg        [3:0]    freeCounter_value;
+  wire                freeCounter_willOverflowIfInc;
+  wire                freeCounter_willOverflow;
+  wire                gatedClk;
+  wire                gatedCounter_willIncrement;
+  wire                gatedCounter_willClear;
+  reg        [3:0]    gatedCounter_valueNext;
+  reg        [3:0]    gatedCounter_value;
+  wire                gatedCounter_willOverflowIfInc;
+  wire                gatedCounter_willOverflow;
+
+  assign _zz_freeCounter_valueNext_1 = freeCounter_willIncrement;
+  assign _zz_freeCounter_valueNext = {3'd0, _zz_freeCounter_valueNext_1};
+  assign _zz_gatedCounter_valueNext_1 = gatedCounter_willIncrement;
+  assign _zz_gatedCounter_valueNext = {3'd0, _zz_gatedCounter_valueNext_1};
+  assign freeCounter_willClear = 1'b0;
+  assign freeCounter_willOverflowIfInc = (freeCounter_value == 4'b1111);
+  assign freeCounter_willOverflow = (freeCounter_willOverflowIfInc && freeCounter_willIncrement);
+  always @(*) begin
+    freeCounter_valueNext = (freeCounter_value + _zz_freeCounter_valueNext);
+    if(freeCounter_willClear) begin
+      freeCounter_valueNext = 4'b0000;
+    end
+  end
+
+  assign freeCounter_willIncrement = 1'b1;
+  assign io_freeCount = freeCounter_value;
+  assign gatedClk = (clk && io_enable);
+  assign gatedCounter_willClear = 1'b0;
+  assign gatedCounter_willOverflowIfInc = (gatedCounter_value == 4'b1111);
+  assign gatedCounter_willOverflow = (gatedCounter_willOverflowIfInc && gatedCounter_willIncrement);
+  always @(*) begin
+    gatedCounter_valueNext = (gatedCounter_value + _zz_gatedCounter_valueNext);
+    if(gatedCounter_willClear) begin
+      gatedCounter_valueNext = 4'b0000;
+    end
+  end
+
+  assign gatedCounter_willIncrement = 1'b1;
+  assign io_gatedCount = gatedCounter_value;
+  always @(posedge clk or posedge reset) begin
+    if(reset) begin
+      freeCounter_value <= 4'b0000;
+    end else begin
+      freeCounter_value <= freeCounter_valueNext;
+    end
+  end
+
+  always @(posedge gatedClk or posedge reset) begin
+    if(reset) begin
+      gatedCounter_value <= 4'b0000;
+    end else begin
+      gatedCounter_value <= gatedCounter_valueNext;
+    end
+  end
+
+endmodule
+```
+
+1. 配置(Configuration)
+
+除了生成器参数(constructor parameters), 以下针对每个时钟域的设置可以通过`ClockDomainConfig`类进行配置：
+
+|           性质           |                               有效值                               |
+| :----------------------: | :----------------------------------------------------------------: |
+|       `clockEdge`        |                        `RISING`, `FALLING`                         |
+|       `resetKind`        | 在一些FPGA(FF的值通过bitstream加载)中支持的`ASYNC`, `SYNC`和`BOOT` |
+|    `resetActiveLevel`    |                           `HIGH`, `LOW`                            |
+|  `softResetActiveLevel`  |                           `HIGH`, `LOW`                            |
+| `clockEnableActiveLevel` |                           `HIGH`, `LOW`                            |
+
+```Scala
+class CustomClockExample extends Component {
+    val io = new Bundle {
+        val clk     = in Bool()
+        val resetn  = in Bool()
+        val result  = out UInt(4 bits)
+    }
+
+    //配置时钟域
+    val myClockDomain = ClockDomain(
+        clock   = io.clk,
+        reset   = io.resetn,
+        config  = ClockDomainConfig(
+            clockEdge        = RISING,
+            resetKind        = ASYNC,
+            resetActiveLevel =LOW
+        )
+    )
+
+    //定义用myClockDomain的区域
+    val myArea = new ClockingArea(myClockDomain) {
+        val myReg = Reg(UInt(4 bits)) init(7)
+
+        myReg := myReg + 1
+
+        io.result := myReg
+    }
+}
+```
+
+Verilog:
+
+```Verilog
+module CustomClockExample (
+  input               io_clk,
+  input               io_resetn,
+  output     [3:0]    io_result
+);
+
+  reg        [3:0]    myArea_myReg;
+
+  assign io_result = myArea_myReg;
+  always @(posedge io_clk or negedge io_resetn) begin
+    if(!io_resetn) begin
+      myArea_myReg <= 4'b0111;
+    end else begin
+      myArea_myReg <= (myArea_myReg + 4'b0001);
+    end
+  end
+
+```
+
+默认地, 一个`ClockDomain`应用于整个设计, 这个全局时钟的默认配置如下：
+
++ Clock: 上升沿
++ Reset: asynchronous, active high
++ 没有时钟使能
+
+对应如下的`ClockDomainConfig`：
+
+```Scala
+val defaultCC = ClockDomainConfig(
+    clockEdge        = RISING,
+    resetKind        = ASYNC,
+    resetActiveLevel = HIGH
+)
+```
+
+1. 内部时钟(Internal clock)
+
+   创建时钟域的另一种语句如下：
+
+   ```Scala
+   ClockDomain.internal(
+       name: String,
+       [config: ClockDomainConfig, ]
+       [withReset: Boolean, ]
+       [withSoftReset: Boolean, ]
+       [withClockEnable: Boolean, ]
+       [frequency: IClockDomainFrequency]
+   )
+   ```
+
+   该定义有以下六个参数：
+
+   |       变量        |               描述               |       默认       |
+   | :---------------: | :------------------------------: | :--------------: |
+   |      `name`       |       clk和reset信号的名字       |                  |
+   |     `config`      | 给定信号的极性以及复位信号的特点 |  Current config  |
+   |    `withReset`    |           增加复位信号           |       true       |
+   |  `withSoftReset`  |         增加软件复位信号         |      false       |
+   | `withClockEnable` |           增加时钟使能           |      false       |
+   |    `frequency`    |            时钟域频率            | UnknownFrequency |
+
+   这种方法的优势在于用已知的/给定的名字创建时钟域和复位信号而非继承一个时钟域。
+
+   一旦时钟域被创建, 你需要给`ClockDomain`的信号赋值, 赋值方式如下：
+
+   ```Scala
+   class InternalClockWithPllExample extends Component {
+       val io = new Bundle {
+           val clk100M = in Bool()
+           val aReset  = in Bool()
+           val result  = out UInt(4 bits)
+       }
+       //myClockDomain.clock会被命名为myClockName_clk
+       //myClockDomain.reset会被命名为myClockName_reset
+       val myClockDomain = ClockDomain.interna("myClockName")
+
+       //例化PLL(可能是黑盒)
+       val pll = new Pll()
+       pll.io.clkIn := io.clk100M
+
+       //给myClockDomain信号赋值
+       myClockDomain.clock := pll.io.clockOut
+       myClockDomain.reset := io.aReset || !pll.io     //有问题：这里缺少语句
+
+       //之后在myCLockDomain可以任你发挥
+       val myArea = new ClockingArea(myClockDomain) {
+           val myReg = Reg(UInt(4 bits)) init(7)
+           myReg := myReg + 1
+
+           io.result := myReg
+       }
+
+   }
+   ```
+
+2. 外部时钟(External clock)
+
+   你可以定义一个在由外部驱动的时钟域, 这个外部驱动可能来自于任何地方。它会自动在顶层给所有这些时序同步单元增加时钟和复位wire。
+
+   ```Scala
+   ClockDomain.external(
+       name: String,
+       [config: ClockDomainConfig, ]
+       [withReset: Boolean, ]
+       [withSoftReset: Boolean, ]
+       [withClockEnable: Bollean, ]
+       [frequency: IClockDomainFrequency]
+   )
+   ```
+
+   `ClockDomain.external`函数的变量和`ClockDomainin.internal`函数中完全一样。以下是使用`ClockDomain.external`的例子：
+
+   ```Scala
+   class ExternalClockExample extends Component {
+       val io = new Bundle {
+           val result = out UInt(4 bits)
+       }
+
+       //在顶层你有两个信号： myClockName_clk和myClockName_reset
+       val myClockDomain = ClockDomain.external("myClockName")
+
+       val myArea = new ClockingArea(myClockDomain) {
+           val myReg = Reg(UInt(4 bits)) init(7)
+           myReg := myReg + 1
+
+           io.result := myReg
+       }
+   }
+   ```
+
+   Verilog:
+
+   ```Verilog
+   module CustomClockExample (
+       input               io_clk,
+       input               io_resetn,
+       output     [3:0]    io_result,
+       input               myClockName_clk,
+       input               myClockName_reset
+   );
+
+   wire       [3:0]    tt_io_result;
+
+   ExternalClockExample tt (
+       .io_result         (tt_io_result[3:0]), //o
+       .myClockName_clk   (myClockName_clk  ), //i
+       .myClockName_reset (myClockName_reset)  //i
+   );
+
+   endmodule
+
+   module ExternalClockExample (
+       output     [3:0]    io_result,
+       input               myClockName_clk,
+       input               myClockName_reset
+   );
+
+   reg        [3:0]    myArea_myReg;
+
+   assign io_result = myArea_myReg;
+   always @(posedge myClockName_clk or posedge myClockName_reset) begin
+       if(myClockName_reset) begin
+           myArea_myReg <= 4'b0111;
+       end else begin
+           myArea_myReg <= (myArea_myReg + 4'b0001);
+       end
+   end
+
+
+   endmodule
+   ```
+
+3. HDL生成中的信号优先级(Signal priorities in HDL generation)
+
+   在当前版本, reset和时钟使能信号有不同的性质, 其顺序是：`asyncReset`, `clockEnable`, `syncReset`和`softReset`。
+
+   请注意`clockEnable`比`syncReset`的优先级更高。如果在没有时钟使能的时候进行同步复位(尤其是在仿真的开始), 门寄存器不会被复位。
+
+   这里有一个例子：
+
+   ```Scala
+   val clockedArea = new ClockEnableArea(clockEnable) {
+       val reg = RegNext(io.input) init False
+   }
+   ```
+
+   这会产生如下VerilogHDL代码：
+
+   ```Verilog
+   always @(posedge clk) begin
+       if(clockedArea_newClockEnable) begin
+           if(!resetn) begin
+               clockedArea_reg <= 1'b0;
+           end else begin
+               clockedArea_reg <= io_input;
+           end
+       end
+   end
+   ```
+
+   > 如果这个行为是有问题的, 一个变通方法是用`when`语句而不是`ClockDomain.enable`作为时钟使能, 这在未来会得到改进。
+
+4. 上下文(Context)
+
+   无论在哪, 你都可以通过调用`ClockDomain.current`取回时钟域。
+
+   返回的`ClockDomain`实例有如下可以调用的函数：
+
+   |       函数名        |             描述             | 返回类型 |
+   | :-----------------: | :--------------------------: | :------: |
+   | frequency.getValue  |        返回时钟域频率        |  Double  |
+   |      hasReset       |   返回时钟域是否有复位信号   | Boolean  |
+   |    hasSoftReset     | 返回时钟域是否有软件复位信号 | Boolean  |
+   |   hasClockEnable    | 返回时钟域是否有时钟使能信号 | Boolean  |
+   |    readClockWire    |    返回时钟信号派生的信号    |   Bool   |
+   |    readResetWire    |  返回软件复位信号派生的信号  |   Bool   |
+   |  readSoftResetWire  |    返回复位信号派生的信号    |   Bool   |
+   | readClockEnableWire |  返回时钟使能信号派生的信号  |   Bool   |
+   |    isResetActive    |      当复位有效返回True      |   Bool   |
+   |  isSoftResetActive  |    当软件复位有效返回True    |   Bool   |
+   | isClockEnableActive |    当时钟使能有效返回True    |   Bool   |
+
+   如下是一个例子, UART控制器使用它的频率规格设置始终分频：
+
+   ```Scala
+   val coreClockDomain = ClockDomain(coreClock, coreReset, frequency=FixedFrequency(100e6))
+
+   val coreArea = new ClockingArea(coreClockDomain) {
+       val ctrl = new UartCtrl()
+       ctrl.io.config.clockDivider := (coreClk.frequency.getValue / 57.6e3 / 8).toInt
+   }
+   ```
+
+### 三、跨时钟域(Clock domain crossing)
+
+SpinalHDL会在编译时检查有没有未定义的跨时钟域的信号的读取, 如果你想要读取另一个`ClockDomain`区域的信号, 你应该给目标信号增加`crossClockDomain`标签, 如下例所示：
+
+```Scala
+//             _____                        _____             _____
+//            |     |  (crossClockDomain)  |     |           |     |
+//  dataIn -->|     |--------------------->|     |---------->|     |--> dataOut
+//            | FF  |                      | FF  |           | FF  |
+//  clkA   -->|     |              clkB -->|     |   clkB -->|     |
+//  rstA   -->|_____|              rstB -->|_____|   rstB -->|_____|
+
+//补全时钟和复位引脚所通过哪个模块IO给定的
+class CrossingExample extends Component {
+    val io = new Bundle {
+        val clkA = in Bool()
+        val rstA = in Bool()
+
+        val clkB = in Bool()
+        val rstB = in Bool()
+
+        val dataIn = in Bool()
+        val dataOut = out Bool()
+    }
+
+    //clkA时钟域下的样本输入
+    val area_clkA = new ClockingArea(ClockDomain(io.clkA, io.rstA)) {
+        val reg = RegNext(io.dataIn) init(False)
+    }
+
+    //两级寄存器避免亚稳态
+    val area_clkB = new ClockingArea(ClockDomain(io.clkB, io.rstB)) {
+        val buf0 = RegNext(area_clkA.reg) init(False) addTag(crossClockDomain)
+        val buf1 = RegNext(buf0)          init(False)
+    }
+
+    io.dataOut := area_clkB.buf1
+}
+
+//另一种时钟域以参数方式给定的实现方式
+class CrossingExample(clkA: ClockDomain, clkB: ClockDomain) extends Component {
+    val io = new Bundle {
+        val dataIn  = in Bool()
+        val dataOut = out Bool() 
+    }
+
+    //clkA时钟域下的样本输入
+    val area_clkA = new ClockingArea(clkA) {
+        val reg = RegNext(io.dataIn) init(False)
+    }
+
+    //两级寄存器避免亚稳态
+    val area_clkB = new ClockingArea(clkB) {
+        val buf0 = RegNext(area_clkA.reg) init(False) addTap(crossClockDomain)
+        val buf1 = RegNext(buf0)          init(False)
+    }
+
+    io.dataOut := area_clkB.buf1
+}
+```
+
+Verilog:
+
+```Verilog
+module CrossingExample (
+  input               io_clkA,
+  input               io_rstA,
+  input               io_clkB,
+  input               io_rstB,
+  input               io_dataIn,
+  output              io_dataOut
+);
+
+  reg                 area_clkA_reg;
+  (* async_reg = "true" *) reg                 area_clkB_buf0;
+  reg                 area_clkB_buf1;
+
+  assign io_dataOut = area_clkB_buf1;
+  always @(posedge io_clkA or posedge io_rstA) begin
+    if(io_rstA) begin
+      area_clkA_reg <= 1'b0;
+    end else begin
+      area_clkA_reg <= io_dataIn;
+    end
+  end
+
+  always @(posedge io_clkB or posedge io_rstB) begin
+    if(io_rstB) begin
+      area_clkB_buf0 <= 1'b0;
+      area_clkB_buf1 <= 1'b0;
+    end else begin
+      area_clkB_buf0 <= area_clkA_reg;
+      area_clkB_buf1 <= area_clkB_buf0;
+    end
+  end
+
+
+endmodule
+
+```
+
+一般来说, 用2个或更多的触发器驱动目标时钟域可以避免亚稳态的产生。提供在`spinal.lib._`中的`BufferCC(input: T, init: T = null, bufferDepth: Int = 2)`函数能例化必要的触发器(触发器的数量取决于`bufferDepth`参数大小)来减轻亚稳态。
+
+```Scala
+class CrossingExample(clkA: ClockDomain, clkB: ClockDomain) extends Component {
+    val io = new Bundle {
+        val dataIn  = in Bool()
+        val dataOut = out Bool()
+    }
+
+    //clkA时钟域下的样本输入
+    val area_clkA = new ClockingArea(clkA) {
+        val reg = RegNext(io.dataIn) init(False)
+    }
+
+    //BufferCC避免亚稳态
+    val area_clkB = new ClockingArea(clkB) {
+        val buf1  = BufferCC(area_clkA.reg, False)
+    }
+
+    io.dataOut := area_clkB.buf1
+}
+```
+
+Verilog:
+
+```Verilog
+module CrossingExample (
+  input               io_dataIn,
+  output              io_dataOut,
+  input               clk1_clk,
+  input               clk1_reset,
+  input               clk2_clk,
+  input               clk2_reset
+);
+
+  wire                area_clkA_reg_buffercc_io_dataOut;
+  reg                 area_clkA_reg;
+  wire                area_clkB_buf1;
+
+  BufferCC area_clkA_reg_buffercc (
+    .io_dataIn  (area_clkA_reg                    ), //i
+    .io_dataOut (area_clkA_reg_buffercc_io_dataOut), //o
+    .clk2_clk   (clk2_clk                         ), //i
+    .clk2_reset (clk2_reset                       )  //i
+  );
+  assign area_clkB_buf1 = area_clkA_reg_buffercc_io_dataOut;
+  assign io_dataOut = area_clkB_buf1;
+  always @(posedge clk1_clk or posedge clk1_reset) begin
+    if(clk1_reset) begin
+      area_clkA_reg <= 1'b0;
+    end else begin
+      area_clkA_reg <= io_dataIn;
+    end
+  end
+
+
+endmodule
+
+module BufferCC (
+  input               io_dataIn,
+  output              io_dataOut,
+  input               clk2_clk,
+  input               clk2_reset
+);
+
+  (* async_reg = "true" *) reg                 buffers_0;
+  (* async_reg = "true" *) reg                 buffers_1;
+
+  assign io_dataOut = buffers_1;
+  always @(posedge clk2_clk or posedge clk2_reset) begin
+    if(clk2_reset) begin
+      buffers_0 <= 1'b0;
+      buffers_1 <= 1'b0;
+    end else begin
+      buffers_0 <= io_dataIn;
+      buffers_1 <= buffers_0;
+    end
+  end
+
+
+endmodule
+```
+
+> 注意：`BufferCC`函数只能用于`Bit`类型, 或像灰度编码计数器(每周期翻转1bit)一样的`Bits`操作, 不能用于多bit跨时钟域处理。对于多bit情况, 推荐使用`StreamFifoCC`以应对高带宽需求, 或用`StreamCCByToggle`在带宽不重要的情况下减少数据源的使用。
+
+### 四、特殊的时序区域(clocking areas)
+
+1. 慢区域(Slow Area)
+
+   `SlowArea`用来创建一个比当前时钟域慢的时钟域：
+
+   ```Scala
+   class TopLevel extends Component:{
+       val io = new Bundle {
+         val counter1 = out UInt(4 bits)
+         val counter2 = out UInt(4 bits)
+         val counter3 = out UInt(4 bits)
+       }
+       //当前使用时钟域：100MHz
+       val areaStd = new Area {
+           val counter = out(CounterFreeRun(16).value)
+       }
+
+       //把当前时钟域减少4倍到25MHz
+       val areaDiv4 = new SlowArea(4) {
+           val counter = out(CounterFreeRun(16).value)
+       }
+
+       //把当前时钟域减少到50MHz
+       val area50MHz = new SlowArea(50 MHz) {
+           val counter = out(CounterFreeRun(16).value)
+       }
+       io.counter1 := areaStd.counter
+       io.counter2 := areaDiv4.counter
+       io.counter3 := area50MHz.counter
+   }
+
+   def main(args: Array[String]) {
+       new SpinalConfig(
+           defaultClockDomainFrequency = FixedFrequency(100 MHz)
+       ).generateVhdl(new TopLevel1)
+   }
+   ```
+
+2. BootReset
+
+   `clockDomain.withBootReset()`能够把寄存器的resetkinde指定成boot。`clockDomain.withSyncReset()`能够把寄存器的resetkinde指定成Sync-reset。
+
+   ```Scala
+   class Top extends Component {
+       val io = new Bundle {
+           val data = in Bits(8 bits)
+           val a, b, c, d = out Bits(8 bit)
+       }
+       io.a := RegNext(io.data) init 0
+       io.b := clockDomain.withBootReset()  on RegNext(io.data) init 0
+       io.c := clockDomain.withSyncReset()  on RegNext(io.data) init 0
+       io.d := clockDomain.withAsyncReset() on RegNext(io.data) init 0
+   }
+   SpinalVerilog(new Top)
+   ```
+
+   Verilog:
+
+   ```Verilog
+   module MyTopLevel (
+     input      [7:0]    io_data,
+     output     [7:0]    io_a,
+     output     [7:0]    io_b,
+     output     [7:0]    io_c,
+     output     [7:0]    io_d,
+     input               clk,
+     input               reset
+   );
+   
+     reg        [7:0]    io_data_regNext;
+     reg        [7:0]    io_data_regNext_1;
+     reg        [7:0]    io_data_regNext_2;
+     reg        [7:0]    io_data_regNext_3;
+   
+     initial begin
+       io_data_regNext_1 = 8'h0;
+     end
+   
+     assign io_a = io_data_regNext;
+     assign io_b = io_data_regNext_1;
+     assign io_c = io_data_regNext_2;
+     assign io_d = io_data_regNext_3;
+     always @(posedge clk or posedge reset) begin
+       if(reset) begin
+         io_data_regNext <= 8'h0;
+         io_data_regNext_3 <= 8'h0;
+       end else begin
+         io_data_regNext <= io_data;
+         io_data_regNext_3 <= io_data;
+       end
+     end
+   
+     always @(posedge clk) begin
+       io_data_regNext_1 <= io_data;
+     end
+   
+     always @(posedge clk) begin
+       if(reset) begin
+         io_data_regNext_2 <= 8'h0;
+       end else begin
+         io_data_regNext_2 <= io_data;
+       end
+     end
+   
+   
+   endmodule
+   
+   ```
+
+3. 重置区域(Reset Area)
+
+   `ResetArea`可以用来创建新的时钟域, 在这个时钟域中一个特殊的复位信号和当前时钟域复位信号相结合：
+
+   ```Scala
+   class TopLevel extends Component {
+       val specialReset = Bool()       //需要初始化
+
+       //这个区域的reset由specialReset实现
+       val areaRst_1 = new ResetArea(specialReset, false) {
+           val counter = out(CounterFreeRun(16).value)
+       }
+
+       //这个区域的复位信号是当前复位和specialReset的结合
+       val areaRst_2 = new ResetArea(specialReset, true) {
+           val counter = out(CounterFreeRun(16).value)
+       }
+   }
+   ```
+
+   Verilog:
+
+   ```Verilog
+   assign _zz__zz_io_counter1_1_1 = _zz_io_counter1;
+   assign _zz__zz_io_counter1_1 = {3'd0, _zz__zz_io_counter1_1_1};
+   assign _zz__zz_io_counter2_1_1 = _zz_io_counter2;
+   assign _zz__zz_io_counter2_1 = {3'd0, _zz__zz_io_counter2_1_1};
+   assign specialReset = 1'b0;
+   always @(*) begin
+     _zz_io_counter1_1 = (_zz_io_counter1_2 + _zz__zz_io_counter1_1);
+     if(1'b0) begin
+       _zz_io_counter1_1 = 4'b0000;
+     end
+   end
+
+   assign _zz_io_counter1 = 1'b1;
+   assign areaRst_2_newReset = (reset || specialReset);
+   always @(*) begin
+     _zz_io_counter2_1 = (_zz_io_counter2_2 + _zz__zz_io_counter2_1);
+     if(1'b0) begin
+       _zz_io_counter2_1 = 4'b0000;
+     end
+   end
+
+   assign _zz_io_counter2 = 1'b1;
+   assign io_counter1 = _zz_io_counter1_2;
+   assign io_counter2 = _zz_io_counter2_2;
+   always @(posedge clk or posedge specialReset) begin
+     if(specialReset) begin
+       _zz_io_counter1_2 <= 4'b0000;
+     end else begin
+       _zz_io_counter1_2 <= _zz_io_counter1_1;
+     end
+   end
+
+   always @(posedge clk or posedge areaRst_2_newReset) begin
+     if(areaRst_2_newReset) begin
+       _zz_io_counter2_2 <= 4'b0000;
+     end else begin
+       _zz_io_counter2_2 <= _zz_io_counter2_1;
+     end
+   end
+
+   ```
+
+4. 时钟使能区域(ClockEnableArea)
+
+   `ClockEnableArea`可以在当前时钟域增加额外的时钟使能：
+
+   ```Scala
+   class TopLevel extends Component {
+       val clockEnable = Bool()        //需要初始化
+
+       //在这个区域增加时钟使能
+       val area_1 = new ClockEnableArea(clockEnable) {
+           val counter = out(CounterFreeRun(16).value)
+       }
+   }
+   ```
+
+   Verilog:
+
+   ```Verilog
+   assign _zz__zz_io_counter1_1_1 = _zz_io_counter1;
+   assign _zz__zz_io_counter1_1 = {3'd0, _zz__zz_io_counter1_1_1};
+   assign clockEnable = 1'b0;
+   assign area_1_newClockEnable = (1'b1 && clockEnable);
+   always @(*) begin
+     _zz_io_counter1_1 = (_zz_io_counter1_2 + _zz__zz_io_counter1_1);
+     if(1'b0) begin
+       _zz_io_counter1_1 = 4'b0000;
+     end
+   end
+
+   assign _zz_io_counter1 = 1'b1;
+   assign io_counter1 = _zz_io_counter1_2;
+   always @(posedge clk or posedge reset) begin
+     if(reset) begin
+       _zz_io_counter1_2 <= 4'b0000;
+     end else begin
+       if(area_1_newClockEnable) begin
+         _zz_io_counter1_2 <= _zz_io_counter1_1;
+       end
+     end
+   end
+   ```

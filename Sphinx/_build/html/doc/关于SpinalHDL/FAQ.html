@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="用户(Users)" href="%E7%94%A8%E6%88%B7.html" />
+    <link rel="prev" title="关于SpinalHDL(About SpinalHDL)" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">关于SpinalHDL(About SpinalHDL)</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FAQ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#spinalhdlrtlvhdl-verilog">一、SpinalHDL生成的RTL与手工书写VHDL/Verilog相比额外硬件开销有多少？</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spinalhdl">二、SpinalHDL未来可能会不支持吗？</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spinalhdlvhdl-verilog">三、SpinalHDL生成的VHDL/Verilog是否保持备注？</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">四、SpinalHDL可以扩展到大工程吗？</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">五、SpinalHDL如何产生的？</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vhdl-verilog-systemverilog">六、为什么有VHDL/Verilog/SystemVerilog还要开发新语言？</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#git-spinalhdl">七、如何使用未发布(但是已经提交到git)的SpinalHDL版本？</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#support">支持(Support)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#communication-channels">一、联系渠道(Communication channels)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%94%A8%E6%88%B7.html">用户(Users)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%94%AF%E6%8C%81.html">二、商业支持(Commercial support)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">关于SpinalHDL(About SpinalHDL)</a> &raquo;</li>
+      <li>FAQ</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/关于SpinalHDL/FAQ.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="faq">
+<h1>FAQ<a class="headerlink" href="#faq" title="此标题的永久链接"></a></h1>
+<section id="spinalhdlrtlvhdl-verilog">
+<h2>一、SpinalHDL生成的RTL与手工书写VHDL/Verilog相比额外硬件开销有多少？<a class="headerlink" href="#spinalhdlrtlvhdl-verilog" title="此标题的永久链接"></a></h2>
+<blockquote>
+<div><p>开销为零, 因为SpinalHDL不是HLS方法。它的目标不是将任何任意代码翻译成RTL, 而是提供一种强大的语言来描述RTL并提高抽象级别。</p>
+</div></blockquote>
+</section>
+<section id="spinalhdl">
+<h2>二、SpinalHDL未来可能会不支持吗？<a class="headerlink" href="#spinalhdl" title="此标题的永久链接"></a></h2>
+<blockquote>
+<div><p>这个问题有两个方面：</p>
+<p>1). SpinalHDL生成VHDL/Verilog文件, 这意味着SpinalHDL将在几十年内得到所有EDA工具的支持。</p>
+<p>2). 如果SpinalHDL中存在一个错误, 并且不再支持修复它, 那么这不是一个致命的情况, 因为SpinalHDL编译器是完全开源的。对于简单的问题, 你可以在几个小时内自己解决问题。请记住EDA公司在其封闭工具中修复问题或添加新功能需要多长的时间。</p>
+</div></blockquote>
+</section>
+<section id="spinalhdlvhdl-verilog">
+<h2>三、SpinalHDL生成的VHDL/Verilog是否保持备注？<a class="headerlink" href="#spinalhdlvhdl-verilog" title="此标题的永久链接"></a></h2>
+<blockquote>
+<div><p>不, 没有。生成的文件应视为网表。例如, 在编译C代码时, 你是否关心生成的汇编代码中的注释？</p>
+</div></blockquote>
+</section>
+<section id="id1">
+<h2>四、SpinalHDL可以扩展到大工程吗？<a class="headerlink" href="#id1" title="此标题的永久链接"></a></h2>
+<blockquote>
+<div><p>是的, 已经做了一些实验, 它在生成带缓存的数百个3KLUT CPU只需要12秒左右, 与模拟或综合此类设计所需的时间相比, 这是一个非常短的时间。</p>
+</div></blockquote>
+</section>
+<section id="id2">
+<h2>五、SpinalHDL如何产生的？<a class="headerlink" href="#id2" title="此标题的永久链接"></a></h2>
+<blockquote>
+<div><p>2014年12月至2016年4月, 这是一个个人爱好项目。但自2016年4月以来, 有一个人全职从事这项工作, 其他一些人也会定期为该项目做出贡献。</p>
+</div></blockquote>
+</section>
+<section id="vhdl-verilog-systemverilog">
+<h2>六、为什么有VHDL/Verilog/SystemVerilog还要开发新语言？<a class="headerlink" href="#vhdl-verilog-systemverilog" title="此标题的永久链接"></a></h2>
+<ol>
+<li><p>VHDL/Verilog/SystemVerilog不是硬件描述语言</p>
+<p>这些语言最初是为仿真/文档目的创建的事件驱动语言。只是后来, 它们被用作综合工具的输入语言。这解释了本页下面许多要点的根源。</p>
+</li>
+<li><p>这些事件驱动范式对RTL没有任何意义</p>
+<p>仔细想想, 用process/always块描述数字硬件（RTL）没有任何实际意义。为什么我们要担心敏感度列表？为什么我们必须在不同性质的process/always块（组合逻辑/无重置寄存器/异步重置寄存器）之间拆分设计？</p>
+<p>等价的VHDL/SpinalHDL的例子：</p>
+<p>VHDL:</p>
+<div class="highlight-VHDL notranslate"><div class="highlight"><pre><span></span><span class="k">signal</span><span class="w"> </span><span class="n">mySignal</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">;</span><span class="w"></span>
+<span class="k">signal</span><span class="w"> </span><span class="n">myRegister</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">unsigned</span><span class="p">(</span><span class="mi">3</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="k">signal</span><span class="w"> </span><span class="n">myRegisterWithReset</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">unsigned</span><span class="p">(</span><span class="mi">3</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">process</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="w"></span>
+<span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">mySignal</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="sc">&#39;0&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">cond</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;1&#39;</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">        </span><span class="n">mySignal</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="sc">&#39;1&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span><span class="w"></span>
+<span class="k">end</span><span class="w"> </span><span class="k">process</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">process</span><span class="p">(</span><span class="n">clk</span><span class="p">)</span><span class="w"></span>
+<span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">rising_edge</span><span class="p">(</span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">cond</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;1&#39;</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">            </span><span class="n">myRegister</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">myRegister</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span><span class="w"></span>
+<span class="k">end</span><span class="w"> </span><span class="k">process</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">process</span><span class="p">(</span><span class="n">clk</span><span class="p">,</span><span class="n">reset</span><span class="p">)</span><span class="w"></span>
+<span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">reset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;1&#39;</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">        </span><span class="n">myRegisterWithReset</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">elsif</span><span class="w"> </span><span class="n">rising_edge</span><span class="p">(</span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">cond</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;1&#39;</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">            </span><span class="n">myRegisterWithReset</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">myRegisterWithReset</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span><span class="w"></span>
+<span class="k">end</span><span class="w"> </span><span class="k">process</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>SpinalHDL</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">mySignal</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">myRegister</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">myRegisterWithReset</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">mySignal</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">False</span><span class="w"></span>
+<span class="n">when</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">mySignal</span><span class="w">            </span><span class="o">:=</span><span class="w"> </span><span class="nc">True</span><span class="w"></span>
+<span class="w">    </span><span class="n">myRegister</span><span class="w">          </span><span class="o">:=</span><span class="w"> </span><span class="n">myRegister</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="n">myRegisterWithReset</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">myRegisterWithReset</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>对于一切, 你都可以尝试这种事件驱动语言, 知道你尝试到更好的。</p>
+</li>
+<li><p>VHDL和Verilog的最新版本不可用。</p>
+<p>EDA行业在其工具中实现VHDL 2008和SystemVerilog综合功能的速度非常慢。此外, 完成后, 似乎只实现了语言的一个约束子集（不涉及模拟特性）。这导致使用这些语言版本中任何有趣的功能都是不安全的, 因为：</p>
+<ul class="simple">
+<li><p>这可能会使你的代码与许多EDA工具不兼容。</p></li>
+<li><p>其他公司可能不会接受你的IP, 因为他们的流程还没有准备好。</p></li>
+</ul>
+<p>让我告诉你, 我已经厌倦了等待昂贵的封闭源代码工具。</p>
+</li>
+<li><p>VHDL和Verilog的最新版本没有那么好。</p>
+<p>请参阅VHDL 2008参数化包和无约束记录, 确保它可以编写更好的VHDL源代码, 但从面向对象的角度来看, 它们让我感到恶心（请参阅下一个主题, 了解SpinalHDL示例）。</p>
+<p>尽管如此, 这些修订并没有改变HDL问题的核心：它们基于一种事件驱动的范式, 描述数字硬件是没有意义的。</p>
+</li>
+<li><p>VHDL记录(records), Verilog结构(struct)是破碎的(如果你可以使用, SystemVerilog在这方面做的很好)</p>
+<p>你不能用它们来定义接口, 因为你不能定义它们的内部信号方向。 更糟糕的是, 你不能给他们构造参数！ 所以, 定义你的 RGB 记录/结构一次, 并希望你永远不必将它与更大/更小的颜色通道一起使用……</p>
+<p>VHDL 的另一个奇特之处在于, 如果你想将一个数组添加到一个组件实体中, 你必须将这个数组的类型定义到一个包中……它不能被参数化……</p>
+<p>以下是SpinalHDL下APB3总线的定义：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">//Class which can be instantiated to represent a given APB3 configuration</span>
+<span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Apb3Config</span><span class="p">(</span><span class="w"></span>
+<span class="n">addressWidth</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"></span>
+<span class="n">dataWidth</span><span class="w">     </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"></span>
+<span class="n">selWidth</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="n">useSlaveError</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Boolean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="c1">//Class which can be instantiated to represent a given hardware APB3 bus</span>
+<span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Apb3</span><span class="p">(</span><span class="n">config</span><span class="p">:</span><span class="w"> </span><span class="nc">Apb3Config</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="nc">IMasterSlave</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="nc">PADDR</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">addressWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="nc">PSEL</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">selWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="nc">PENABLE</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="nc">PREADY</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="nc">PWRITE</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="nc">PWDATA</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">dataWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="nc">PRDATA</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">dataWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="nc">PSLVERROR</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">useSlaveError</span><span class="p">)</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="kc">null</span><span class="w">  </span><span class="c1">//Optional signal</span>
+
+<span class="c1">//Can be used to setup a given APB3 bus into a master interface of the host component</span>
+<span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">asMaster</span><span class="p">():</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">out</span><span class="p">(</span><span class="nc">PADDR</span><span class="p">,</span><span class="nc">PSEL</span><span class="p">,</span><span class="nc">PENABLE</span><span class="p">,</span><span class="nc">PWRITE</span><span class="p">,</span><span class="nc">PWDATA</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">in</span><span class="p">(</span><span class="nc">PREADY</span><span class="p">,</span><span class="nc">PRDATA</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">useSlaveError</span><span class="p">)</span><span class="w"> </span><span class="n">in</span><span class="p">(</span><span class="nc">PSLVERROR</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>关于VHDL2008的部分解决方法和SystemVerilog接口/模组端口, 如果你的EDA工具/公司流程/公司规定允许你使用他们, 你很幸运。</p>
+</li>
+<li><p>VHDL和Verilog非常冗长。</p>
+<p>实际上, 使用VHDL和Verilog, 当它开始涉及组件实例互连时, 需要考虑复制过去的产品。</p>
+<p>为了更深入地理解它, 有一个SpinalHDL示例, 它执行一些外围设备实例化, 并添加访问它们所需的APB3解码器。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">//Instanciate an AXI4 to APB3 bridge</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">apbBridge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Axi4ToApb3Bridge</span><span class="p">(</span><span class="w"></span>
+<span class="n">addressWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"></span>
+<span class="n">dataWidth</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"></span>
+<span class="n">idWidth</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="c1">//Instanciate some APB3 peripherals</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">gpioACtrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Apb3Gpio</span><span class="p">(</span><span class="n">gpioWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">gpioBCtrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Apb3Gpio</span><span class="p">(</span><span class="n">gpioWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">timerCtrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">PinsecTimerCtrl</span><span class="p">()</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">uartCtrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Apb3UartCtrl</span><span class="p">(</span><span class="n">uartCtrlConfig</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">vgaCtrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Axi4VgaCtrl</span><span class="p">(</span><span class="n">vgaCtrlConfig</span><span class="p">)</span><span class="w"></span>
+
+<span class="c1">//Instanciate an APB3 decoder</span>
+<span class="c1">//- Drived by the apbBridge</span>
+<span class="c1">//- Map each peripherals in a memory region</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">apbDecoder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Apb3Decoder</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">master</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">apbBridge</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">apb</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">slaves</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">List</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">gpioACtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">apb</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="mh">0x00000</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="nc">KiB</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="n">gpioBCtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">apb</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="mh">0x01000</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="nc">KiB</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="n">uartCtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">apb</span><span class="w">  </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="mh">0x10000</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="nc">KiB</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="n">timerCtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">apb</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="mh">0x20000</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="nc">KiB</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="n">vgaCtrl</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">apb</span><span class="w">   </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="mh">0x30000</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="nc">KiB</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">)</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>这样, 当你实例化一个模块/组件时, 你不必逐个绑定每个信号, 因为你可以以面向对象的方式访问它们的接口。</p>
+<p>同样关于VHDL/Verilog 的struct/records, 我只想说它们真的是肮脏的把戏, 没有真正的参数化和可重用性功能, 一些拐杖试图掩盖这些语言设计拙劣的事实。</p>
+</li>
+<li><p>元硬件描述的功能和能力</p>
+<p>好的, 这是一大块。基本上, VHDL/Verilog/SystemVerilog将为你提供一些精化工具, 这些工具不会直接映射到硬件中, 例如loops/generate语句/macro/function/process/task。但仅此而已。</p>
+<p>甚至它们也非常有限。举例来说, 为什么不能将process/alwasys/compents/module块定义为task/process？这真的是许多新奇事物的瓶颈。如果你在总线调用一个用户定义的task/procedure, 比如myHandshakeBus.quequ(depth=64)？这不是很爽吗？</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">//Define the concept of handshake bus</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Stream</span><span class="p">[</span><span class="nc">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="nc">Data</span><span class="p">](</span><span class="n">dataType</span><span class="p">:</span><span class="w">  </span><span class="nc">T</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">valid</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">ready</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cloneOf</span><span class="p">(</span><span class="n">dataType</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//Define an operator to connect the left operand (this) to the right operand (that)</span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">&gt;&gt;</span><span class="p">(</span><span class="n">that</span><span class="p">:</span><span class="w"> </span><span class="nc">Stream</span><span class="p">[</span><span class="nc">T</span><span class="p">]):</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="bp">this</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">that</span><span class="p">.</span><span class="n">valid</span><span class="w"></span>
+<span class="w">        </span><span class="n">that</span><span class="p">.</span><span class="n">ready</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="bp">this</span><span class="p">.</span><span class="n">ready</span><span class="w"></span>
+<span class="w">        </span><span class="bp">this</span><span class="p">.</span><span class="n">payload</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">that</span><span class="p">.</span><span class="n">payload</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//Return a Stream connected to this via a FIFO of depth elements</span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">queue</span><span class="p">(</span><span class="n">depth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">):</span><span class="w"> </span><span class="nc">Stream</span><span class="p">[</span><span class="nc">T</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">fifo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">StreamFifo</span><span class="p">(</span><span class="n">dataType</span><span class="p">,</span><span class="w"> </span><span class="n">depth</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="bp">this</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">fifo</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">push</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">fifo</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">pop</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>然后让我们进一步了解, 假设你想要定义一个状态机, 你必须编写原始VHDL/Verilog和一些开关语句来完成。你不能定义一种“状态机”抽象, 这种抽象会给你一种奇特的语法来定义它们, 相反, 你必须使用第三方工具来绘制你的状态机, 然后生成与VHDL/Verilog等效的代码。这真的很乱。</p>
+<p>因此, 所谓元硬件描述能力, 我指的是通过使用原始SpinalHDL语法, 你可以定义工具, 然后允许你以抽象的方式定义事物, 比如状态机。</p>
+<p>这里还有一个简单的定义在顶层SpinalHDL的状态机抽象使用的例子：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">//Define a new state machine</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">fsm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">StateMachine</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//Define all states</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">stateA</span><span class="p">,</span><span class="w"> </span><span class="n">stateB</span><span class="p">,</span><span class="w"> </span><span class="n">stateC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">State</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//Set the state machine entry point</span>
+<span class="w">    </span><span class="n">setEntry</span><span class="p">(</span><span class="n">stateA</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//Define a register used into the state machine</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"> </span><span class="n">init</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//Define the state machine behavioural</span>
+<span class="w">    </span><span class="n">stateA</span><span class="p">.</span><span class="n">whenIsActive</span><span class="w"> </span><span class="p">(</span><span class="n">goto</span><span class="p">(</span><span class="n">stateB</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">stateB</span><span class="p">.</span><span class="n">onEntry</span><span class="p">(</span><span class="n">counter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">stateB</span><span class="p">.</span><span class="n">onExit</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">True</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">stateB</span><span class="p">.</span><span class="n">whenIsActive</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">counter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">counter</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mi">4</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="n">goto</span><span class="p">(</span><span class="n">stateC</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">stateC</span><span class="p">.</span><span class="n">whenIsActive</span><span class="w"> </span><span class="p">(</span><span class="n">goto</span><span class="p">(</span><span class="n">stateA</span><span class="p">))</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>同样, 如果你想生成CPU的指令解码, 可能需要一些花哨的精化时间算法来生成尽可能少的逻辑。但是, 在VHDL/Verilog/SystemVerilog中, 执行此类操作的唯一选择是编写一个脚本, 生成所需的.vhd/.v。</p>
+<p>关于元硬件描述确实有很多话要说, 但要理解它并获得它真正的味道, 唯一真正的方法是对它进行实验。它的目标是停止像猴子一样玩弄电线和门, 开始与那些低级的东西保持一定距离, 思考更大和可重用的东西。</p>
+</li>
+</ol>
+</section>
+<section id="git-spinalhdl">
+<h2>七、如何使用未发布(但是已经提交到git)的SpinalHDL版本？<a class="headerlink" href="#git-spinalhdl" title="此标题的永久链接"></a></h2>
+<p>例如, 如果你想尝试<code class="docutils literal notranslate"><span class="pre">dev</span></code>分支, 在dummy文件夹中做如下操作：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="n">git</span><span class="w"> </span><span class="n">clone</span><span class="w"> </span><span class="n">https</span><span class="p">:</span><span class="c1">//github.com/SpinalHDL/SpinalHDL.git -b dev</span>
+<span class="n">cd</span><span class="w"> </span><span class="nc">SpinalHDL</span><span class="w"></span>
+<span class="n">sbt</span><span class="w"> </span><span class="n">clean</span><span class="w"> </span><span class="n">publishLocal</span><span class="w"></span>
+</pre></div>
+</div>
+<p>在你的工程中, 不要忘记更新build.sbt选定的SpinalHDL的版本, 应该是”dev”而不是”?.?.?”</p>
+</section>
+</section>
+<section id="support">
+<h1>支持(Support)<a class="headerlink" href="#support" title="此标题的永久链接"></a></h1>
+<section id="communication-channels">
+<h2>一、联系渠道(Communication channels)<a class="headerlink" href="#communication-channels" title="此标题的永久链接"></a></h2>
+<ul class="simple">
+<li><p>支持错误报告和功能请求的通信渠道, 毫不犹豫地创建github问题：   https://github.com/SpinalHDL/SpinalHDL/</p></li>
+<li><p>有关SpinalHDL语法和现场对话的问题, 可以使用Gitter频道：   https://gitter.im/SpinalHDL/SpinalHDL</p></li>
+<li><p>如果问题你还可以使用带有标签StackOverflow的论坛:    spinalhl:https://StackOverflow.com/</p></li>
+<li><p>也可以通过谷歌查询。你可以随意发布与SpinalHDL相关的任何主题：  https://groups.google.com/forum/#!forum/spinalhdl-hardware-description-language</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="关于SpinalHDL(About SpinalHDL)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E7%94%A8%E6%88%B7.html" class="btn btn-neutral float-right" title="用户(Users)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
