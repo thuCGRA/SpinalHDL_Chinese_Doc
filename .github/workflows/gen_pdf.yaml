@@ -37,40 +37,35 @@ jobs:
           draft: false
           prerelease: true
 
-  convert_via_pandoc:
-    runs-on: ubuntu-18.04
-    needs: [dependencies, release]
+  test:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: create file list
-        run: |
-          mkdir output
-          sudo apt-get update
-          sudo apt-get install pandoc
-          sudo apt install texlive texlive-latex-extra texlive-latex-recommended texlive-xetex pandoc
-          pandoc --output=output/SpinalHDL中文手册.docx SpinalHDL_Chinese_Doc.md
-          pandoc --output=output/SpinalHDL中文手册.html SpinalHDL_Chinese_Doc.md
-# pandoc --latex-engine=xelatex --output=output/SpinalHDL中文手册.pdf SpinalHDL_Chinese_Doc.md
-      - uses: actions/upload-artifact@master
-        with:
-          name: output
-          path: output
-      - name: Upload release assets docx
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: output/SpinalHDL中文手册.docx
-          asset_name: SpinalHDL_Chinese_Doc.docx
-          asset_content_type: application/vnd.openxmlformats-officedocument.wordprocessingml.document
-      - name: Upload release assets html
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: output/SpinalHDL中文手册.html
-          asset_name: SpinalHDL_Chinese_Doc.html
-          asset_content_type: text/html
-      
+    - uses: actions/checkout@v1
+      with:
+        fetch-depth: 0
+    - name: "setup python"
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: "install dependencies"
+      run: |
+        apt-get update -y && apt-get install -y git
+        pip install -r requirements.txt
+    - uses: ammaraskar/sphinx-problem-matcher@master
+    - name: "check links"
+      run: make linkcheck
+    - name: "Test doc building"
+      run: make pdf
+    - uses: actions/upload-artifact@master
+      with:
+        name: output
+        path: Sphinx/_build/pdf
+    - name: Upload release assets docx
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.release.outputs.upload_url }}
+        asset_path: Sphinx/_build/pdf/SpinalHDL_Chinese_Doc.pdf
+        asset_name: SpinalHDL_Chinese_Doc.pdf
+        asset_content_type: application/pdf
