@@ -21,6 +21,9 @@ SpinalHDL_Chinese_Doc是清华尹首一可重构团队将Spinal-Doc翻译成中�
 如有勘误或更进一步的讨论，欢迎各位读者联系该GitHub账号的邮箱:
 THU_CGRA@163.com
 
+
+
+
 特别鸣谢：
 
 感谢yportne13为我们更新了workflow，也协助我们搭建了静态网页！
