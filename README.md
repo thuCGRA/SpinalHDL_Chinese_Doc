@@ -1,6 +1,8 @@
 # SpinalHDL_Chinese_Doc
 Translated SpinalHDL-Doc(v1.7.2) into Chinese
 
+在线文档网址: https://thucgra.github.io/SpinalHDL_Chinese_Doc/
+
 既然是中文版就用中文写Readme了; )
 
 SpinalHDL_Chinese_Doc是清华尹首一可重构团队将Spinal-Doc翻译成中文手册的成果，相比于原作者的SpinalHDL来说，有如下内容的增加:
@@ -18,3 +20,7 @@ SpinalHDL_Chinese_Doc是清华尹首一可重构团队将Spinal-Doc翻译成中�
 
 如有勘误或更进一步的讨论，欢迎各位读者联系该GitHub账号的邮箱:
 THU_CGRA@163.com
+
+特别鸣谢：
+
+感谢yportne13为我们更新了workflow，也协助我们搭建了静态网页！
