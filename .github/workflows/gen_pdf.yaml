@@ -53,14 +53,20 @@ jobs:
         pip install -r requirements.txt
     - uses: ammaraskar/sphinx-problem-matcher@master
     - name: "check links"
-      run: make linkcheck
+      run: |
+        cd Sphinx
+        make linkcheck
     - name: "Test doc building"
-      run: make pdf
+      run: |
+        cd Sphinx
+        make html
+        zip -r Sphinx/_build/SpinalHDL_Chinese_Doc_html.zip Sphinx/_build/html/
+        make pdf
     - uses: actions/upload-artifact@master
       with:
         name: output
         path: Sphinx/_build/pdf
-    - name: Upload release assets docx
+    - name: Upload release assets pdf
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -69,3 +75,16 @@ jobs:
         asset_path: Sphinx/_build/pdf/SpinalHDL_Chinese_Doc.pdf
         asset_name: SpinalHDL_Chinese_Doc.pdf
         asset_content_type: application/pdf
+    - uses: actions/upload-artifact@master
+      with:
+        name: output
+        path: Sphinx/_build
+    - name: Upload release assets html
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.release.outputs.upload_url }}
+        asset_path: Sphinx/_build/SpinalHDL_Chinese_Doc_html.zip
+        asset_name: SpinalHDL_Chinese_Doc_html.zip
+        asset_content_type: application/zip
