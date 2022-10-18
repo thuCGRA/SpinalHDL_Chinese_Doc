@@ -61,20 +61,6 @@ jobs:
         cd Sphinx
         make html
         zip -r _build/SpinalHDL_Chinese_Doc_html.zip _build/html/
-        make pdf
-    - uses: actions/upload-artifact@master
-      with:
-        name: output
-        path: Sphinx/_build/pdf
-    - name: Upload release assets pdf
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ needs.release.outputs.upload_url }}
-        asset_path: Sphinx/_build/pdf/SpinalHDL_Chinese_Doc.pdf
-        asset_name: SpinalHDL_Chinese_Doc.pdf
-        asset_content_type: application/pdf
     - uses: actions/upload-artifact@master
       with:
         name: output
