@@ -1,0 +1,105 @@
+## 工具(Utils)
+
+### 一、 总览
+
+|                       句式                        | 返回<br>类型 |                                           描述                                           |
+| :-----------------------------------------------: | :----------: | :--------------------------------------------------------------------------------------: |
+|             `widthOf(x : BitVector)`              |     Int      |                         返回一个类型为Bits/UInt/SInt的信号的位宽                         |
+|               `log2Up(x : BigInt)`                |     Int      |                             返回表示输入状态`x`所需要的位数                              |
+|               `isPow2(x : BigInt)`                |   Boolean    |                               当`x`为2的指数时, 返回`True`                               |
+| `roundUp(`<br>`that : BigInt,`<br>` by : BigInt)` |    BigInt    |                              返回参数`by`乘参数`that`的结果                              |
+|                 `Cat(x : Data*)`                  |     Bits     | 连接所有的参数, 其中第一个参数会放置在最高有效位(MSB), 最后一个参数放置在最低有效位(LSB) |
+
+### 二、克隆硬件数据类型(Cloning hardware datatypes)
+
+用户可以通过`cloneOf(x)`函数克隆给定的硬件数据类型。该函数将会返回一个拥有相同Scala类型和参数的新实例。例如：
+
+```Scala
+def plusOne(value : UInt) : UInt = {
+    // 将会生成一个和`value`同位宽的UInt类型
+    val temp = cloneOf(value)
+    temp := value + 1
+    return temp
+}
+
+// treePlusOne 将会成为一个8比特的值
+val treePlusOne = plusOne(U(3, 8 bits))
+```
+> **注意！：若对一个`Bundle`类型使用`cloneOf(x)`函数功能, 需要确保该`Bundle`是一个`case`类, 否则需要在`Bundle`内部重写克隆函数。**
+
+### 三、传递数据类型作为结构参数(Passing a datatype as construction parameter)
+
+许多可重用的硬件要求能够被一些数据类型所参数化。例如如果用户想要定义一个FIFO或者移位寄存器, 则需要一个参数来定义该硬件所需的负载。
+
+1. 传统方式
+
+   以定义一个`ShiftRegister`元件为例, 介绍传统的传递数据类型方式如下：
+   ```Scala
+   case class ShiftRegister[T <: Data](dataType: T, depth: Int) extends Component {
+       val io = new Bundle {
+       val input  = in (cloneOf(dataType))
+       val output = out(cloneOf(dataType))
+       //需要在Case Class内部重写`cloneof`函数
+       }
+   }
+   ```
+   实例化该元件的代码为：
+   ```Scala
+   val shiftReg = ShiftRegister(Bits(32 bits), depth = 8)
+   ```
+
+   在上述例子中, 硬件的数据类型（位宽）直接作为构造参数传递。因此每次需要例化或是用该datatype时, 都需要使用`cloneOf`函数对其datatype进行定义。这种方式并不安全因为常`cloneOf`函数会被遗忘。
+
+2. 更安全的方式
+
+   以更安全的方式来传递数据类型的例子如下：
+   ```Scala
+   case class ShiftRegister[T <: Data](dataType: HardType[T], depth: Int) extends Component {
+       val io = new Bundle {
+       val input  = in (dataType())
+       val output = out(dataType())
+       }
+   }
+   ```
+   实例化该元件的代码为：
+   ```Scala
+   val shiftReg = ShiftRegister(Bits(32 bits), depth = 8)
+   ```
+
+   在上述的更安全的方法中, 使用了`HardType`去封装数据类型`T`, 可以看成是`T`的蓝图(blueprint)。这种方式相比于传统方式更加简单, 因为每次例化使用该datatype时, 只需要调用`HardType`的`apply`函数即可。此外, 从用户的角度来看, 这种机制是完全透明的, 因为硬件数据类型可以隐式转换为`HardType`。
+
+### 四、频率与时间(Frequency and time)    
+
+SpinalHDL有专门的语法来定义频率和时间值:
+```Scala
+val frequency = 100 MHz
+val timeoutLimit = 3 ms
+val period = 100 us
+
+val periodCycles = frequency * period
+val timeoutCycles = frequency * timeoutLimit
+```
+对一个时间定义, 可以利用如下后缀得到一个`TimeNumber`: `fs, ps, ns, us, ms, sec, mn, hr`; 可以利用如下后缀得到一个`HertzNumber`: `Hz, KHz, MHz, GHz, THz`。
+
+`TimeNumber`和`HertzNumber`是基于`PhysicalNumber`类, 该类在Scala中利用`BigDecimal`存储数据。
+
+### 五、二进制前缀(Binary prefix)
+
+SpinalHDL允许根据IEC, 来使用二进制前缀表示法定义整数。
+```Scala
+val memSize = 512 MiB
+val dpRamSize = 4 KiB
+```
+可使用的所有二进制前缀如下：
+|  二进制前缀   |           表示值            |
+| :-----------: | :-------------------------: |
+| `Byte, Bytes` |              1              |
+|     `KiB`     |       1024 == 1 << 10       |
+|     `MiB`     | 1024<sup>2</sup> == 1 << 20 |
+|     `GiB`     | 1024<sup>3</sup> == 1 << 30 |
+|     `TiB`     | 1024<sup>4</sup> == 1 << 40 |
+|     `PiB`     | 1024<sup>5</sup> == 1 << 50 |
+|     `EiB`     | 1024<sup>6</sup> == 1 << 60 |
+|     `ZiB`     | 1024<sup>7</sup> == 1 << 70 |
+|     `YiB`     | 1024<sup>8</sup> == 1 << 80 |
+

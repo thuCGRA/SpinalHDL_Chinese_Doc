@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UFix/SFix &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="Floating" href="Floating.html" />
+    <link rel="prev" title="Vec" href="Vec.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">数据类型(Data Types)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E7%AE%80%E4%BB%8B.html">简介(Introduction)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bool.html">Bool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bits.html">Bits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Int.html">UInt/SInt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpinalEnum.html">SpinalEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bundle.html">Bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Vec.html">Vec</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">UFix/SFix</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">一、描述(Description)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#declaration">二、声明(Declaration)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#assignments">三、赋值(Assignments)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#raw-raw-value">四、Raw值(Raw value)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#operators">五、操作符(Operators)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Floating.html">Floating</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AFix.html">AFix(AFix是最新版Spinal新增的数据结构，不知为何该板块有些代码无法通过编译)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">数据类型(Data Types)</a> &raquo;</li>
+      <li>UFix/SFix</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/数据类型/Fix.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ufix-sfix">
+<h1>UFix/SFix<a class="headerlink" href="#ufix-sfix" title="此标题的永久链接"></a></h1>
+<blockquote>
+<div><p>注意：SpinalHDL定点数只是部分支持并部分经过测试的, 如果你发现它有任何bug, 或者你认为有些函数丢失了, 请创建一个Github issue。并且, 请不要在代码中用未在doc中指出的特征。</p>
+</div></blockquote>
+<section id="description">
+<h2>一、描述(Description)<a class="headerlink" href="#description" title="此标题的永久链接"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">UFix</span></code>和<code class="docutils literal notranslate"><span class="pre">SFix</span></code>类型对应于适用于定点数算法的bit向量。</p>
+</section>
+<section id="declaration">
+<h2>二、声明(Declaration)<a class="headerlink" href="#declaration" title="此标题的永久链接"></a></h2>
+<p>声明定点数的语法如下所示：</p>
+<ol class="simple">
+<li><p>无符号定点数(Unsigned Fixed-Point)</p></li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">语法</th>
+<th style="text-align: center;">整数宽度</th>
+<th style="text-align: center;">分辨率</th>
+<th style="text-align: center;">max</th>
+<th style="text-align: center;">min</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">UFix(peak: ExpNumber, resolution: ExpNumber)</td>
+<td style="text-align: center;">peak-resolution</td>
+<td style="text-align: center;">2^resolution</td>
+<td style="text-align: center;">2^peak-2^resolution</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr>
+<td style="text-align: center;">UFix(peak: ExpNumber, width: BitCount)</td>
+<td style="text-align: center;">width</td>
+<td style="text-align: center;">2^(peak-width)</td>
+<td style="text-align: center;">2^peak-2^(peak-width)</td>
+<td style="text-align: center;">0</td>
+</tr>
+</tbody>
+</table><ol class="simple">
+<li><p>有符号定点数(Signed Fixed-Point)</p></li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">语法</th>
+<th style="text-align: center;">整数宽度</th>
+<th style="text-align: center;">分辨率</th>
+<th style="text-align: center;">max</th>
+<th style="text-align: center;">min</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">SFix(peak: ExpNumber, resolution: ExpNumber)</td>
+<td style="text-align: center;">peak-resolution+1</td>
+<td style="text-align: center;">2^resolution</td>
+<td style="text-align: center;">2^peak-2^resolution</td>
+<td style="text-align: center;">-(2^peak)</td>
+</tr>
+<tr>
+<td style="text-align: center;">SFix(peak: ExpNumber, width: ExpNumber)</td>
+<td style="text-align: center;">width</td>
+<td style="text-align: center;">2^(peak-width-1)</td>
+<td style="text-align: center;">2^peak-2^(peak-width-1)</td>
+<td style="text-align: center;">-(2^peak)</td>
+</tr>
+</tbody>
+</table><ol>
+<li><p>格式(Format)</p>
+<p>SpinalHDL中定点数的格式按照Q notation的格式定义, 详情可见Wikipedia关于Q notation的讲解。</p>
+<p>举例来说, Q8.2表示8+2 bits的定点数, 其中8 bits是整数部分而2 bits是小数部分。如果定点数是有符号数, 需要整数中的1 bit用作符号位。</p>
+<p>分辨率定义为能表征的最小非零数是2的几次幂。</p>
+<blockquote>
+<div><p>备注：为了减少定点数在表示中2的几次幂时的错误, 在<code class="docutils literal notranslate"><span class="pre">spinal.core</span></code>中有一个数量类型叫做<code class="docutils literal notranslate"><span class="pre">ExpNumber</span></code>, 用来生成定点数类型, 另一种比较方便的实现可以用<code class="docutils literal notranslate"><span class="pre">exp</span></code>函数(如下页代码所示)</p>
+</div></blockquote>
+</li>
+<li><p>例子(Examples)</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">//无符号定点数</span>
+<span class="kd">val</span><span class="w"> </span><span class="nc">UQ_8_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UFix</span><span class="p">(</span><span class="n">peak</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="n">resolution</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="w"> </span><span class="n">exp</span><span class="p">)</span><span class="w">    </span><span class="c1">//bit宽度是8-(-2)=10 bits</span>
+<span class="kd">val</span><span class="w"> </span><span class="nc">UQ_8_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UFix</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="w"> </span><span class="n">exp</span><span class="p">)</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="nc">UQ_8_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UFix</span><span class="p">(</span><span class="n">peak</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="nc">UQ_8_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UFix</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+
+<span class="c1">//有符号定点数</span>
+<span class="kd">val</span><span class="w"> </span><span class="nc">Q_8_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">SFix</span><span class="p">(</span><span class="n">peak</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w">         </span><span class="c1">//bit宽度是8-(-2)+1=11 bits</span>
+<span class="kd">val</span><span class="w"> </span><span class="nc">Q_8_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">SFix</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="n">exp</span><span class="p">)</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="nc">Q_8_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">SFix</span><span class="p">(</span><span class="n">peak</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="nc">Q_8_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">SFix</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="assignments">
+<h2>三、赋值(Assignments)<a class="headerlink" href="#assignments" title="此标题的永久链接"></a></h2>
+<ol>
+<li><p>有效赋值(Valid Assignments)</p>
+<p>没有bit丢失时, 对定点数的赋值是有效的, 任何一位的bit丢失都会产生错误。</p>
+<p>如果定点数的来源数太大, <code class="docutils literal notranslate"><span class="pre">.truncated</span></code>函数可以帮你改变元数据的尺寸来匹配目标尺寸。</p>
+<p><strong>举例</strong></p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">i16_m2</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">SFix</span><span class="p">(</span><span class="mi">16</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="w"> </span><span class="n">exp</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">i16_0</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nc">SFix</span><span class="p">(</span><span class="mi">16</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w">  </span><span class="mi">0</span><span class="w"> </span><span class="n">exp</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">i8_m2</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nc">SFix</span><span class="p">(</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="w"> </span><span class="n">exp</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">o16_m2</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">SFix</span><span class="p">(</span><span class="mi">16</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="w"> </span><span class="n">exp</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">o16_m0</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">SFix</span><span class="p">(</span><span class="mi">16</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w">  </span><span class="mi">0</span><span class="w"> </span><span class="n">exp</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">o14_m2</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">SFix</span><span class="p">(</span><span class="mi">14</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="w"> </span><span class="n">exp</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">o16_m2</span><span class="w">  </span><span class="o">:=</span><span class="w"> </span><span class="n">i16_m2</span><span class="w">           </span><span class="c1">//OK</span>
+<span class="n">o16_m0</span><span class="w">  </span><span class="o">:=</span><span class="w"> </span><span class="n">i16_m2</span><span class="w">           </span><span class="c1">//Not OK, bit丢失</span>
+<span class="n">o14_m2</span><span class="w">  </span><span class="o">:=</span><span class="w"> </span><span class="n">i16_m2</span><span class="w">           </span><span class="c1">//Not OK, bit丢失</span>
+<span class="n">o16_m0</span><span class="w">  </span><span class="o">:=</span><span class="w"> </span><span class="n">i16_m2</span><span class="p">.</span><span class="n">truncated</span><span class="w"> </span><span class="c1">//OK, 尺寸自动改变</span>
+<span class="n">o14_m2</span><span class="w">  </span><span class="o">:=</span><span class="w"> </span><span class="n">i16_m2</span><span class="p">.</span><span class="n">truncated</span><span class="w"> </span><span class="c1">//OK, 尺寸自动改变</span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">18</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">i16_m2</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">16</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">i16_0</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">10</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">i8_m2</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">18</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">o16_m2</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">16</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">o16_m0</span><span class="p">;</span><span class="w"></span>
+<span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">16</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">o14_m2</span><span class="p">;</span><span class="w"></span>
+<span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">counter</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">assign</span><span class="w"> </span><span class="n">o16_m2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i16_m2</span><span class="p">;</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">o16_m0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">i16_m2</span><span class="w"> </span><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="mh">2</span><span class="p">);</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">o14_m2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i16_m2</span><span class="p">[</span><span class="mh">16</span><span class="o">:</span><span class="mh">0</span><span class="p">];</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>赋值来自于Scala常量(From a Scala constant)</p>
+<p>Scala<code class="docutils literal notranslate"><span class="pre">BigInt</span></code>或者<code class="docutils literal notranslate"><span class="pre">Double</span></code>类型能在给<code class="docutils literal notranslate"><span class="pre">UFix</span></code>或者<code class="docutils literal notranslate"><span class="pre">SFix</span></code>信号赋值的时候视为常量。</p>
+<p><strong>举例</strong></p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">i4_m2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">SFix</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="w"> </span><span class="n">exp</span><span class="p">)</span><span class="w"></span>
+<span class="n">i4_m2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">1.25</span><span class="w">   </span><span class="c1">//会在i4_m2.raw中载入5</span>
+<span class="n">i4_m2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">4</span><span class="w">      </span><span class="c1">//会在i4_m2.raw中载入16</span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">6</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">i4_m2</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">assign</span><span class="w"> </span><span class="n">i4_m2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">7&#39;h05</span><span class="p">;</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">i4_m2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">7&#39;h10</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="raw-raw-value">
+<h2>四、Raw值(Raw value)<a class="headerlink" href="#raw-raw-value" title="此标题的永久链接"></a></h2>
+<p>定点数的整体表达可以通过<code class="docutils literal notranslate"><span class="pre">raw</span></code>属性读写数据。</p>
+<p><strong>举例</strong></p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="nc">UQ_8_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UFix</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="nc">UQ_8_2</span><span class="p">.</span><span class="n">raw</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">4</span><span class="w">     </span><span class="c1">//00000001 00赋值为1</span>
+<span class="nc">UQ_8_2</span><span class="p">.</span><span class="n">raw</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">U</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span><span class="w"> </span><span class="c1">//00000100 01赋值为4.25</span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">9</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">UQ_8_2</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">assign</span><span class="w"> </span><span class="n">UQ_8_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">10&#39;h004</span><span class="p">;</span><span class="w"></span>
+<span class="k">assign</span><span class="w"> </span><span class="n">UQ_8_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">10&#39;h011</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="operators">
+<h2>五、操作符(Operators)<a class="headerlink" href="#operators" title="此标题的永久链接"></a></h2>
+<p>以下所<code class="docutils literal notranslate"><span class="pre">UFix</span></code>类型所支持的操作符：</p>
+<ol class="simple">
+<li><p>算数运算(Arithmetic)</p></li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">操作符</th>
+<th style="text-align: center;">描述</th>
+<th style="text-align: center;">返回的小数部分分辨率</th>
+<th style="text-align: center;">返回的整数部分范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">x+y</td>
+<td style="text-align: center;">加法</td>
+<td style="text-align: center;">Min(x.resolution, y.resolution)</td>
+<td style="text-align: center;">Max(x.amplitude, y.amplitude)</td>
+</tr>
+<tr>
+<td style="text-align: center;">x-y</td>
+<td style="text-align: center;">减法</td>
+<td style="text-align: center;">Min(x.resolution, y.resolution)</td>
+<td style="text-align: center;">Max(x.amplitude, y.amplitude)</td>
+</tr>
+<tr>
+<td style="text-align: center;">x*y</td>
+<td style="text-align: center;">乘法</td>
+<td style="text-align: center;">x.resolution*y.resolution</td>
+<td style="text-align: center;">x.amplitude*y.amplitude</td>
+</tr>
+<tr>
+<td style="text-align: center;">x&gt;&gt;y</td>
+<td style="text-align: center;">算数右移, y:Int</td>
+<td style="text-align: center;">x.amplitude&gt;&gt;y</td>
+<td style="text-align: center;">x.resolution&gt;&gt;y</td>
+</tr>
+<tr>
+<td style="text-align: center;">x&lt;&lt;y</td>
+<td style="text-align: center;">算数左移, y:Int</td>
+<td style="text-align: center;">x.amplitude&lt;&lt;y</td>
+<td style="text-align: center;">x.resolution&lt;&lt;y</td>
+</tr>
+<tr>
+<td style="text-align: center;">x&gt;&gt;&#124;y</td>
+<td style="text-align: center;">算数右移, y:Int</td>
+<td style="text-align: center;">x.amplitude&gt;&gt;y</td>
+<td style="text-align: center;">x.resolution</td>
+</tr>
+<tr>
+<td style="text-align: center;">x&lt;&lt;&#124;y</td>
+<td style="text-align: center;">算数右移, y:Int</td>
+<td style="text-align: center;">x.amplitude&lt;&lt;y</td>
+<td style="text-align: center;">x.resolution</td>
+</tr>
+</tbody>
+</table><ol class="simple">
+<li><p>比较运算(Comparison)</p></li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">操作符</th>
+<th style="text-align: center;">描述</th>
+<th style="text-align: center;">返回类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">x===y</td>
+<td style="text-align: center;">相等</td>
+<td style="text-align: center;">Bool</td>
+</tr>
+<tr>
+<td style="text-align: center;">x=/=y</td>
+<td style="text-align: center;">不相等</td>
+<td style="text-align: center;">Bool</td>
+</tr>
+<tr>
+<td style="text-align: center;">x&gt;y</td>
+<td style="text-align: center;">大于</td>
+<td style="text-align: center;">Bool</td>
+</tr>
+<tr>
+<td style="text-align: center;">x&gt;=y</td>
+<td style="text-align: center;">大于等于</td>
+<td style="text-align: center;">Bool</td>
+</tr>
+<tr>
+<td style="text-align: center;">x&lt;y</td>
+<td style="text-align: center;">小于</td>
+<td style="text-align: center;">Bool</td>
+</tr>
+<tr>
+<td style="text-align: center;">x&lt;=y</td>
+<td style="text-align: center;">小于等于</td>
+<td style="text-align: center;">Bool</td>
+</tr>
+</tbody>
+</table><ol class="simple">
+<li><p>类型转换(Type cast)</p></li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">操作符</th>
+<th style="text-align: center;">描述</th>
+<th style="text-align: center;">返回类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">x.asBits</td>
+<td style="text-align: center;">二进制转换为Bits</td>
+<td style="text-align: center;">Bits(w(x) bits)</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.asUInt</td>
+<td style="text-align: center;">二进制转换为UInt</td>
+<td style="text-align: center;">UInt(w(x) bits)</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.asSInt</td>
+<td style="text-align: center;">二进制转换为SInt</td>
+<td style="text-align: center;">SInt(w(x) bits)</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.asBools</td>
+<td style="text-align: center;">转换为Bool数组</td>
+<td style="text-align: center;">Vec(Bool, width(x))</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.toUInt</td>
+<td style="text-align: center;">返回对应的UInt(自带truncation)</td>
+<td style="text-align: center;">UInt</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.toSInt</td>
+<td style="text-align: center;">返回对应的SInt(自带truncation)</td>
+<td style="text-align: center;">SInt</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.toUFix</td>
+<td style="text-align: center;">返回对应的UFix</td>
+<td style="text-align: center;">UFix</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.toSFix</td>
+<td style="text-align: center;">返回对应的SFix</td>
+<td style="text-align: center;">SFix</td>
+</tr>
+</tbody>
+</table><ol class="simple">
+<li><p>Misc##有问题, x.resolution那里##</p></li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">操作符</th>
+<th style="text-align: center;">描述</th>
+<th style="text-align: center;">返回类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">x.maxValue</td>
+<td style="text-align: center;">返回可存储的最大值</td>
+<td style="text-align: center;">Double</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.minValue</td>
+<td style="text-align: center;">返回可存储的最小值</td>
+<td style="text-align: center;">Double</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.resolution</td>
+<td style="text-align: center;">x.amplitude*y.amplitude</td>
+<td style="text-align: center;">Double</td>
+</tr>
+</tbody>
+</table></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Vec.html" class="btn btn-neutral float-left" title="Vec" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Floating.html" class="btn btn-neutral float-right" title="Floating" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

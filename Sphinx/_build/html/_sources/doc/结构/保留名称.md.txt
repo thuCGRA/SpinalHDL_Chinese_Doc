@@ -1,0 +1,514 @@
+## 保留名称(Preserving names)
+
+### 一、简介(Introduction)
+
+这一章会介绍SpinalHDL如何把名字从scala代码传递到产生的硬件中。知道这些能帮助你更好地了解如何保留名字, 以尽可能增加生成的网表的可读性。
+
+### 二、可命名的基础类(Nameable base class)
+
+在SpinalHDL中所有可以被命名的东西都扩展了可命名的基类。
+
+所以实际上, 以下的类拓展了可命名特点：
+
++ 模块(Component)
++ 区域(Area)
++ 数据(UInt, SInt, Bundle, ...)
+
+这里有一些可命名的API的例子
+
+```Scala
+class MyComponent extends Component {
+    val a, b, c, d = Bool()
+    b.setName("rawrr")      //强制命名
+    c.setName("rawrr", weak = true)     //提出一个弱名字, 如果有更强的名字已经被使用则不会更改名字
+    d.setCompositeName(b, postfix = "wuff") //强制命名成b.getname()+"_wuff"
+}
+```
+
+上述代码会生成：
+
+```Scala
+module Mycomponent ();
+    wire    a;
+    wire    rawrr;
+    wire    c;
+    wire    rawrr_wuff;
+endmodule
+```
+
+一般来说, 除非你出于debug或精细化的目的, 你不必一定要用这个API来修改名字。
+
+### 三、从Scala中提取名字(Name extraction from Scala)
+
+首先, 自从v.1.4.0, 在类的建立期间, 当每次新的`val`被定义的时候, SpinalHDL用的Scala编译器插件可以提供一个返回值。
+
+以下这个例子或多或少地展示了SpinalHDL是如何实现的：
+
+```Scala
+//spinal.idslplugin.ValCallback是Scala编译器插件的特征, 用来产生callback
+class Component extends spinal.idslplugin.ValCallback {
+    override def valCallback[T](ref: T, name: String) : T = {
+        println(s"Got $ref named $name")    //这里我们把我们得到的打印出来作为demo
+        ref
+    }
+}
+
+class UInt
+class Bits
+class MyComponent extends Component {
+    val two = 2
+    val wuff = "miaou"
+    val toto = new UInt
+    val rawrr = new Bits
+}
+
+object Debug3 extends App {
+    new MyComponent()
+    //这会打印出：
+    // Got 2 named two
+    // Got miaou named wuff
+    // Got spinal.tester.code.sandbox.UInt@691a7f8f named toto
+    // Got spinal.tester.code.sandbox.Bits@161b062a named rawrr
+}
+```
+
+通过使用返回值的“自省”特点, SpinalHDL的模块类能时刻知道他们的内容和名字。
+
+但这也意味着如果你想让某些东西得到名字, 并且你只依赖于这个自动命名的特点, 你例化的数据(UInt, SInt, ...)的引用应该以模块(component)val的形式存在某些地方。
+
+例如：
+
+```Scala
+class MyComponent extend Component {
+    val a, b = in UInt(8 bits)  //会被正确地命名
+    val toto = out UInt(8 bits) //也会被正确地命名
+
+    def doStuff(): Unit = {
+        val tmp = UInt(8 bits)  //这不会被命名, 因为它没作为component val存储(之后会有解释)
+        tmp := 0x20
+        toto := tmp
+    }
+    doStuff()
+}
+```
+
+这会产生：
+
+```Verilog
+module MyComponent (
+    input   [7:0]   a,
+    input   [7:0]   b,
+    output  [7:0]   toto
+);
+    //注意在Scala中定义的tmp信号被SpinalHDL切掉了, 因为它没有被命名并且是可剪切的
+
+    assign toto = 8'h20;
+endmodule
+```
+
+### 四、模块中的区域(Area in a Component)
+
+在命名系统时一个很重要的方面是你可以在模块内定义新的命名空间(namespaces)并使用它。
+
+例如：
+
+```Scala
+class MyComponent extends Component {
+    val logicA = new Area {     //这定义了一个叫做“logicA”的命名空间
+        val toggle = Reg(Bool)  //这个寄存器会被命名为”logicA_toggle“
+        toggle := !toggle
+    }
+}
+```
+
+这会产生：
+
+```Verilog
+module MyComponent (
+    input   clk;
+    input   reset
+);
+    reg     logicA_toggle;
+    always @ (posedge clk) begin
+        logicA_toggle <= (! logicA_toggle)
+    end
+endmodule
+```
+
+### 五、函数中的区域(Area in a function)
+
+你也可以定义产生新区域的函数来为它的内容提供命名空间。
+
+```Scala
+class MyComponent extends Component {
+    def isZero(value: UInt) = new Area {
+        val comparator = value === 0
+    }
+
+    val value = in UInt(8 bits)
+    val someLogic = isZero(value)
+
+    val result = out Bool()
+    result := someLogic.comparator
+}
+```
+
+这会生成：
+
+```Verilog
+module Mycomponent (
+    input   [7:0]   value,
+    output          result
+);
+    wire            someLogic_comparator;
+
+    assign someLogic_comparator = (value == 8'h0);
+    assign result = someLogic_comparator;
+
+endmodule
+```
+
+### 六、在函数中组合(Composite in a function)
+
+在SpinalHDL 1.5.0中, 增加了在函数中组合的操作(Composite in a function), 这允许你将创建的区域作为另一个可命名量的前缀：
+
+```Scala
+class MyComponent extends Component {
+    //基本上, 组合操作就是一个用它结构体参数作为命名空间前缀的区域
+    def isZero(value: UInt) = new Composite(value) {
+        val comparator = value === 0
+    }.comparator    //注意我们不返回组合, 但是会返回我们感兴趣的组合
+
+    val value = in UInt(8 bits)
+    val result = out Bool()
+    result := isZero(value)
+}
+```
+
+这会生成：
+
+```Scala
+module MyComponent (
+    input   [7:0]   value,
+    output          result
+);
+    wire            value_comparator;
+
+    assign value_comparator = (value == 8'h0);
+    assign result = value_comparator;
+```
+
+### 七、组合链(Composite chains)
+
+你也可以把组合连接起来：
+
+```Scala
+class MyComponent extends Component {
+    def isZero(value: UInt) = new Composite(value) {
+        val comparator = value === 0
+    }.comparator
+
+    def inverted(value: Bool) = new Composite(value) {
+        val inverter = !value
+    }.inverter
+
+    val value = in UInt(8 bits)
+    val result = out Bool()
+    result := inverted(isZero(value))
+}
+```
+
+这会生成：
+
+```Verilog
+module MyComponent (
+    input   [7:0]   value,
+    output          result
+);
+    wire            value_comparator;
+    wire            value_comparator_inverter;
+
+    assign value_comparator = (value == 8'h0);
+    assign value_comparator_inverter = (! value_comparator);
+    assign result = value_comparator_inverter;
+
+endmodule
+```
+
+### 八、Bundle函数中的组合(Composite in a Bundle's function)
+
+这个特性在实现Bundle工具的时候非常有用, 例如在spinal.lib.Stream类中如下定义：
+
+```Scala
+class Stream[T <: Data](val payloadType: HardType[T]) extends Bundle {
+    val valid   = Bool()
+    val ready   = Bool()
+    val payload = payloadType()
+
+    def queue(size: Int): Stream[T] = new Composite(this) {
+        val fifo = new StreamFifo(payloadType, size)
+        fifo.io.push << self    //'self'引用了组合结构体参数(在本例中是this), 这避免了繁琐的‘Stream.this’
+    }.fifo.io.pop
+
+    def m2sPipe(): Stream[T] = new Composite(this) {
+        val m2sPipe = Stream(payloadType)
+
+        val rValid = RegInit(False)
+        val rData = Reg(payloadType)
+
+        self.ready := (!m2sPipe.valid) || m2sPipe.ready
+
+        when(self.ready) {
+            rValid := self.valid
+            rData := self.payload
+        }
+
+        m2sPipe.valid := rValid
+        m2sPipe.payload := rData
+    }.m2sPipe
+}
+```
+
+这允许在保留名字的同时嵌套调用：
+
+```Scala
+class MyComponent extends Component {
+    val source = slave(Stream(UInt(8 bits)))
+    val sink = master(Stream(UInt(8 bits)))
+    sink << source.queue(size = 16).m2sPipe()
+}
+```
+
+这会生成：
+
+```Verilog
+module MyComponent (
+  input               source_valid,
+  output              source_ready,
+  input      [7:0]    source_payload,
+  output              sink_valid,
+  input               sink_ready,
+  output     [7:0]    sink_payload,
+  input               clk,
+  input               reset
+);
+  wire                source_fifo_io_pop_ready;
+  wire                source_fifo_io_push_ready;
+  wire                source_fifo_io_pop_valid;
+  wire       [7:0]    source_fifo_io_pop_payload;
+  wire       [4:0]    source_fifo_io_occupancy;
+  wire       [4:0]    source_fifo_io_availability;
+  wire                source_fifo_io_pop_m2sPipe_valid;
+  wire                source_fifo_io_pop_m2sPipe_ready;
+  wire       [7:0]    source_fifo_io_pop_m2sPipe_payload;
+  reg                 source_fifo_io_pop_rValid;
+  reg        [7:0]    source_fifo_io_pop_rData;
+
+  StreamFifo source_fifo (
+    .io_push_valid      (source_valid                 ), //i
+    .io_push_ready      (source_fifo_io_push_ready    ), //o
+    .io_push_payload    (source_payload               ), //i
+    .io_pop_valid       (source_fifo_io_pop_valid     ), //o
+    .io_pop_ready       (source_fifo_io_pop_ready     ), //i
+    .io_pop_payload     (source_fifo_io_pop_payload   ), //o
+    .io_flush           (1'b0                         ), //i
+    .io_occupancy       (source_fifo_io_occupancy     ), //o
+    .io_availability    (source_fifo_io_availability  ), //o
+    .clk                (clk                          ), //i
+    .reset              (reset                        )  //i
+  );
+  assign source_ready = source_fifo_io_push_ready;
+  assign source_fifo_io_pop_ready = ((1'b1 && (! source_fifo_io_pop_m2sPipe_valid)) || source_fifo_io_pop_m2sPipe_ready);
+  assign source_fifo_io_pop_m2sPipe_valid = source_fifo_io_pop_rValid;
+  assign source_fifo_io_pop_m2sPipe_payload = source_fifo_io_pop_rData;
+  assign sink_valid = source_fifo_io_pop_m2sPipe_valid;
+  assign source_fifo_io_pop_m2sPipe_ready = sink_ready;
+  assign sink_payload = source_fifo_io_pop_m2sPipe_payload;
+  always @ (posedge clk or posedge reset) begin
+    if (reset) begin
+      source_fifo_io_pop_rValid <= 1'b0;
+    end else begin
+      if(source_fifo_io_pop_ready)begin
+        source_fifo_io_pop_rValid <= source_fifo_io_pop_valid;
+      end
+    end
+  end
+
+  always @ (posedge clk) begin
+    if(source_fifo_io_pop_ready)begin
+      source_fifo_io_pop_rData <= source_fifo_io_pop_payload;
+    end
+  end
+endmodule
+```
+
+### 九、处理未命名信号(Unamed signal handling)
+
+在1.5.0版本后, 对于没有名字的信号, SpinalHDL会找到被该命名信号驱动的信号作为他的名字。只要你没有太多未命名的信号, 这种未命名方式会非常便利。
+
+此类未命名信号的的名字是：_zz_ + drivenSignal.getName()
+
+> 备注：这种命名方式也适用于后期生成时, 需要把一些特定的表达式或长的表达式链拆分成多个信号的情况。
+
+1. Verilog表达式拆分(Verilog expression splitting)
+
+   这里有一个SpinalHDL需要以专用信号表达来匹配Scala API的行为的表达式的例子：
+
+   ```Scala
+   class MyComponent extends Component {
+       val a, b, c, d = in UInt(8 bits)
+       val result = a + b + c + d
+   }
+   ```
+
+   这会生成：
+
+   ```Verilog
+   module MyComponent (
+       input      [7:0]    a,
+       input      [7:0]    b,
+       input      [7:0]    c,
+       input      [7:0]    d
+   );
+       wire       [7:0]    _zz_result;
+       wire       [7:0]    _zz_result_1;
+       wire       [7:0]    result;
+
+       assign _zz_result = (_zz_result_1 + c);
+       assign _zz_result_1 = (a + b);
+       assign result = (_zz_result + d);
+
+   endmodule
+   ```
+
+2. Verilog长表达式拆分(Verilog long expression splitting)
+
+   这里举了一个如何通过SpinalHDL将长表达式链拆分开的例子：
+
+   ```Scala
+   class MyComponent extends Component {
+       val conditions = in Vec(Bool, 64)
+       val result = conditions.reduce(_ || _)  //在所有条件单元之间增加逻辑or
+   }
+   ```
+
+   这会生成：
+
+   ```Verilog
+   module MyComponent (
+       input               conditions_0,
+       input               conditions_1,
+       input               conditions_2,
+       input               conditions_3,
+       ...
+       input               conditions_58,
+       input               conditions_59,
+       input               conditions_60,
+       input               conditions_61,
+       input               conditions_62,
+       input               conditions_63
+   );
+       wire                _zz_result;
+       wire                _zz_result_1;
+       wire                _zz_result_2;
+       wire                result;
+
+       assign _zz_result = ((((((((((((((((_zz_result_1 || conditions_32) || conditions_33) || conditions_34) || conditions_35) ||   conditions_36) || conditions_37) || conditions_38) || conditions_39) || conditions_40) || conditions_41) || conditions_42) ||     conditions_43) || conditions_44) || conditions_45) || conditions_46) || conditions_47);
+       assign _zz_result_1 = ((((((((((((((((_zz_result_2 || conditions_16) || conditions_17) || conditions_18) || conditions_19) ||     conditions_20) || conditions_21) || conditions_22) || conditions_23) || conditions_24) || conditions_25) || conditions_26) ||   conditions_27) || conditions_28) || conditions_29) || conditions_30) || conditions_31);
+       assign _zz_result_2 = (((((((((((((((conditions_0 || conditions_1) || conditions_2) || conditions_3) || conditions_4) ||  conditions_5) || conditions_6) || conditions_7) || conditions_8) || conditions_9) || conditions_10) || conditions_11) ||     conditions_12) || conditions_13) || conditions_14) || conditions_15);
+       assign result = ((((((((((((((((_zz_result || conditions_48) || conditions_49) || conditions_50) || conditions_51) ||     conditions_52) || conditions_53) || conditions_54) || conditions_55) || conditions_56) || conditions_57) || conditions_58) ||   conditions_59) || conditions_60) || conditions_61) || conditions_62) || conditions_63);
+
+   endmodule
+   ```
+
+3. When条件语句(When statement condition)
+
+   `when(cond) {}`条件语句在生成时会拆分成名为when_ + fileName + line的信号, swith也同理：
+
+   ```Scala
+   //在Test.scala文件中
+   class MyComponent extends Component {
+       val value = in UInt(8 bits)
+       val isZero = out (Bool())
+       val counter = out (Reg(UInt(8 bits)))
+   }
+
+   isZero := False
+   when(value === 0) {
+       isZero := True
+       counter := counter + 1
+   }
+   ```
+
+   这会生成：
+
+   ```Verilog
+   module MyComponent (
+       input      [7:0]    value,
+       output reg          isZero,
+       output reg [7:0]    counter,
+       input               clk,
+       input               reset
+   );
+       wire                when_Test_l117;
+
+       always @ (*) begin
+           isZero = 1'b0;
+           if(when_Test_l117)begin
+               isZero = 1'b1;
+           end
+       end
+
+       assign when_Test_l117 = (value == 8'h0);
+       always @ (posedge clk) begin
+           if(when_Test_l117)begin
+               counter <= (counter + 8'h01);
+           end
+       end
+   endmodule
+   ```
+
+4. 万不得已(In last resort)
+
+  万不得已, 如果有信号没有名字(无名信号), SpinalHDL会找到该信号驱动的有名信号并用它作为后缀：
+
+  ```Scala
+  class MyComponent extends Component {
+      val enable = in Bool()
+      val value = out UInt(8 bits)
+
+      def count(cond: Bool): UInt = {
+          val ret = Reg(UInt(8 bits)) //该寄存器是未命名的
+          when(cond) {
+              ret := ret + 1
+          }
+          return ret
+      }
+      
+      value := count(enable)
+  }
+  ```
+
+  这会生成：
+
+  ```Verilog
+  module MyComponent (
+      input               enable,
+      output     [7:0]    value,
+      input               clk,
+      input               reset
+  );
+      reg        [7:0]    _zz_value; //Name given to the register in last resort by looking what was driven by it
+
+      assign value = _zz_value;
+      always @ (posedge clk) begin
+          if(enable)begin
+              _zz_value <= (_zz_value + 8'h01);
+          end
+      end
+  endmodule
+  ```
+
+  最后一种命名方式并不是在所有情况下都是理想的, 但有时会有所帮助。
+
+  > 备注：带有下划线的信号不会存储在Verilator波形中。

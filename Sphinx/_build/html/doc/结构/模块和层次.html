@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>模块和层次(Component and hierarchy) &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="区域(Area)" href="%E5%8C%BA%E5%9F%9F.html" />
+    <link rel="prev" title="结构(Structuring)" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">结构(Structuring)</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">模块和层次(Component and hierarchy)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">一、简介(Introduction)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#input-output-definition">二、输入/输出定义(Input/output definition)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pruned-signals">三、信号剪枝(Pruned signals)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generic-vhdl-parameter-verilog">四、参数化硬件电路(”Generic”——VHDL, “Parameter”——Verilog)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#synthesized-component-names">五、综合模块名(Synthesized component names)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%8C%BA%E5%9F%9F.html">区域(Area)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%87%BD%E6%95%B0.html">函数(Function)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%97%B6%E9%92%9F%E5%9F%9F.html">时钟域(Clock domains)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="VHDL%E4%BE%8B%E5%8C%96%E5%92%8CVerilogIP.html">VHDL例化和Verilog IP(Instantiate VHDL and Verilog IP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BF%9D%E7%95%99%E5%90%8D%E7%A7%B0.html">保留名称(Preserving names)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%8F%82%E6%95%B0%E5%8C%96.html">参数化(Parametrization)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">结构(Structuring)</a> &raquo;</li>
+      <li>模块和层次(Component and hierarchy)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/结构/模块和层次.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="component-and-hierarchy">
+<h1>模块和层次(Component and hierarchy)<a class="headerlink" href="#component-and-hierarchy" title="此标题的永久链接"></a></h1>
+<section id="introduction">
+<h2>一、简介(Introduction)<a class="headerlink" href="#introduction" title="此标题的永久链接"></a></h2>
+<p>正如VHDL和Verilog, 你可以在SpinalHDL中定义模块来进行层次化设计。然而, 在SpinalHDL中, 你不需要在例化的时候分配他们的端口。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AdderCell</span><span class="p">()</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//声明外部端口, 推荐在Bundle中用io命名</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">cin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="n">cout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//写一些逻辑</span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">sum</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="n">^</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">b</span><span class="w"> </span><span class="n">^</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">cin</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">cout</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="n">&amp;</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="n">&amp;</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">cin</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">b</span><span class="w"> </span><span class="n">&amp;</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">cin</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Adder</span><span class="p">(</span><span class="n">width</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//例化两个AdderCell</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">cell0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">AdderCell</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">cell1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">AdderCell</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="n">cell1</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">cin</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">cell0</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">cout</span><span class="w">       </span><span class="c1">//连接cell0的cout和cell1的cin</span>
+
+<span class="w">    </span><span class="c1">//创建ArrayCell阵列的另一个例化例子</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">cellArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Array</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">width</span><span class="p">)(</span><span class="k">new</span><span class="w"> </span><span class="nc">AdderCell</span><span class="p">())</span><span class="w"></span>
+<span class="w">    </span><span class="n">cellArray</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">io</span><span class="p">.</span><span class="n">cin</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">cellArray</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">io</span><span class="p">.</span><span class="n">cout</span><span class="w">     </span><span class="c1">//连接cell0的cout和cell1的cin</span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="k">module</span><span class="w"> </span><span class="n">Adder</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cell0_io_a</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cell0_io_b</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cell0_io_cin</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cell1_io_a</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cell1_io_b</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cellArray_0_io_a</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cellArray_0_io_b</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cellArray_0_io_cin</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cellArray_1_io_a</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cellArray_1_io_b</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cell0_io_sum</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cell0_io_cout</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cell1_io_sum</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cell1_io_cout</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cellArray_0_io_sum</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cellArray_0_io_cout</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cellArray_1_io_sum</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">cellArray_1_io_cout</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">AdderCell</span><span class="w"> </span><span class="n">cell0</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_a</span><span class="w">    </span><span class="p">(</span><span class="n">cell0_io_a</span><span class="w">   </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_b</span><span class="w">    </span><span class="p">(</span><span class="n">cell0_io_b</span><span class="w">   </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_cin</span><span class="w">  </span><span class="p">(</span><span class="n">cell0_io_cin</span><span class="w"> </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_sum</span><span class="w">  </span><span class="p">(</span><span class="n">cell0_io_sum</span><span class="w"> </span><span class="p">),</span><span class="w"> </span><span class="c1">//o</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_cout</span><span class="w"> </span><span class="p">(</span><span class="n">cell0_io_cout</span><span class="p">)</span><span class="w">  </span><span class="c1">//o</span>
+<span class="w">  </span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">AdderCell</span><span class="w"> </span><span class="n">cell1</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_a</span><span class="w">    </span><span class="p">(</span><span class="n">cell1_io_a</span><span class="w">   </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_b</span><span class="w">    </span><span class="p">(</span><span class="n">cell1_io_b</span><span class="w">   </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_cin</span><span class="w">  </span><span class="p">(</span><span class="n">cell0_io_cout</span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_sum</span><span class="w">  </span><span class="p">(</span><span class="n">cell1_io_sum</span><span class="w"> </span><span class="p">),</span><span class="w"> </span><span class="c1">//o</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_cout</span><span class="w"> </span><span class="p">(</span><span class="n">cell1_io_cout</span><span class="p">)</span><span class="w">  </span><span class="c1">//o</span>
+<span class="w">  </span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">AdderCell</span><span class="w"> </span><span class="n">cellArray_0</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_a</span><span class="w">    </span><span class="p">(</span><span class="n">cellArray_0_io_a</span><span class="w">   </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_b</span><span class="w">    </span><span class="p">(</span><span class="n">cellArray_0_io_b</span><span class="w">   </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_cin</span><span class="w">  </span><span class="p">(</span><span class="n">cellArray_0_io_cin</span><span class="w"> </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_sum</span><span class="w">  </span><span class="p">(</span><span class="n">cellArray_0_io_sum</span><span class="w"> </span><span class="p">),</span><span class="w"> </span><span class="c1">//o</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_cout</span><span class="w"> </span><span class="p">(</span><span class="n">cellArray_0_io_cout</span><span class="p">)</span><span class="w">  </span><span class="c1">//o</span>
+<span class="w">  </span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">AdderCell</span><span class="w"> </span><span class="n">cellArray_1</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_a</span><span class="w">    </span><span class="p">(</span><span class="n">cellArray_1_io_a</span><span class="w">   </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_b</span><span class="w">    </span><span class="p">(</span><span class="n">cellArray_1_io_b</span><span class="w">   </span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_cin</span><span class="w">  </span><span class="p">(</span><span class="n">cellArray_0_io_cout</span><span class="p">),</span><span class="w"> </span><span class="c1">//i</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_sum</span><span class="w">  </span><span class="p">(</span><span class="n">cellArray_1_io_sum</span><span class="w"> </span><span class="p">),</span><span class="w"> </span><span class="c1">//o</span>
+<span class="w">    </span><span class="p">.</span><span class="n">io_cout</span><span class="w"> </span><span class="p">(</span><span class="n">cellArray_1_io_cout</span><span class="p">)</span><span class="w">  </span><span class="c1">//o</span>
+<span class="w">  </span><span class="p">);</span><span class="w"></span>
+
+<span class="k">endmodule</span><span class="w"></span>
+
+<span class="c1">//AdderCell replaced by AdderCell</span>
+
+<span class="c1">//AdderCell replaced by AdderCell</span>
+
+<span class="c1">//AdderCell replaced by AdderCell</span>
+
+<span class="k">module</span><span class="w"> </span><span class="n">AdderCell</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_a</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_b</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_cin</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">              </span><span class="n">io_sum</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">              </span><span class="n">io_cout</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="n">io_a</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n">io_b</span><span class="p">)</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n">io_cin</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">io_cout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(((</span><span class="n">io_a</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">io_b</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">(</span><span class="n">io_a</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">io_cin</span><span class="p">))</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">(</span><span class="n">io_b</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">io_cin</span><span class="p">));</span><span class="w"></span>
+
+<span class="k">endmodule</span><span class="w"></span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">io</span> <span class="pre">=</span> <span class="pre">new</span> <span class="pre">Bundle</span> <span class="pre">{...}</span></code>推荐在Bundle中声明了名为<code class="docutils literal notranslate"><span class="pre">io</span></code>的外部端口。如果把bundle命名为<code class="docutils literal notranslate"><span class="pre">io</span></code>, SpinalHDL会检查其元素是否都定义为输入或输出。</p>
+</div></blockquote>
+<blockquote>
+<div><p>如果你更喜欢, 你也可以用<code class="docutils literal notranslate"><span class="pre">Module</span></code>语句替代<code class="docutils literal notranslate"><span class="pre">Component</span></code>(他们本质上一样)</p>
+</div></blockquote>
+</section>
+<section id="input-output-definition">
+<h2>二、输入/输出定义(Input/output definition)<a class="headerlink" href="#input-output-definition" title="此标题的永久链接"></a></h2>
+<p>定义输入输出的语句如下所示：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">语句</th>
+<th style="text-align: center;">描述</th>
+<th style="text-align: center;">返回类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">in Bool()/out Bool()</td>
+<td style="text-align: center;">创建输入Bool类型/输出Bool类型</td>
+<td style="text-align: center;">Bool</td>
+</tr>
+<tr>
+<td style="text-align: center;">in/out Bits/UInt/SInt[(x bits)]</td>
+<td style="text-align: center;">创建对应类型的输入/输出</td>
+<td style="text-align: center;">Bits/UInt/SInt</td>
+</tr>
+<tr>
+<td style="text-align: center;">in/out(T)</td>
+<td style="text-align: center;">对于其他数据类型, 需要加括号, 这是Scala的约束</td>
+<td style="text-align: center;">T</td>
+</tr>
+<tr>
+<td style="text-align: center;">master/slave(T)</td>
+<td style="text-align: center;">这条语句需要spinal.lib库的支持(如果你在对象里只用<code>slave</code>语句, 用spinal.lib.slave就可以)T应该加上IMasterSlave-这里有一些doc做解释。你也可以不带括号, maste T也可以</td>
+<td style="text-align: center;">T</td>
+</tr>
+</tbody>
+</table><p>关于模块的互联还有一些规则如下：</p>
+<ul class="simple">
+<li><p>模块能读取output和子模块的input信号。</p></li>
+<li><p>模块能读取他们自己output端口的值(不像VHDL)。</p></li>
+</ul>
+<blockquote>
+<div><p>备注：如出于某些原因需要从本层次外很远的地方读取信号(比如debugg或临时补丁), 你可以用<code class="docutils literal notranslate"><span class="pre">some.where.else.theSignal.pull()</span></code>实现。</p>
+</div></blockquote>
+</section>
+<section id="pruned-signals">
+<h2>三、信号剪枝(Pruned signals)<a class="headerlink" href="#pruned-signals" title="此标题的永久链接"></a></h2>
+<p>SpinalHDL会产生所有命名了的信号以及他们的依赖关系, 然而所有无用的/未命名的/0宽度的信号会在RTL产生时被移除。</p>
+<p>你可以在生成的<code class="docutils literal notranslate"><span class="pre">SpinalReport</span></code>对象中用<code class="docutils literal notranslate"><span class="pre">printPruned</span></code>和<code class="docutils literal notranslate"><span class="pre">printPrunedIO</span></code>函数来产生所有被移除的和无用信号的列表：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TopLevel</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">b</span><span class="w"></span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">unusedSignal</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">unusedSignal2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">unusedSignal2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">unusedSignal</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">object</span><span class="w"> </span><span class="nc">Main</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nc">SpinalVhdl</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">TopLevel</span><span class="p">).</span><span class="n">printPruned</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="c1">//这会报告：</span>
+<span class="w">        </span><span class="c1">//  [Warning] Unused wire detected : toplevel/unusedSignal : UInt[8 bits]</span>
+<span class="w">        </span><span class="c1">//  [Warning] Unused wire detected : toplevel/unusedSignal2 : UInt[8 bits]    </span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="generic-vhdl-parameter-verilog">
+<h2>四、参数化硬件电路(”Generic”——VHDL, “Parameter”——Verilog)<a class="headerlink" href="#generic-vhdl-parameter-verilog" title="此标题的永久链接"></a></h2>
+<p>如果你想要参数化模块, 你可以在模块生成的地方通过如下方式给定参数：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyAdder</span><span class="p">(</span><span class="n">width</span><span class="p">:</span><span class="w"> </span><span class="nc">BitCount</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">width</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">width</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">b</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">object</span><span class="w"> </span><span class="nc">Main</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nc">SpinalVhdl</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">MyAdder</span><span class="p">(</span><span class="mi">32</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>如果有很多参数, 以一种特定的配置类来参数化很方便：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MySocConfig</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">axiFrequency</span><span class="w">    </span><span class="p">:</span><span class="w"> </span><span class="nc">HertzNumber</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">onChipRamSize</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="nc">BigInt</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">cpu</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="nc">RiscCoreConfig</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">iCache</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="nc">InstructionCacheConfig</span><span class="p">)</span><span class="w"></span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MySoc</span><span class="p">(</span><span class="n">config</span><span class="p">:</span><span class="w"> </span><span class="nc">MySocConfig</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>你可以在配置中使用函数, 以及对配置属性设置要求(requirements)：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MyBusConfig</span><span class="p">(</span><span class="n">addressWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"> </span><span class="n">dataWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">bytePerWord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dataWidth</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">8</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">addressType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">addressWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">dataType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="n">dataWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">require</span><span class="p">(</span><span class="n">dataWidth</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">dataWidth</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Data width must be 32 or 64&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="synthesized-component-names">
+<h2>五、综合模块名(Synthesized component names)<a class="headerlink" href="#synthesized-component-names" title="此标题的永久链接"></a></h2>
+<p>在module中, 每个模块都有名字, 叫做“不完全的名字(partial name)”。“全名(full name)”通过用“_”连接每个模块的父类名字得到, 例如：<code class="docutils literal notranslate"><span class="pre">io_clockDomain_reset</span></code>。你可以用<code class="docutils literal notranslate"><span class="pre">setName</span></code>用定制化的名字替代原始名。这在与外部模块用接口链接的时候非常有用。类似的方法相对应的还有<code class="docutils literal notranslate"><span class="pre">getName</span></code>, <code class="docutils literal notranslate"><span class="pre">setPartialName</span></code>, <code class="docutils literal notranslate"><span class="pre">getPartialName</span></code>。</p>
+<p>在综合时, 每个模块的名字由Scala的类定义得到, 你也可以使用<code class="docutils literal notranslate"><span class="pre">setDefinitionName</span></code>将其替换。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="结构(Structuring)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E5%8C%BA%E5%9F%9F.html" class="btn btn-neutral float-right" title="区域(Area)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

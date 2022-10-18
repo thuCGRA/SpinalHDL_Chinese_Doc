@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>自动设计工具(EDA) &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="Misc" href="Misc.html" />
+    <link rel="prev" title="图形(Graphics)" href="%E5%9B%BE%E5%BD%A2.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Libraries(库)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E7%AE%80%E4%BB%8B.html">简介</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7.html">Utils(实用工具)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%B5%81%E5%BC%8F.html">流(Stream)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%B5%81.html">Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%89%87%E6%AE%B5.html">片段(Fragment)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%8A%B6%E6%80%81%E6%9C%BA.html">状态机(State machine)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="VexRiscv.html">VexRiscv(RV32IM CPU)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BB%8E%E7%AB%AF%E6%80%BB%E7%BA%BF%E5%BA%93.html">从端总线库(Bus Slave Factory)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%BA%A4%E7%A8%8B%E6%A1%86%E6%9E%B6.html">纤程框架(Fiber Framework)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%B3%BB%E7%BB%9F.html">二进制系统(Binary System)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AF%84%E5%AD%98%E5%99%A8%E6%8E%A5%E5%8F%A3.html">寄存器接口(RegIf)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%B8%AD%E6%96%AD%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.html">中断设计规范(Interrupt Design Spec)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%80%BB%E7%BA%BF.html">总线(bus)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Com.html">Com</a></li>
+<li class="toctree-l2"><a class="reference internal" href="IO%E5%8F%A3.html">IO口</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%9B%BE%E5%BD%A2.html">图形(Graphics)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">自动设计工具(EDA)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#qsysify">一、QSysify</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quartusflow">二、QuartusFlow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#for-an-existing-project">三、对于一个已存在的项目(For an existing project)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Misc.html">Misc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Libraries(库)</a> &raquo;</li>
+      <li>自动设计工具(EDA)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/库/自动设计工具.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="eda">
+<h1>自动设计工具(EDA)<a class="headerlink" href="#eda" title="此标题的永久链接"></a></h1>
+<section id="qsysify">
+<h2>一、QSysify<a class="headerlink" href="#qsysify" title="此标题的永久链接"></a></h2>
+<ol>
+<li><p>简介</p>
+<p>QSysify是一个可以从SpinalHDL组件通过分析其IO定义生成QSys IP (tcl脚本)的工具。目前实现了以下接口特性:</p>
+<ul class="simple">
+<li><p>Master/Slave AvalonMM</p></li>
+<li><p>Master/Slave APB3</p></li>
+<li><p>时钟域输入</p></li>
+<li><p>复位输出</p></li>
+<li><p>中断输入</p></li>
+<li><p>导线</p></li>
+</ul>
+</li>
+<li><p>例子</p>
+<p>以UART控制器为例;</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AvalonMMUartCtrl</span><span class="p">(...)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="p">{</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">bus</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">slave</span><span class="p">(</span><span class="nc">AvalonMM</span><span class="p">(</span><span class="nc">AvalonMMUartCtrl</span><span class="p">.</span><span class="n">getAvalonMMConfig</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">uart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">master</span><span class="p">(</span><span class="nc">Uart</span><span class="p">())</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c1">//...</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>下面的<code class="docutils literal notranslate"><span class="pre">main</span></code>将使用io.bus和io.uart生成Verilog和QSys TCL脚本:</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span><span class="w"> </span><span class="nc">AvalonMMUartCtrl</span><span class="p">{</span><span class="w"></span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//生成verilog</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">toplevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">SpinalVerilog</span><span class="p">(</span><span class="nc">AvalonMMUartCtrl</span><span class="p">(</span><span class="nc">UartCtrlMemoryMappedConfig</span><span class="p">(...))).</span><span class="n">toplevel</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//对avalon总线添加标志位并指明时钟域</span>
+<span class="w">    </span><span class="n">toplevel</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">bus</span><span class="w"> </span><span class="n">addTag</span><span class="p">(</span><span class="nc">ClockDomainTag</span><span class="p">(</span><span class="n">toplevel</span><span class="p">.</span><span class="n">clockDomain</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">//利用tcl脚本生成QSysIP</span>
+<span class="w">    </span><span class="nc">QSysify</span><span class="p">(</span><span class="n">toplevel</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>标志(tags)</p>
+<p>因为QSys需要SpinalHDL硬件规范中没有指定的一些信息, 所以应该向接口添加一些标记:</p>
+<ul class="simple">
+<li><p>AvalonMM / APB3</p></li>
+</ul>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="n">io</span><span class="p">.</span><span class="n">bus</span><span class="w"> </span><span class="n">addTag</span><span class="p">(</span><span class="nc">ClockDomainTag</span><span class="p">(</span><span class="n">busClockDomain</span><span class="p">))</span><span class="w"></span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>中断输入(Interrupt input)</p></li>
+</ul>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="n">io</span><span class="p">.</span><span class="n">interrupt</span><span class="w"> </span><span class="n">addTag</span><span class="p">(</span><span class="nc">InterruptReceiverTag</span><span class="p">(</span><span class="n">relatedMemoryInterfacei</span><span class="p">,</span><span class="w"> </span><span class="n">interruptClockDomain</span><span class="p">))</span><span class="w"></span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>重置输出(Reset output)</p></li>
+</ul>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="n">io</span><span class="p">.</span><span class="n">resetOutput</span><span class="w"> </span><span class="n">addTag</span><span class="p">(</span><span class="nc">ResetEmitterTag</span><span class="p">(</span><span class="n">resetOutputClockDomain</span><span class="p">))</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>添加新的接口支持(Adding new interface support)</p>
+<p>基本上, QSysify工具可以通过一个接口<code class="docutils literal notranslate"><span class="pre">emitter</span></code>列表来设置。</p>
+<p>用户可以通过创建一个扩展QSysifyInterfaceEmiter的新类来创建自己的发射器。</p>
+</li>
+</ol>
+</section>
+<section id="quartusflow">
+<h2>二、QuartusFlow<a class="headerlink" href="#quartusflow" title="此标题的永久链接"></a></h2>
+<ol>
+<li><p>简介</p>
+<p>编译流是altera定义的命令序列, 它使用命令行可执行文件的组合。完整的编译流按顺序启动所有编译器模块, 以综合、匹配、分析最终的时序, 并生成编程文件。</p>
+<p>这个文件中的工具可以帮助消除冗余的Quartus GUI。</p>
+</li>
+<li><p>对于单个rtl文件</p>
+<p>对象<code class="docutils literal notranslate"><span class="pre">spinal.lib.eda.altera.QuartusFlow</span></code>可以自动报告单个rtl文件的使用面积和最大频率。</p>
+<p>例如:</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">report</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">QuartusFlow</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">quartusPath</span><span class="o">=</span><span class="s">&quot;/eda/intelFPGA_lite/17.0/quartus/bin/&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">workspacePath</span><span class="o">=</span><span class="s">&quot;/home/spinalvm/tmp&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">toplevelPath</span><span class="o">=</span><span class="s">&quot;TopLevel.vhd&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">family</span><span class="o">=</span><span class="s">&quot;Cyclone V&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">device</span><span class="o">=</span><span class="s">&quot;5CSEMA5F31C6&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">frequencyTarget</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="nc">MHz</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="n">println</span><span class="p">(</span><span class="n">report</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>上面的代码将使用<code class="docutils literal notranslate"><span class="pre">topllevel.vhd</span></code>创建一个新的Quartus项目。</p>
+<blockquote>
+<div><p><strong>警告：该操作将移除<code class="docutils literal notranslate"><span class="pre">workspacePath</span></code>文件夹</strong></p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>注意：<code class="docutils literal notranslate"><span class="pre">family</span></code>和<code class="docutils literal notranslate"><span class="pre">devbice</span></code>值直接作为参数传递给Quartus CLI。请检查Quartus文档, 以确定要在项目中使用的正确值。</strong></p>
+</div></blockquote>
+<p>小贴士：</p>
+<p>为了测试含有多个引脚的组件, 请将它们设置为<code class="docutils literal notranslate"><span class="pre">VIRTUAL_PIN</span></code>。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">miaou</span><span class="p">:</span><span class="w"> </span><span class="nc">Vec</span><span class="p">[</span><span class="nc">Flow</span><span class="p">[</span><span class="nc">Bool</span><span class="p">]]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Vec</span><span class="p">(</span><span class="n">master</span><span class="p">(</span><span class="nc">Flow</span><span class="p">(</span><span class="nc">Bool</span><span class="p">())),</span><span class="w"> </span><span class="mi">666</span><span class="p">)</span><span class="w"></span>
+<span class="n">miaou</span><span class="p">.</span><span class="n">addAttribute</span><span class="p">(</span><span class="s">&quot;altera_attribute&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-name VIRTUAL_PIN ON&quot;</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="for-an-existing-project">
+<h2>三、对于一个已存在的项目(For an existing project)<a class="headerlink" href="#for-an-existing-project" title="此标题的永久链接"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">spinal.lib.eda.altera.QuartusProject</span></code>类可以自动查找现有项目中的配置文件。它们用于对设备进行编译和编程。</p>
+<p>例如：
+指定包含项目文件(如.qpf和.cdf)的路径。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">prj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">QuartusProject</span><span class="p">(</span><span class="w"></span>
+<span class="w">   </span><span class="n">quartusPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;F:/intelFPGA_lite/20.1/quartus/bin64/&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="n">workspacePath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;G:/&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="n">prj</span><span class="p">.</span><span class="n">compile</span><span class="p">()</span><span class="w"></span>
+<span class="n">prj</span><span class="p">.</span><span class="n">program</span><span class="p">()</span><span class="w">  </span><span class="c1">// 自动寻找项目的链表描述文件</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>重要：请记住调用<code class="docutils literal notranslate"><span class="pre">prj.program()</span></code>前保存项目的<code class="docutils literal notranslate"><span class="pre">.cdf</span></code>文件</strong></p>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E5%9B%BE%E5%BD%A2.html" class="btn btn-neutral float-left" title="图形(Graphics)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Misc.html" class="btn btn-neutral float-right" title="Misc" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

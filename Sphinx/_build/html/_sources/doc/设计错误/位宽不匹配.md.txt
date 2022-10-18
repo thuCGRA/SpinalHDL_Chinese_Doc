@@ -1,0 +1,61 @@
+## 位宽不匹配(Width mismatch)
+
+### 一、简介
+
+SpinalHDL会检查赋值两侧的操作和信号有相同的位宽。
+
+### 二、分配赋值例子
+
+下述代码：
+```Scala
+class TopLevel extends Component {
+  val a = UInt(8 bits)
+  val b = UInt(4 bits)
+  b := a
+}
+```
+将会报错：
+```
+WIDTH MISMATCH on (toplevel/b :  UInt[4 bits]) := (toplevel/a :  UInt[8 bits]) at
+  ***
+  Source file location of the OR operator via the stack trace
+  ***
+```
+可以修复为：
+```Scala
+class TopLevel extends Component {
+  val a = UInt(8 bits)
+  val b = UInt(4 bits)
+  b := a.resized
+}
+```
+
+### 三、操作实例
+
+下述代码：
+```Scala
+class TopLevel extends Component {
+  val a = UInt(8 bits)
+  val b = UInt(4 bits)
+  val result = a | b
+}
+
+```
+将会报错：
+```
+WIDTH MISMATCH on (UInt | UInt)[8 bits]
+- Left  operand : (toplevel/a :  UInt[8 bits])
+- Right operand : (toplevel/b :  UInt[4 bits])
+  at
+  ***
+  Source file location of the OR operator via the stack trace
+  ***
+```
+可修复为：
+```Scala
+class TopLevel extends Component {
+  val a = UInt(8 bits)
+  val b = UInt(4 bits)
+  val result = a | (b.resized)
+}
+```

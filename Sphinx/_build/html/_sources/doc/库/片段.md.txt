@@ -1,0 +1,36 @@
+## 片段(Fragment)
+
+### 一、规范(Specification)
+
+`Fragment`包(Bundle)是利用多个小片段传输一个大集合的概念。例如：
++ 一张利用`Stream[Fragment[Pixel]]`传输的尺寸为width*height的图片。
++ 一个接收来自控制器信号的无流控制协议的UART包可以在`Stream[Fragment[Bits]]`上传输
++ 一个AXI突发读模式可以被`Stream[Fragment[AxiReadResponse]]`承载
+
+由`Fragment`包定义的信号是：
+
+|   信号   | 类型  |  驱动  |                  描述                  |
+| :------: | :---: | :----: | :------------------------------------: |
+| fragment |   T   | Master |             当前传输的负载             |
+|   last   | Bool  | Master | 当该片段是当前包的最后一个片段时则置高 |
+
+可以发现根据规范和上述例子, `Fragment`不会指明传输任务是如何被传输的(用户可以使用Stream, Flow或其他任何协议)。它只会增加足够的信息`last`来告知当前传输是否为给定数据包的第一个, 最后一个还是中间的某一个。
+
+> **注意：协议没有携带'first'比特是因为它可以通过执行'RegNextWhen(bus.last, bus.fire) init(True)'被生成在任何位置**
+
+
+### 二、函数(Functions)
+
+对于`Stream[Fragment[T]]`和`Flow[Fragment[T]]`, 给出了以下函数:
+|   句式    | 返回类型 |                         描述                         |
+| :-------: | :------: | :--------------------------------------------------: |
+|  x.first  |   Bool   |  当下一个或当前传输任务是包的第一个子片段时返回True  |
+|  x.tail   |   Bool   | 当下一个或当前传输任务不是包的第一个子片段时返回True |
+| x.isFirst |   Bool   |  当传输任务被提交且是数据包的第一个子片段时返回True  |
+| x.isTail  |   Bool   | 当传输任务被提交且不是数据包的第一个子片段时返回True |
+| x.isLast  |   Bool   | 当传输任务被提交且是数据包的最后一个子片段时返回True |
+
+对于`Stream[Fragment[T]]`, 下面的函数也是可使用的:
+|            句式            |      返回类型       |                    描述                     |
+| :------------------------: | :-----------------: | :-----------------------------------------: |
+| x.insertHeader(header : T) | Stream[Fragment[T]] | 对每一个`x`的包添加`header`并且返回结果总线 |

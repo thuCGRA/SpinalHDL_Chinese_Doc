@@ -1,0 +1,121 @@
+## 自动设计工具(EDA)
+
+### 一、QSysify
+
+1. 简介
+
+   QSysify是一个可以从SpinalHDL组件通过分析其IO定义生成QSys IP (tcl脚本)的工具。目前实现了以下接口特性:
+   + Master/Slave AvalonMM
+   + Master/Slave APB3
+   + 时钟域输入
+   + 复位输出
+   + 中断输入
+   + 导线 
+
+2. 例子
+
+   以UART控制器为例;
+   ```Scala
+   case class AvalonMMUartCtrl(...) extends Component{
+   val io = new Bundle{
+       val bus =  slave(AvalonMM(AvalonMMUartCtrl.getAvalonMMConfig))
+       val uart = master(Uart())
+   }
+
+   //...
+   }
+   ```
+
+   下面的`main`将使用io.bus和io.uart生成Verilog和QSys TCL脚本:
+   ```scala
+   object AvalonMMUartCtrl{
+   def main(args: Array[String]) {
+       //生成verilog
+       val toplevel = SpinalVerilog(AvalonMMUartCtrl(UartCtrlMemoryMappedConfig(...))).toplevel
+
+       //对avalon总线添加标志位并指明时钟域
+       toplevel.io.bus addTag(ClockDomainTag(toplevel.clockDomain))
+
+       //利用tcl脚本生成QSysIP
+       QSysify(toplevel)
+   }
+   }
+   ```
+3. 标志(tags)
+
+   因为QSys需要SpinalHDL硬件规范中没有指定的一些信息, 所以应该向接口添加一些标记:
+
+   - AvalonMM / APB3
+   ```Scala
+   io.bus addTag(ClockDomainTag(busClockDomain))
+   ```
+   - 中断输入(Interrupt input)
+   ```Scala
+   io.interrupt addTag(InterruptReceiverTag(relatedMemoryInterfacei, interruptClockDomain))
+   ```
+   - 重置输出(Reset output)
+   ```Scala
+   io.resetOutput addTag(ResetEmitterTag(resetOutputClockDomain))
+   ```
+
+4. 添加新的接口支持(Adding new interface support)
+
+   基本上, QSysify工具可以通过一个接口`emitter`列表来设置。
+
+   用户可以通过创建一个扩展QSysifyInterfaceEmiter的新类来创建自己的发射器。
+
+### 二、QuartusFlow
+
+1. 简介
+
+   编译流是altera定义的命令序列, 它使用命令行可执行文件的组合。完整的编译流按顺序启动所有编译器模块, 以综合、匹配、分析最终的时序, 并生成编程文件。
+
+   这个文件中的工具可以帮助消除冗余的Quartus GUI。
+
+2. 对于单个rtl文件
+
+   对象`spinal.lib.eda.altera.QuartusFlow`可以自动报告单个rtl文件的使用面积和最大频率。
+
+   例如:
+   ```Scala
+   val report = QuartusFlow(
+       quartusPath="/eda/intelFPGA_lite/17.0/quartus/bin/",
+       workspacePath="/home/spinalvm/tmp",
+       toplevelPath="TopLevel.vhd",
+       family="Cyclone V",
+       device="5CSEMA5F31C6",
+       frequencyTarget = 1 MHz
+   )
+   println(report)
+   ```
+   上面的代码将使用`topllevel.vhd`创建一个新的Quartus项目。
+
+   > **警告：该操作将移除`workspacePath`文件夹**
+
+   > **注意：`family`和`devbice`值直接作为参数传递给Quartus CLI。请检查Quartus文档, 以确定要在项目中使用的正确值。**
+
+   小贴士：
+
+   为了测试含有多个引脚的组件, 请将它们设置为`VIRTUAL_PIN`。
+   ```Scala
+   val miaou: Vec[Flow[Bool]] = Vec(master(Flow(Bool())), 666)
+   miaou.addAttribute("altera_attribute", "-name VIRTUAL_PIN ON")
+   ```
+
+### 三、对于一个已存在的项目(For an existing project)
+
+`spinal.lib.eda.altera.QuartusProject`类可以自动查找现有项目中的配置文件。它们用于对设备进行编译和编程。
+
+例如：
+指定包含项目文件(如.qpf和.cdf)的路径。
+
+```Scala
+val prj = new QuartusProject(
+   quartusPath = "F:/intelFPGA_lite/20.1/quartus/bin64/",
+   workspacePath = "G:/"
+)
+prj.compile()
+prj.program()  // 自动寻找项目的链表描述文件
+```
+
+> **重要：请记住调用`prj.program()`前保存项目的`.cdf`文件**

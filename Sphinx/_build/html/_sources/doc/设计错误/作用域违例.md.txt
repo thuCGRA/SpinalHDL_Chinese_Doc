@@ -1,0 +1,41 @@
+## 作用域违例(Scope violation)
+
+### 一、简介
+
+SpinalHDL将会检查没有信号会在超出其定义的作用域之外被赋值使用。这个错误不容易触发, 因为它需要一些特定的元硬件描述技巧。
+
+### 二、例子
+
+下述代码：
+```Scala
+class TopLevel extends Component {
+  val cond = Bool()
+
+  var tmp : UInt = null
+  when(cond) {
+    tmp = UInt(8 bits)
+  }
+  tmp := U"x42"
+}
+```
+
+会报错：
+```
+SCOPE VIOLATION : (toplevel/tmp :  UInt[8 bits]) is assigned outside its declaration scope at
+  ***
+  Source file location of the tmp := U"x42" via the stack trace
+  ***
+```
+
+修复为：
+```Scala
+class TopLevel extends Component {
+  val cond = Bool()
+
+  var tmp : UInt = UInt(8 bits)
+  when(cond) {
+
+  }
+  tmp := U"x42"
+}
+```

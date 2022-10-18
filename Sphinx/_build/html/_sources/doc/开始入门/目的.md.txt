@@ -1,0 +1,6 @@
+## 目的(Motivation)
+
+见PPT
+
+https://github.com/SpinalHDL/SpinalDoc/blob/master/presentation/en/workshop/taste.pdf
+

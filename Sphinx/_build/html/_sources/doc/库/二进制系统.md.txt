@@ -1,0 +1,130 @@
+## 二进制系统(Binary System)
+
+### 一、规范(Specification)
+
+这里的某些对象和HDL没有关系, 但是他们在数字系统中很常见。尤其是算法参考模型经常被使用。另外, 它们也用在测试实例(testbench)的编写中。
+
+|                           命名                            |                            描述                            | 返回类型  |
+| :-------------------------------------------------------: | :--------------------------------------------------------: | :-------: |
+|                       String.asHex                        |       十六进制字符串转为BigInt == BigInt(string, 16)       |  BigInt   |
+|                       String.asDec                        |        十进制字符串转为BigInt == BigInt(string, 10)        |  BigInt   |
+|                       String.asOct                        |        八进制字符串转为BigInt == BigInt(string, 8)         |  BigInt   |
+|                       String.asBin                        |        二进制字符串转为BigInt == BigInt(string, 2)         |  BigInt   |
+|   Byte​&#x7C;​Int​&#x7C;​Long​&#x7C;​BigInt.hexString()   |                       转为HEX String                       |  String   |
+|   Byte​&#x7C;​Int​&#x7C;​Long​&#x7C;​BigInt.octString()   |                       转为Oct String                       |  String   |
+|    Byte​&#x7C;Int​&#x7C;Long​&#x7C;BigInt.binString()     |                       转为Bin String                       |  String   |
+| Byte​&#x7C;Int​&#x7C;Long​&#x7C;BigInt.hexString(bitSize) |           首先对齐位大小, 然后转为十六进制字符串           |  String   |
+| Byte​&#x7C;Int​&#x7C;Long​&#x7C;BigInt.octString(bitSize) |            首先对齐位大小, 然后转为八进制字符串            |
+| Byte​&#x7C;Int​&#x7C;Long​&#x7C;BigInt.binString(bitSize) |            首先对齐位大小, 然后转为二进制字符串            |  String   |
+|    Byte​&#x7C;Int​&#x7C;Long​&#x7C;BigInt.toBinInts()     |                 转为二进制列表(BinaryList)                 | List[Int] |
+|    Byte​&#x7C;Int​&#x7C;Long​&#x7C;BigInt.toDecInts()     |                转为十进制列表(DecimalList)                 | List[Int] |
+|    Byte​&#x7C;Int​&#x7C;Long​&#x7C;BigInt.toOctInts()     |                 转为八进制列表(OctalList)                  | List[Int] |
+|   Byte​&#x7C;Int​&#x7C;Long​&#x7C;BigInt.toBinInts(num)   |          转到BinaryList, 对齐到num参数大小并填充0          | List[Int] |
+|   Byte​&#x7C;Int​&#x7C;Long​&#x7C;BigInt.toDecInts(num)   |         转到DecimalList, 对齐到num参数大小并填充0          | List[Int] |
+|   Byte​&#x7C;Int​&#x7C;Long​&#x7C;BigInt.toOctInts(num)   |          专到OctalList, 对齐到num参数大小并填充0           | List[Int] |
+|                    “3F2A”.hexToBinInts                    |                十六进制字符串转为二进制列表                | List[Int] |
+|                 “3F2A”.hexToBinIntsAlign                  |        十六进制字符串转为二进制列表并对齐到4倍大小         | List[Int] |
+|               List(1,0,1,0,…).binIntsToHex                |                二进制列表转为十六进制字符串                |  String   |
+|               List(1,0,1,0,…).binIntsToOct                |                 二进制列表转为八进制字符串                 |  String   |
+|           List(1,0,1,0,…).binIntsToHexAlignHigh           | 二进制列表的大小对齐到4倍大小(填充0)然后转为十六进制字符串 |  String   |
+|           List(1,0,1,0,…).binIntsToOctAlignHigh           |  二进制列表的大小对齐到3倍大小(填充0)然后转为八进制字符串  |  String   |
+|               List(1,0,1,0,…).binIntsToInt                |              二进制列表(最大尺寸为32)转为Int               |    Int    |
+|               List(1,0,1,0,…).binIntsToLong               |              二进制列表(最大尺寸为64)转为Long              |   Long    |
+|              List(1,0,1,0,…).binIntsToBigInt              |            二进制列表(最大尺寸无限制)转为BigInt            |  BigInt   |
+|                       Int.toBigInt                        |                 32.toBigInt == BigInt(32)                  |  BigInt   |
+|                       Long.toBigInt                       |        3233113232L.toBigInt == BigInt(3233113232L)         |  BigInt   |
+|                       Byte.toBigInt                       |           8.toByte.toBigInt == BigInt(8.toByte)            |  BigInt   |
+
+### 二、字符串转Int/Long/BigInt(String to Int/Long/BigInt)
+
+```Scala
+import spinal.core.lib._
+
+$: "32FF190".asHex
+
+$: "12384798999999".asDec
+
+$: "123456777777700".asOct
+
+$: "10100011100111111".asBin
+```
+
+### 三、Int/Long/BigInt 转为 String
+
+```Scala
+import spinal.core.lib._
+
+$: "32FF190".asHex.hexString()
+"32FF190"
+$: "123456777777700".asOct.octString()
+"123456777777700"
+$: "10100011100111111".asBin.binString()
+"10100011100111111"
+$: 32323239988L.hexString()
+7869d8034
+$: 3239988L.octString()
+14270064
+$: 34.binString()
+100010
+```
+### 四、Int/Long/BigInt 转为 Binary-List
+
+```Scala
+import spinal.core.lib._
+
+$: 32.toBinInts
+List(0, 0, 0, 0, 0, 1)
+$: 1302309988L.toBinInts
+List(0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1)
+$: BigInt("100101110", 2).toBinInts
+List(0, 1, 1, 1, 0, 1, 0, 0, 1)
+$: BigInt("123456789abcdef0", 16).toBinInts
+List(0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1)
+$: BigInt("1234567", 8).toBinInts
+List(1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1)
+$: BigInt("123451118", 10).toBinInts
+List(0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1)
+```
+对齐到固定位宽：
+```Scala
+import spinal.core.lib._
+
+$: 39.toBinInts()
+List(1, 1, 1, 0, 0, 1)
+$: 39.toBinInts(8)    // 对齐到填充0的8比特
+List(1, 1, 1, 0, 0, 1, 0, 0)
+```
+
+### 五、Binary-List 转为 Int/Long/BigInt
+
+```Scala
+import spinal.core.lib._
+
+$: List(1, 1, 1, 0, 0, 1).binIntsToInt
+39
+$: List(1, 1, 1, 0:, 0, 1).binIntsToLong
+39
+$: List(0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1).binIntsToBigInt
+1302309988
+```
+```Scala
+$: List(1, 1, 1, 0, 0, 1).binIntsToHex
+27
+$: List(1, 1, 1, 0, 0, 1).binIntsToHexAlignHigh
+9c
+$: List(1, 1, 1, 0, 0, 1).binIntsToOct
+47
+$: List(1, 1, 1, 0, 0, 1).binIntsToHexAlignHigh
+47
+```
+
+### 六、BigInt放大器(BigInt enricher)
+
+```Scala
+$: 32.toBigInt
+32
+$: 3211323244L.toBigInt
+3211323244
+$: 8.toByte.toBigInt
+8
+```

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>举例(Example) &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="实用程序和原语(Utilities and primitives)" href="%E5%AE%9E%E7%94%A8%E7%A8%8B%E5%BA%8F%E5%92%8C%E5%8E%9F%E8%AF%AD.html" />
+    <link rel="prev" title="安装需求(Installing requirements)" href="%E5%AE%89%E8%A3%85%E9%9C%80%E6%B1%82.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">形式验证(Formal verification)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E9%80%9A%E5%B8%B8.html">通常(General)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%BD%A2%E5%BC%8F%E5%90%8E%E7%AB%AF.html">形式后端(Formal backend)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AE%89%E8%A3%85%E9%9C%80%E6%B1%82.html">安装需求(Installing requirements)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">举例(Example)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#external-assertions">一、外部断言(External assertions)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-assertions">二、内部断言(Internal assertions)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#external-stimulus">三、外部激励(External stimulus)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#more-assertions-past">四、更多的断言/传递(More assertions/past)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#assuming-memory-content">五、假设存储内容(Assuming memory content)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AE%9E%E7%94%A8%E7%A8%8B%E5%BA%8F%E5%92%8C%E5%8E%9F%E8%AF%AD.html">实用程序和原语(Utilities and primitives)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E9%99%90%E5%88%B6.html">限制(Limitations)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">形式验证(Formal verification)</a> &raquo;</li>
+      <li>举例(Example)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/形式验证/举例.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="example">
+<h1>举例(Example)<a class="headerlink" href="#example" title="此标题的永久链接"></a></h1>
+<section id="external-assertions">
+<h2>一、外部断言(External assertions)<a class="headerlink" href="#external-assertions" title="此标题的永久链接"></a></h2>
+<p>这是一个简单计数器和其对应形式化验证的例子：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="n">_</span>
+
+<span class="c1">//Here is our DUT</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LimitedCounter</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">//The value register will always be between [2:10]</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="n">when</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="n">value</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">object</span><span class="w"> </span><span class="nc">LimitedCounterFormal</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">App</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// import utilities to run the formal verification, but also some utilities to describe formal stuff</span>
+<span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="nn">formal</span><span class="p">.</span><span class="n">_</span>
+
+<span class="w">  </span><span class="c1">// Here we run a formal verification which will explore the state space up to 15 cycles to find an assertion failure</span>
+<span class="w">  </span><span class="nc">FormalConfig</span><span class="p">.</span><span class="n">withBMC</span><span class="p">(</span><span class="mi">15</span><span class="p">).</span><span class="n">doVerify</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Instanciate our LimitedCounter DUT as a FormalDut, which ensure that all the outputs of the dut are:</span>
+<span class="w">    </span><span class="c1">// - directly and indirectly driven (no latch / no floating wire)</span>
+<span class="w">    </span><span class="c1">// - allows the current toplevel to read every signal across the hierarchy</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">dut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">FormalDut</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">LimitedCounter</span><span class="p">())</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Ensure that the state space start with a proper reset</span>
+<span class="w">    </span><span class="n">assumeInitial</span><span class="p">(</span><span class="nc">ClockDomain</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">isResetActive</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Check a few things</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">})</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="nc">Internal</span><span class="w"> </span><span class="n">assertions</span><span class="w"></span>
+
+<span class="nc">If</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">want</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">embed</span><span class="w"> </span><span class="n">formal</span><span class="w"> </span><span class="n">statements</span><span class="w"> </span><span class="n">directly</span><span class="w"> </span><span class="n">into</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="nc">DUT</span><span class="p">:</span><span class="w"></span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">LimitedCounterEmbedded</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="n">when</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="n">value</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// That code block will not be in the SpinalVerilog netlist by default. (would need to enable SpinalConfig().includeFormal. ...</span>
+<span class="w">  </span><span class="nc">GenerationFlags</span><span class="p">.</span><span class="n">formal</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">object</span><span class="w"> </span><span class="nc">LimitedCounterEmbeddedFormal</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">App</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="nn">formal</span><span class="p">.</span><span class="n">_</span>
+
+<span class="w">  </span><span class="nc">FormalConfig</span><span class="p">.</span><span class="n">withBMC</span><span class="p">(</span><span class="mi">15</span><span class="p">).</span><span class="n">doVerify</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">dut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">FormalDut</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">LimitedCounterEmbedded</span><span class="p">())</span><span class="w"></span>
+<span class="w">    </span><span class="n">assumeInitial</span><span class="p">(</span><span class="nc">ClockDomain</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">isResetActive</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">})</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="internal-assertions">
+<h2>二、内部断言(Internal assertions)<a class="headerlink" href="#internal-assertions" title="此标题的永久链接"></a></h2>
+<p>如果你愿意你也可以把形式化语句直接包含在DUT中：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">LimitedCounterEmbedded</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="n">when</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="n">value</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// That code block will not be in the SpinalVerilog netlist by default. (would need to enable SpinalConfig().includeFormal. ...</span>
+<span class="w">  </span><span class="nc">GenerationFlags</span><span class="p">.</span><span class="n">formal</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">object</span><span class="w"> </span><span class="nc">LimitedCounterEmbeddedFormal</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">App</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="nn">formal</span><span class="p">.</span><span class="n">_</span>
+
+<span class="w">  </span><span class="nc">FormalConfig</span><span class="p">.</span><span class="n">withBMC</span><span class="p">(</span><span class="mi">15</span><span class="p">).</span><span class="n">doVerify</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">dut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">FormalDut</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">LimitedCounterEmbedded</span><span class="p">())</span><span class="w"></span>
+<span class="w">    </span><span class="n">assumeInitial</span><span class="p">(</span><span class="nc">ClockDomain</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">isResetActive</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">})</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="external-stimulus">
+<h2>三、外部激励(External stimulus)<a class="headerlink" href="#external-stimulus" title="此标题的永久链接"></a></h2>
+<p>如果你的DUT有输入, 你需要从testbench中驱动他们。所有的一般硬件语句都可以实现它, 但是你也可以用形式化<em>anyseq</em>,<em>qnyconst</em>, <em>allseq</em>, <em>allconst</em>语句：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">LimitedCounterInc</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">//Only increment the value when the inc input is set</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">inc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="n">when</span><span class="p">(</span><span class="n">inc</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="n">value</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">object</span><span class="w"> </span><span class="nc">LimitedCounterIncFormal</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">App</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="nn">formal</span><span class="p">.</span><span class="n">_</span>
+
+<span class="w">  </span><span class="nc">FormalConfig</span><span class="p">.</span><span class="n">withBMC</span><span class="p">(</span><span class="mi">15</span><span class="p">).</span><span class="n">doVerify</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">dut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">FormalDut</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">LimitedCounterInc</span><span class="p">())</span><span class="w"></span>
+<span class="w">    </span><span class="n">assumeInitial</span><span class="p">(</span><span class="nc">ClockDomain</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">isResetActive</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Drive dut.inc with random values</span>
+<span class="w">    </span><span class="n">anyseq</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">inc</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">})</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="more-assertions-past">
+<h2>四、更多的断言/传递(More assertions/past)<a class="headerlink" href="#more-assertions-past" title="此标题的永久链接"></a></h2>
+<p>例如我们可以检查值是否计数自增(如果没到10):</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="nc">FormalConfig</span><span class="p">.</span><span class="n">withBMC</span><span class="p">(</span><span class="mi">15</span><span class="p">).</span><span class="n">doVerify</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">dut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">FormalDut</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">LimitedCounter</span><span class="p">())</span><span class="w"></span>
+<span class="w">  </span><span class="n">assumeInitial</span><span class="p">(</span><span class="nc">ClockDomain</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">isResetActive</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// Check that the value is incrementing.</span>
+<span class="w">  </span><span class="c1">// hasPast is used to ensure that the past(dut.value) had at least one sampling out of reset</span>
+<span class="w">  </span><span class="n">when</span><span class="p">(</span><span class="n">pastValid</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">past</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="o">=/=</span><span class="w"> </span><span class="mi">10</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="n">past</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">})</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="assuming-memory-content">
+<h2>五、假设存储内容(Assuming memory content)<a class="headerlink" href="#assuming-memory-content" title="此标题的永久链接"></a></h2>
+<p>本例中我们希望防止<code class="docutils literal notranslate"><span class="pre">1</span></code>出现在内存中：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">DutWithRam</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">ram</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Mem</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">4</span><span class="p">)(</span><span class="nc">UInt</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">write</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slave</span><span class="p">(</span><span class="n">ram</span><span class="p">.</span><span class="n">writePort</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">read</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slave</span><span class="p">(</span><span class="n">ram</span><span class="p">.</span><span class="n">readAsyncPort</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">object</span><span class="w"> </span><span class="nc">FormalRam</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">App</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="nn">formal</span><span class="p">.</span><span class="n">_</span>
+
+<span class="w">  </span><span class="nc">FormalConfig</span><span class="p">.</span><span class="n">withBMC</span><span class="p">(</span><span class="mi">15</span><span class="p">).</span><span class="n">doVerify</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">dut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">FormalDut</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">DutWithRam</span><span class="p">())</span><span class="w"></span>
+<span class="w">    </span><span class="n">assumeInitial</span><span class="p">(</span><span class="nc">ClockDomain</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">isResetActive</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// assume that no word in the ram has the value 1</span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">until</span><span class="w"> </span><span class="n">dut</span><span class="p">.</span><span class="n">ram</span><span class="p">.</span><span class="n">wordCount</span><span class="p">){</span><span class="w"></span>
+<span class="w">      </span><span class="n">assumeInitial</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">ram</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=/=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Allow the write anything but value 1 in the ram</span>
+<span class="w">    </span><span class="n">anyseq</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">write</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">clockDomain</span><span class="p">.</span><span class="n">withoutReset</span><span class="p">(){</span><span class="w"> </span><span class="c1">//As the memory write can occur during reset, we need to ensure the assume apply there too</span>
+<span class="w">      </span><span class="n">assume</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">write</span><span class="p">.</span><span class="n">data</span><span class="w"> </span><span class="o">=/=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Check that no word in the ram is set to 1</span>
+<span class="w">    </span><span class="n">anyseq</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">read</span><span class="p">.</span><span class="n">address</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">read</span><span class="p">.</span><span class="n">data</span><span class="w"> </span><span class="o">=/=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">})</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E5%AE%89%E8%A3%85%E9%9C%80%E6%B1%82.html" class="btn btn-neutral float-left" title="安装需求(Installing requirements)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E5%AE%9E%E7%94%A8%E7%A8%8B%E5%BA%8F%E5%92%8C%E5%8E%9F%E8%AF%AD.html" class="btn btn-neutral float-right" title="实用程序和原语(Utilities and primitives)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

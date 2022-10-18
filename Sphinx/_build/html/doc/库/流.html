@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flow &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="片段(Fragment)" href="%E7%89%87%E6%AE%B5.html" />
+    <link rel="prev" title="流(Stream)" href="%E6%B5%81%E5%BC%8F.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Libraries(库)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E7%AE%80%E4%BB%8B.html">简介</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7.html">Utils(实用工具)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%B5%81%E5%BC%8F.html">流(Stream)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#specification">一、规范(Specification)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">二、函数(Functions)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code-example">三、代码实例(code example)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%89%87%E6%AE%B5.html">片段(Fragment)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%8A%B6%E6%80%81%E6%9C%BA.html">状态机(State machine)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="VexRiscv.html">VexRiscv(RV32IM CPU)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BB%8E%E7%AB%AF%E6%80%BB%E7%BA%BF%E5%BA%93.html">从端总线库(Bus Slave Factory)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E7%BA%A4%E7%A8%8B%E6%A1%86%E6%9E%B6.html">纤程框架(Fiber Framework)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%B3%BB%E7%BB%9F.html">二进制系统(Binary System)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AF%84%E5%AD%98%E5%99%A8%E6%8E%A5%E5%8F%A3.html">寄存器接口(RegIf)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%B8%AD%E6%96%AD%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.html">中断设计规范(Interrupt Design Spec)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%80%BB%E7%BA%BF.html">总线(bus)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Com.html">Com</a></li>
+<li class="toctree-l2"><a class="reference internal" href="IO%E5%8F%A3.html">IO口</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%9B%BE%E5%BD%A2.html">图形(Graphics)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E8%87%AA%E5%8A%A8%E8%AE%BE%E8%AE%A1%E5%B7%A5%E5%85%B7.html">自动设计工具(EDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Misc.html">Misc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BB%BF%E7%9C%9F/index.html">仿真(Simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Libraries(库)</a> &raquo;</li>
+      <li>Flow</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/库/流.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="flow">
+<h1>Flow<a class="headerlink" href="#flow" title="此标题的永久链接"></a></h1>
+<section id="specification">
+<h2>一、规范(Specification)<a class="headerlink" href="#specification" title="此标题的永久链接"></a></h2>
+<p>Flow接口是一个简单的有效(valid)/负载(payload)协议, 意味着从端口(slave)无法中断总线。</p>
+<p>例如, 它可以用来表示来自UART控制器的数据或者向一个片上存储写数据的请求等。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">信号</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">驱动</th>
+<th style="text-align: center;">描述</th>
+<th style="text-align: center;">Don't care 条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">valid</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">Master</td>
+<td style="text-align: center;">当置高时, 说明负载通过该接口</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;">payload</td>
+<td style="text-align: center;">T</td>
+<td style="text-align: center;">Master</td>
+<td style="text-align: center;">负载任务的内容</td>
+<td style="text-align: center;">valid为低时, dont care</td>
+</tr>
+</tbody>
+</table></section>
+<section id="functions">
+<h2>二、函数(Functions)<a class="headerlink" href="#functions" title="此标题的永久链接"></a></h2>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">句式</th>
+<th style="text-align: center;">描述</th>
+<th style="text-align: center;">返回值</th>
+<th style="text-align: center;">延迟</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Flow(type : Data)</td>
+<td style="text-align: center;">建立一个给定类型的Flow</td>
+<td style="text-align: center;">Flow[T]</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;">master/slave Stream(type : Data)</td>
+<td style="text-align: center;">建立一个给定类型的Flow, 并根据给定的IO设置初始化</td>
+<td style="text-align: center;">Flow[T]</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;">x.m2sPipe()</td>
+<td style="text-align: center;">返回一个由x通过寄存器驱动的流 <br>valid/ready/payload路径通过一些寄存器分割。</td>
+<td style="text-align: center;">Flow[T]</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr>
+<td style="text-align: center;">x &lt;&lt; y<br>y &gt;&gt; x</td>
+<td style="text-align: center;">把y连接到x</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr>
+<td style="text-align: center;">x &lt;-&lt; y<br>y &gt;-&gt; x</td>
+<td style="text-align: center;">通过m2sPipe把y连接到x</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.throwWhen(cond : Bool)</td>
+<td style="text-align: center;">返回一个连接到x的Flow, 并且当cond为true时抛弃交换任务(Transaction)</td>
+<td style="text-align: center;">Flow[T]</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.toReg()</td>
+<td style="text-align: center;">返回一个当valid置高时加在<code>payload</code>的寄存器</td>
+<td style="text-align: center;">T</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;">x.setIdle()</td>
+<td style="text-align: center;">将Flow置为空闲状态：<code>valid</code>为<code>False</code>并且不关心负载<code>payload</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;">x.push(newPayload: T)</td>
+<td style="text-align: center;">给予当前Flow一个新的有效负载。<code>valid</code>被设置为<code>True</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table></section>
+<section id="code-example">
+<h2>三、代码实例(code example)<a class="headerlink" href="#code-example" title="此标题的永久链接"></a></h2>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Flow</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">answer</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">Flow</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">storage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"> </span><span class="n">init</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+
+<span class="kd">val</span><span class="w"> </span><span class="n">fsm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">StateMachine</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">answer</span><span class="p">.</span><span class="n">setIdle</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">idle</span><span class="p">:</span><span class="w"> </span><span class="nc">State</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">State</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="nc">EntryPoint</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">whenIsActive</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">when</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">valid</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">storage</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">payload</span><span class="w"></span>
+<span class="w">        </span><span class="n">goto</span><span class="p">(</span><span class="n">sendEcho</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">sendEcho</span><span class="p">:</span><span class="w"> </span><span class="nc">State</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">State</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">whenIsActive</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">answer</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">storage</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">goto</span><span class="p">(</span><span class="n">idle</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c1">// 等价地</span>
+
+<span class="n">answer</span><span class="w"> </span><span class="o">&lt;-&lt;</span><span class="w"> </span><span class="n">request</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E6%B5%81%E5%BC%8F.html" class="btn btn-neutral float-left" title="流(Stream)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E7%89%87%E6%AE%B5.html" class="btn btn-neutral float-right" title="片段(Fragment)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+## 区域(Area)
+
+### 一、简介(Introduction)
+
+有时, 用`Component`定义逻辑可能是致命的, 因为你：
+
++ 需要定义所有的生成器参数和IO(冗长的, 重复的)
++ 分隔你的代码
+
+在这种时候你可以用`Area`来定义一组信号/逻辑：
+
+```Scala
+class UartCtrl extends Component {
+    ...
+    val timer = new Area {
+        val counter = Reg(UInt(8 bits))
+        val tick = counter === 0
+        counter := counter - 1
+        when(tick) {
+            counter := 100
+        }
+    }
+
+    val tickCounter = new Area {
+        val value = Reg(UInt(3 bits))
+        val reset = False
+        when(time.tick) {           //参考timer区域的tick
+            value := value + 1
+        }
+        when(reset) {
+            value := 0
+        }
+    }
+
+    val stateMachine = new Area {
+        ...
+    }
+}
+```
+
+Verilog:(有问题，为什么counter这么写)
+
+```Verilog
+  UartCtrl myUart (
+    .clk   (clk  ), //i
+    .reset (reset)  //i
+  );
+
+module UartCtrl (
+  input               clk,
+  input               reset
+);
+
+  reg        [7:0]    timer_counter;
+  wire                timer_tick;
+  reg        [2:0]    tickCounter_value;
+  wire                tickCounter_reset;
+
+  assign timer_tick = (timer_counter == 8'h0);
+  assign tickCounter_reset = 1'b0;
+  always @(posedge clk) begin
+    timer_counter <= (timer_counter - 8'h01);
+    if(timer_tick) begin
+      timer_counter <= 8'h64;
+    end
+    if(timer_tick) begin
+      tickCounter_value <= (tickCounter_value + 3'b001);
+    end
+    if(tickCounter_reset) begin
+      tickCounter_value <= 3'b000;
+    end
+  end
+
+endmodule
+```
+
+> 备注：在VHDL和Verilog中, 有时候前缀可以用来把变量拆分成逻辑块, 在SpinalHDL中可以用`Area`实现
+
+> 备注：ClockingArea是一种特殊的`Area`允许你用给定的`ClockDomain`定义一块硬件电路。
+

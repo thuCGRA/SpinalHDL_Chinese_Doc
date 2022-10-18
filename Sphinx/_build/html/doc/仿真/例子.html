@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>例子(Examples) &mdash; SpinalHDL_Chinese 1.0.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="形式验证(Formal verification)" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html" />
+    <link rel="prev" title="仿真引擎(Simulation engine)" href="%E4%BB%BF%E7%9C%9F%E5%BC%95%E6%93%8E.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SpinalHDL_Chinese
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B3%E4%BA%8ESpinalHDL/index.html">关于SpinalHDL(About SpinalHDL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BC%80%E5%A7%8B%E5%85%A5%E9%97%A8/index.html">开始入门(Getting Started)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">数据类型(Data Types)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E7%BB%93%E6%9E%84/index.html">结构(Structuring)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AF%AD%E4%B9%89/index.html">语义(Semantic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/index.html">时序逻辑(Sequential logic)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E8%AE%BE%E8%AE%A1%E9%94%99%E8%AF%AF/index.html">设计错误(Design Errors)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%85%B6%E5%AE%83%E8%AF%AD%E8%A8%80%E7%89%B9%E5%BE%81/index.html">其他语言特征(Other language features)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BA%93/index.html">Libraries(库)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">仿真(Simulation)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E7%AE%80%E4%BB%8B.html">介绍(Introduction)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97.html">安装指南(Installation instructions)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%90%AF%E5%8A%A8%E4%BB%BF%E7%9C%9F.html">启动仿真(Boot a Simulation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%90%AF%E5%8A%A8%E4%BB%BF%E7%9C%9F.html#accessing-signals-of-the-simulation">访问仿真信号(Accessing signals of the simulation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E8%AE%BF%E9%97%AE%E4%BB%BF%E7%9C%9F%E4%BF%A1%E5%8F%B7.html">访问仿真信号(Accessing signals of the simulation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%97%B6%E9%92%9F%E5%9F%9F.html">时钟域(Clock domains)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%BB%A1%E7%BA%BF%E7%A8%8BAPI.html">满线程API(Thread-full API)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E5%B0%91%E7%BA%BF%E7%A8%8BAPI.html">少线程API(Thread-less API)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E6%95%8F%E6%84%9FAPI.html">敏感API(Sensitive API)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%E4%BB%BF%E7%9C%9F%E5%BC%95%E6%93%8E.html">仿真引擎(Simulation engine)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">例子(Examples)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#asychronous-adder">一、异步加法器(Asychronous adder)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fifo-dual-clock-fifo">二、双时钟FIFO(Dual clock FIFO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fifo-single-clock-fifo">三、单时钟FIFO(Single clock FIFO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#synchronous-adder">四、同步加法器(Synchronous adder)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uart-decoder">五、串口译码器(Uart decoder)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uart-encoder">六、串口编码器(Uart encoder)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html">形式验证(Formal verification)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../%E4%BE%8B%E5%AD%90/index.html">例子(Examples)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SpinalHDL_Chinese</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">仿真(Simulation)</a> &raquo;</li>
+      <li>例子(Examples)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/doc/仿真/例子.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="examples">
+<h1>例子(Examples)<a class="headerlink" href="#examples" title="此标题的永久链接"></a></h1>
+<section id="asychronous-adder">
+<h2>一、异步加法器(Asychronous adder)<a class="headerlink" href="#asychronous-adder" title="此标题的永久链接"></a></h2>
+<p>该例使用组合逻辑创建了能处理一些简单算术运算的三操作数<code class="docutils literal notranslate"><span class="pre">Component</span></code>：</p>
+<p>testbench执行100次下述步骤：</p>
+<ul class="simple">
+<li><p>在0..255的范围内随机初始化<code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>和<code class="docutils literal notranslate"><span class="pre">c</span></code>；</p></li>
+<li><p>给DUT的<code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>输入激励；</p></li>
+<li><p>等1个仿真时间步(让输入信号传播)</p></li>
+<li><p>检查输出是否正确。</p></li>
+</ul>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">sim</span><span class="p">.</span><span class="n">_</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="n">_</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="nn">sim</span><span class="p">.</span><span class="n">_</span>
+
+<span class="k">import</span><span class="w"> </span><span class="nn">scala</span><span class="p">.</span><span class="nn">util</span><span class="p">.</span><span class="nc">Random</span>
+
+
+<span class="k">object</span><span class="w"> </span><span class="nc">SimAsynchronousExample</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">class</span><span class="w"> </span><span class="nc">Dut</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">UInt</span><span class="w"> </span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">UInt</span><span class="w"> </span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">c</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">]):</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nc">SimConfig</span><span class="p">.</span><span class="n">withWave</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">Dut</span><span class="p">).</span><span class="n">doSim</span><span class="p">{</span><span class="w"> </span><span class="n">dut</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"></span>
+<span class="w">      </span><span class="kd">var</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">      </span><span class="k">while</span><span class="p">(</span><span class="n">idx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">100</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Random</span><span class="p">.</span><span class="n">nextInt</span><span class="p">(</span><span class="mi">256</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="o">#=</span><span class="w"> </span><span class="n">a</span><span class="w"></span>
+<span class="w">        </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">b</span><span class="w"> </span><span class="o">#=</span><span class="w"> </span><span class="n">b</span><span class="w"></span>
+<span class="w">        </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">c</span><span class="w"> </span><span class="o">#=</span><span class="w"> </span><span class="n">c</span><span class="w"></span>
+<span class="w">        </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="c1">//休眠1个时间步</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">result</span><span class="p">.</span><span class="n">toInt</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">((</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="n">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">))</span><span class="w"></span>
+<span class="w">        </span><span class="n">idx</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="fifo-dual-clock-fifo">
+<h2>二、双时钟FIFO(Dual clock FIFO)<a class="headerlink" href="#fifo-dual-clock-fifo" title="此标题的永久链接"></a></h2>
+<p>该例创建了为跨时钟域设计的<code class="docutils literal notranslate"><span class="pre">StreamFifoCC</span></code>, 用了3个仿真线程。</p>
+<p>线程用来处理：</p>
+<ul class="simple">
+<li><p>管理两个时钟；</p></li>
+<li><p>把数据推入FIFO；</p></li>
+<li><p>把数据移出FIFO。</p></li>
+</ul>
+<p>输入随机数推入FIFO。</p>
+<p>FIFO推出线程检查DUT的输出和参考模型是否匹配(原始的scala.collection.mutable.Queue实例)。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">sim</span><span class="p">.</span><span class="n">_</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="n">_</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="nn">sim</span><span class="p">.</span><span class="n">_</span>
+
+<span class="k">import</span><span class="w"> </span><span class="nn">scala</span><span class="p">.</span><span class="nn">collection</span><span class="p">.</span><span class="nn">mutable</span><span class="p">.</span><span class="nc">Queue</span>
+
+
+<span class="k">object</span><span class="w"> </span><span class="nc">SimStreamFifoCCExample</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">]):</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Compile the Component for the simulator.</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">compiled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">SimConfig</span><span class="p">.</span><span class="n">withWave</span><span class="p">.</span><span class="n">allOptimisation</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="w"></span>
+<span class="w">      </span><span class="n">rtl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">StreamFifoCC</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">dataType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">32</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">pushClock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">.</span><span class="n">external</span><span class="p">(</span><span class="s">&quot;clkA&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="n">popClock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">.</span><span class="n">external</span><span class="p">(</span><span class="s">&quot;clkB&quot;</span><span class="p">,</span><span class="n">withReset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Run the simulation.</span>
+<span class="w">    </span><span class="n">compiled</span><span class="p">.</span><span class="n">doSimUntilVoid</span><span class="p">{</span><span class="n">dut</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"></span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="n">queueModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mutable</span><span class="p">.</span><span class="nc">Queue</span><span class="p">[</span><span class="nc">Long</span><span class="p">]()</span><span class="w"></span>
+
+<span class="w">      </span><span class="c1">// Fork a thread to manage the clock domains signals</span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="n">clocksThread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fork</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Clear the clock domains&#39; signals, to be sure the simulation captures their first edges.</span>
+<span class="w">        </span><span class="n">dut</span><span class="p">.</span><span class="n">pushClock</span><span class="p">.</span><span class="n">fallingEdge</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="n">dut</span><span class="p">.</span><span class="n">popClock</span><span class="p">.</span><span class="n">fallingEdge</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="n">dut</span><span class="p">.</span><span class="n">pushClock</span><span class="p">.</span><span class="n">deassertReset</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">// Do the resets.</span>
+<span class="w">        </span><span class="n">dut</span><span class="p">.</span><span class="n">pushClock</span><span class="p">.</span><span class="n">assertReset</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">dut</span><span class="p">.</span><span class="n">pushClock</span><span class="p">.</span><span class="n">deassertReset</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">// Forever, randomly toggle one of the clocks.</span>
+<span class="w">        </span><span class="c1">// This will create asynchronous clocks without fixed frequencies.</span>
+<span class="w">        </span><span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="k">if</span><span class="p">(</span><span class="nc">Random</span><span class="p">.</span><span class="n">nextBoolean</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">dut</span><span class="p">.</span><span class="n">pushClock</span><span class="p">.</span><span class="n">clockToggle</span><span class="p">()</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">dut</span><span class="p">.</span><span class="n">popClock</span><span class="p">.</span><span class="n">clockToggle</span><span class="p">()</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">          </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">      </span><span class="c1">// Push data randomly, and fill the queueModel with pushed transactions.</span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="n">pushThread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fork</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">valid</span><span class="p">.</span><span class="n">randomize</span><span class="p">()</span><span class="w"></span>
+<span class="w">          </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">payload</span><span class="p">.</span><span class="n">randomize</span><span class="p">()</span><span class="w"></span>
+<span class="w">          </span><span class="n">dut</span><span class="p">.</span><span class="n">pushClock</span><span class="p">.</span><span class="n">waitSampling</span><span class="p">()</span><span class="w"></span>
+<span class="w">          </span><span class="k">if</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">valid</span><span class="p">.</span><span class="n">toBoolean</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">ready</span><span class="p">.</span><span class="n">toBoolean</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">queueModel</span><span class="p">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">payload</span><span class="p">.</span><span class="n">toLong</span><span class="p">)</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">      </span><span class="c1">// Pop data randomly, and check that it match with the queueModel.</span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="n">popThread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fork</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">until</span><span class="w"> </span><span class="mi">100000</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">pop</span><span class="p">.</span><span class="n">ready</span><span class="p">.</span><span class="n">randomize</span><span class="p">()</span><span class="w"></span>
+<span class="w">          </span><span class="n">dut</span><span class="p">.</span><span class="n">popClock</span><span class="p">.</span><span class="n">waitSampling</span><span class="p">()</span><span class="w"></span>
+<span class="w">          </span><span class="k">if</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">pop</span><span class="p">.</span><span class="n">valid</span><span class="p">.</span><span class="n">toBoolean</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">pop</span><span class="p">.</span><span class="n">ready</span><span class="p">.</span><span class="n">toBoolean</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">assert</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">pop</span><span class="p">.</span><span class="n">payload</span><span class="p">.</span><span class="n">toLong</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">queueModel</span><span class="p">.</span><span class="n">dequeue</span><span class="p">())</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">simSuccess</span><span class="p">()</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="fifo-single-clock-fifo">
+<h2>三、单时钟FIFO(Single clock FIFO)<a class="headerlink" href="#fifo-single-clock-fifo" title="此标题的永久链接"></a></h2>
+<p>该例创建了<code class="docutils literal notranslate"><span class="pre">StreamFifo</span></code>, 并产生3个仿真线程。不像Dual clock fifo, 本FIFO不需要复杂的时钟管理。</p>
+<p>三个仿真线程用来处理：</p>
+<ul class="simple">
+<li><p>管理时钟/复位</p></li>
+<li><p>数据推入FIFO</p></li>
+<li><p>数据推出FIFO</p></li>
+</ul>
+<p>输入随机数推入FIFO</p>
+<p>FIFO推出线程检查DUT的输出和参考模型是否匹配(原始的scala.collection.mutable.Queue实例)。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">sim</span><span class="p">.</span><span class="n">_</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="n">_</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="nn">sim</span><span class="p">.</span><span class="n">_</span>
+
+<span class="k">import</span><span class="w"> </span><span class="nn">scala</span><span class="p">.</span><span class="nn">collection</span><span class="p">.</span><span class="nn">mutable</span><span class="p">.</span><span class="nc">Queue</span>
+
+
+<span class="k">object</span><span class="w"> </span><span class="nc">SimStreamFifoExample</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">]):</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Compile the Component for the simulator.</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">compiled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">SimConfig</span><span class="p">.</span><span class="n">withWave</span><span class="p">.</span><span class="n">allOptimisation</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="w"></span>
+<span class="w">      </span><span class="n">rtl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">StreamFifo</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">dataType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="mi">32</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="w"></span>
+<span class="w">      </span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Run the simulation.</span>
+<span class="w">    </span><span class="n">compiled</span><span class="p">.</span><span class="n">doSimUntilVoid</span><span class="p">{</span><span class="n">dut</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"></span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="n">queueModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mutable</span><span class="p">.</span><span class="nc">Queue</span><span class="p">[</span><span class="nc">Long</span><span class="p">]()</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">dut</span><span class="p">.</span><span class="n">clockDomain</span><span class="p">.</span><span class="n">forkStimulus</span><span class="p">(</span><span class="n">period</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="nc">SimTimeout</span><span class="p">(</span><span class="mi">1000000</span><span class="o">*</span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">      </span><span class="c1">// Push data randomly, and fill the queueModel with pushed transactions.</span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="n">pushThread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fork</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">#=</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="w">        </span><span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">valid</span><span class="p">.</span><span class="n">randomize</span><span class="p">()</span><span class="w"></span>
+<span class="w">          </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">payload</span><span class="p">.</span><span class="n">randomize</span><span class="p">()</span><span class="w"></span>
+<span class="w">          </span><span class="n">dut</span><span class="p">.</span><span class="n">clockDomain</span><span class="p">.</span><span class="n">waitSampling</span><span class="p">()</span><span class="w"></span>
+<span class="w">          </span><span class="k">if</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">valid</span><span class="p">.</span><span class="n">toBoolean</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">ready</span><span class="p">.</span><span class="n">toBoolean</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">queueModel</span><span class="p">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">payload</span><span class="p">.</span><span class="n">toLong</span><span class="p">)</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">      </span><span class="c1">// Pop data randomly, and check that it match with the queueModel.</span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="n">popThread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fork</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">pop</span><span class="p">.</span><span class="n">ready</span><span class="w"> </span><span class="o">#=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">until</span><span class="w"> </span><span class="mi">100000</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">pop</span><span class="p">.</span><span class="n">ready</span><span class="p">.</span><span class="n">randomize</span><span class="p">()</span><span class="w"></span>
+<span class="w">          </span><span class="n">dut</span><span class="p">.</span><span class="n">clockDomain</span><span class="p">.</span><span class="n">waitSampling</span><span class="p">()</span><span class="w"></span>
+<span class="w">          </span><span class="k">if</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">pop</span><span class="p">.</span><span class="n">valid</span><span class="p">.</span><span class="n">toBoolean</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">pop</span><span class="p">.</span><span class="n">ready</span><span class="p">.</span><span class="n">toBoolean</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">assert</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">pop</span><span class="p">.</span><span class="n">payload</span><span class="p">.</span><span class="n">toLong</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">queueModel</span><span class="p">.</span><span class="n">dequeue</span><span class="p">())</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">simSuccess</span><span class="p">()</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="synchronous-adder">
+<h2>四、同步加法器(Synchronous adder)<a class="headerlink" href="#synchronous-adder" title="此标题的永久链接"></a></h2>
+<p>本例用时序逻辑搭建了三操作数的简单算术运算<code class="docutils literal notranslate"><span class="pre">Component</span></code>。</p>
+<ul class="simple">
+<li><p>在0..255的范围内随机初始化<code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>和<code class="docutils literal notranslate"><span class="pre">c</span></code>；</p></li>
+<li><p>给DUT的<code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>输入激励；</p></li>
+<li><p>一直等待直到DUT信号再次被仿真采样；</p></li>
+<li><p>检查输出是否正确。</p></li>
+</ul>
+<p>该例和Asynchronous adder例子的主要区别是本<code class="docutils literal notranslate"><span class="pre">Component</span></code>需要用<code class="docutils literal notranslate"><span class="pre">forkStimulus</span></code>产生时钟信号, 因为它内部用的是时序逻辑。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">sim</span><span class="p">.</span><span class="n">_</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="n">_</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">spinal</span><span class="p">.</span><span class="nn">core</span><span class="p">.</span><span class="nn">sim</span><span class="p">.</span><span class="n">_</span>
+
+<span class="k">import</span><span class="w"> </span><span class="nn">scala</span><span class="p">.</span><span class="nn">util</span><span class="p">.</span><span class="nc">Random</span>
+
+
+<span class="k">object</span><span class="w"> </span><span class="nc">SimSynchronousExample</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">class</span><span class="w"> </span><span class="nc">Dut</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">UInt</span><span class="w"> </span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">UInt</span><span class="w"> </span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">]):</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nc">SimConfig</span><span class="p">.</span><span class="n">withWave</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">Dut</span><span class="p">).</span><span class="n">doSim</span><span class="p">{</span><span class="w"> </span><span class="n">dut</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"></span>
+<span class="w">      </span><span class="n">dut</span><span class="p">.</span><span class="n">clockDomain</span><span class="p">.</span><span class="n">forkStimulus</span><span class="p">(</span><span class="n">period</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">      </span><span class="kd">var</span><span class="w"> </span><span class="n">resultModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">      </span><span class="k">for</span><span class="p">(</span><span class="n">idx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">until</span><span class="w"> </span><span class="mi">100</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="o">#=</span><span class="w"> </span><span class="nc">Random</span><span class="p">.</span><span class="n">nextInt</span><span class="p">(</span><span class="mi">256</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">b</span><span class="w"> </span><span class="o">#=</span><span class="w"> </span><span class="nc">Random</span><span class="p">.</span><span class="n">nextInt</span><span class="p">(</span><span class="mi">256</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">c</span><span class="w"> </span><span class="o">#=</span><span class="w"> </span><span class="nc">Random</span><span class="p">.</span><span class="n">nextInt</span><span class="p">(</span><span class="mi">256</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">dut</span><span class="p">.</span><span class="n">clockDomain</span><span class="p">.</span><span class="n">waitSampling</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">result</span><span class="p">.</span><span class="n">toInt</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">resultModel</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">resultModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">a</span><span class="p">.</span><span class="n">toInt</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">b</span><span class="p">.</span><span class="n">toInt</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">dut</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">c</span><span class="p">.</span><span class="n">toInt</span><span class="p">)</span><span class="w"> </span><span class="n">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="uart-decoder">
+<h2>五、串口译码器(Uart decoder)<a class="headerlink" href="#uart-decoder" title="此标题的永久链接"></a></h2>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">// Fork a simulation process which will analyze the uartPin and print transmitted bytes into the simulation terminal.</span>
+<span class="n">fork</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// Wait until the design sets the uartPin to true (wait for the reset effect).</span>
+<span class="w">  </span><span class="n">waitUntil</span><span class="p">(</span><span class="n">uartPin</span><span class="p">.</span><span class="n">toBoolean</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">waitUntil</span><span class="p">(</span><span class="n">uartPin</span><span class="p">.</span><span class="n">toBoolean</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">sleep</span><span class="p">(</span><span class="n">baudPeriod</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">uartPin</span><span class="p">.</span><span class="n">toBoolean</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">sleep</span><span class="p">(</span><span class="n">baudPeriod</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="n">bitId</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="mi">7</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">uartPin</span><span class="p">.</span><span class="n">toBoolean</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">buffer</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">bitId</span><span class="w"></span>
+<span class="w">      </span><span class="n">sleep</span><span class="p">(</span><span class="n">baudPeriod</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">uartPin</span><span class="p">.</span><span class="n">toBoolean</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">print</span><span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">toChar</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="uart-encoder">
+<h2>六、串口编码器(Uart encoder)<a class="headerlink" href="#uart-encoder" title="此标题的永久链接"></a></h2>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">// Fork a simulation process which will get chars typed into the simulation terminal and transmit them on the simulation uartPin.</span>
+<span class="n">fork</span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">uartPin</span><span class="w"> </span><span class="o">#=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="w">  </span><span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// System.in is the java equivalent of the C&#39;s stdin.</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="nc">System</span><span class="p">.</span><span class="n">in</span><span class="p">.</span><span class="n">available</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">System</span><span class="p">.</span><span class="n">in</span><span class="p">.</span><span class="n">read</span><span class="p">()</span><span class="w"></span>
+<span class="w">      </span><span class="n">uartPin</span><span class="w"> </span><span class="o">#=</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="w">      </span><span class="n">sleep</span><span class="p">(</span><span class="n">baudPeriod</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">      </span><span class="k">for</span><span class="p">(</span><span class="n">bitId</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="mi">7</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">uartPin</span><span class="w"> </span><span class="o">#=</span><span class="w"> </span><span class="p">((</span><span class="n">buffer</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">bitId</span><span class="p">)</span><span class="w"> </span><span class="n">&amp;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">        </span><span class="n">sleep</span><span class="p">(</span><span class="n">baudPeriod</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">uartPin</span><span class="w"> </span><span class="o">#=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="w">      </span><span class="n">sleep</span><span class="p">(</span><span class="n">baudPeriod</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">sleep</span><span class="p">(</span><span class="n">baudPeriod</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="c1">// Sleep a little while to avoid polling System.in too often.</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E4%BB%BF%E7%9C%9F%E5%BC%95%E6%93%8E.html" class="btn btn-neutral float-left" title="仿真引擎(Simulation engine)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../%E5%BD%A2%E5%BC%8F%E9%AA%8C%E8%AF%81/index.html" class="btn btn-neutral float-right" title="形式验证(Formal verification)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, THU-CGRA.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

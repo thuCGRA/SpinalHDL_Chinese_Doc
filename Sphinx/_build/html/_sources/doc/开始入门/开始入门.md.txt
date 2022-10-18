@@ -1,0 +1,142 @@
+## 开始入门(Getting Started)
+
+SpinalHDL 是一种用 Scala 编写的硬件描述语言, Scala 是一种使用 Java 虚拟机 (JVM) 的静态类型功能语言。 为了开始使用 SpinalHDL 进行编程, 你必须拥有 JVM 以及 Scala 编译器。 在下一节中, 我们将说明如果你还没有这些工具, 如何下载它们。
+
+### 一、开始所要下载的必要条件/事情(Requirements/Things to download to get started)
+
+在你下载SpinalHDL工具之前, 你应该安装：
+
++ Java JDK
++ Scala 2.11.X版本
++ SBT搭建工具
+
+可选择：
+
++ 推荐你用带有Scala接口的IntelliJ IDEA
++ Git, 用来版本控制
+
+### 二、如何开始用SpinalHDL编程(How to start programming with SpinalHDL)
+
+下载所有要求后, 有两种方法可以开始 SpinalHDL 编程。
+
++ SBT方式：如果你已经熟悉 SBT 构建系统和/或如果你不需要 IDE；
++ IDE方式：获取已经在 IDE 中为你设置的项目并立即开始编程。
+
+1. SBT方式(SBT way)
+  
+   我们在 Github 上为你准备了一个现成的项目。
+
+   + clone或下载"getting started"仓库；
+   + 在它的根目录中打开一个终端并运行`sbt run`。 当你第一次执行它时, 该过程可能需要一些时间, 因为它将下载运行SpinalHDL所需的所有依赖项。
+
+   正常情况下, 这个命令必定生成一个输出文件`MyTopLevel.vhd`, 对应`src\main\scala\MyCode.scala`中定义的顶层SpinalHDL代码, 对应最简单的SpinalHDL例子。
+
+   在干净的Debian发行版中, 你可以在shell中键入以下命令。这些命令将安装 ava、Scala、SBT, 下载基础项目, 并生成相应的VHDL文件。如果你第一次运行它需要一些时间, 请不担心。
+
+   ```Linux
+   sudo apt-get install openjdk-8-jdk
+   sudo apt-get install scala
+   echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
+   echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee /etc/apt/sources.list.d/sbt_old.list
+   curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo apt-key add
+   sudo apt-get update
+   sudo apt-get install sbt
+   git clone https://github.com/SpinalHDL/SpinalTemplateSbt.git SpinalTemplateSbt
+   cd SpinalTemplateSbt
+   sbt run   # select "mylib.MyTopLevelVhdl" in the menu
+   ls MyTopLevel.vhd
+   ```
+
+   **离线SBT环境**
+
+   通常, SBT使用在线存储库来下载和缓存你的项目依赖项, 此缓存位于你的`home/.ivy2`文件夹中。设置无互联网环境的方法是从缓存已被填充一次的互联网完整环境中复制此缓存, 然将其复制到你的无互联网环境中。
+
+   可移植的SBT搭建途径：https://www.scala-sbt.org/download.html
+
+2. 用带有Scala接口的IntelliJ IDEA的IDE方式(The IDE way, with IntelliJ IDEA and its Scala plugin)
+
+   除了上述要求外, 还需要下载IntelliJ IDEA(免费社区版就够了)。 安装IntelliJ后, 还要检查是否启用了它的Scala插件(可以在此处找到安装信息)。
+
+   进行如下操作：
+
+   + clone或下载"getting started"仓库。
+   + 在IntelliJ IDEA, 使用此存储库的根目录“import project”, 选择从外部模型SBT导入项目并确保选中所有框。
+   + 此外, 你可能需要指定一些路径, 例如将JDK安装到IntelliJ的位置。
+   + 在项目(Intellij 项目 GUI)中, 右键单击`src/main/scala/mylib/MyTopLevel.scala`并选择“Run MyTopLevel”。
+
+   这应该会在项目目录中生成输出文件`MyTopLevel.vhd`, 它实现了一个简单的 8 位计数器。
+
+### 三、一个非常简单的SpinalHDL例子(A very simple SpinalHDL example)
+
+以下代码生成有两个1-bit输入`and`门：
+
+```Scala
+import spinal.core._
+
+class AND_Gate extends Component {
+
+  /**
+    * This is the component definition that corresponds to
+    * the VHDL entity of the component
+    */
+  val io = new Bundle {
+    val a = in Bool()
+    val b = in Bool()
+    val c = out Bool()
+  }
+
+  // Here we define some asynchronous logic
+  io.c := io.a & io.b
+}
+
+object AND_Gate {
+  // Let's go
+  def main(args: Array[String]) {
+    SpinalVhdl(new AND_Gate)
+  }
+}
+```
+
+如你所见, 你必须在SpinalHDL中编写的第一行是`import spinal.core._`, 这表明我们正在使用文件中的Spinal组件。
+
+1. 生成代码(Generated code)
+
+   一旦你成功编译代码, 编译器会生成如下VHDL代码：
+
+   ```Verilog
+   package pkg_enum is
+   ...
+   end pkg_enum;
+
+   package pkg_scala2hdl is
+   ...
+   end  pkg_scala2hdl;
+
+   library ieee;
+   use ieee.std_logic_1164.all;
+   use ieee.numeric_std.all;
+
+   library work;
+   use work.pkg_scala2hdl.all;
+   use work.all;
+   use work.pkg_enum.all;
+
+
+   entity AND_Gate is
+   port(
+       io_a : in std_logic;
+       io_b : in std_logic;
+       io_c : out std_logic
+   );
+   end AND_Gate;
+
+   architecture arch of AND_Gate is
+
+   begin
+   io_c <= (io_a and io_b);
+   end arch;
+   ```
+
+### 四、接下来做什么?(What to do next?)
+
+这取决于你, 但为什么不看看SpinalHDL中的类型或发现该语言提供哪些原语来描述硬件组件呢？ 你还可以查看我们的示例, 了解你接下来可以做什么的一些示例。
