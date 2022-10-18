@@ -60,7 +60,7 @@ jobs:
       run: |
         cd Sphinx
         make html
-        zip -r Sphinx/_build/SpinalHDL_Chinese_Doc_html.zip Sphinx/_build/html/
+        zip -r _build/SpinalHDL_Chinese_Doc_html.zip _build/html/
         make pdf
     - uses: actions/upload-artifact@master
       with:
