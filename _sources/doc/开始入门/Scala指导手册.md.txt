@@ -16,7 +16,7 @@ Scala是一款功能强大的编程语言, 它的产生受到了很多其他独�
    | 数据类型 |     举例      |         描述          |
    | :------: | :-----------: | :-------------------: |
    | Boolean  |  true, false  |
-   |   Int    |    3, 0*32    |    32bits integer     |
+   |   Int    |    3, -32    |    32bits integer     |
    |  Float   |     3.14f     | 32bits floating point |
    |  Doublt  |     3.14      | 64bits floating point |
    |  String  | "Hello world" |     UTF-16 string     |
