@@ -297,8 +297,9 @@
 <ol>
 <li><p>复位控制(ResetControl)</p>
 <p>复位控制提供了一些工具以管理复位。</p>
-<ul>
-<li><p>asyncAssertSyncDeassert</p>
+<ul class="simple">
+<li><p>asyncAssertSyncDeassert</p></li>
+</ul>
 <p>用户可以利用一个异步有效同步无效(asynchronously asserted synchronously de-asserted)逻辑来筛选异步复位。可以使用<code class="docutils literal notranslate"><span class="pre">ResetCtrl.asyncAssertSyncDeassert</span></code>函数来筛选并返回相应的值。</p>
 <p>|    声明命名    |  返回类型   |                          描述                          |
 | :————: | :———: | :—————————————————-: |
@@ -307,9 +308,9 @@
 | inputPolarity  |  Polarity   |                HIGH/LOW (default=HIGH)                 |
 | outputPolarity |  Polarity   | HIGH/LOW (default=clockDomain.config.resetActiveLevel) |
 |  bufferDepth   |     Int     |         防止亚稳态所需的寄存器级数（默认为2）          |</p>
-<p>另外有一个ResetCtrl.asyncAssertSyncDeassertDrive版本的工具, 它直接分配clockDomain以重置的值。</p>
-</li>
-</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>另外有一个ResetCtrl.asyncAssertSyncDeassertDrive版本的工具, 它直接分配clockDomain以重置的值。
+</pre></div>
+</div>
 </li>
 </ol>
 </section>

@@ -419,6 +419,7 @@ Stream中有许多工具可以与用户设计中的流总线(Stream bus)结合, 
    | inputClock  | ClockDomain |  存入数据端使用的时钟域  |
    | outputClock | ClockDomain |  取出数据端使用的时钟域  |
 
+
    | IO口名 |   类型    |           描述           |
    | :----: | :-------: | :----------------------: |
    | input  | Stream[T] | 用来向流式FIFO中压入数据 |
@@ -442,6 +443,7 @@ Stream中有许多工具可以与用户设计中的流总线(Stream bus)结合, 
    该组件会使得输入流与输出流的位宽相匹配。当输出流`outStream`的负载的位宽比`inStream`的位宽更大时, 会通过将多个输入传输任务结合成一个的操作来匹配输出的大位宽；相反, 如果输出位宽大于输入位宽, 则一个输入的传输任务会被分割成多个输出传输任务以匹配输出的小位宽。
 
    在最好的情况下, 输入`inStream`负载的位宽应该是输出`outStream`负载的整数倍, 如下方代码所示：
+
    ```Scala
    val inStream = Stream(Bits(8 bits))
    val outStream = Stream(Bits(16 bits))
@@ -516,11 +518,13 @@ Stream中有许多工具可以与用户设计中的流总线(Stream bus)结合, 
    如上方例子所示, 两个`inStream`的传输将会被结合成一个`outStream`传输, 并且第一个`inStream`的传输会被默认放置在输出负载的低比特。
 
    如果输入传输任务负载的期望顺序和默认设置不同, 这里有一个例子：
+
    ```Scala
    val inStream = Stream(Bits(8 bits))
    val outStream = Stream(Bits(16 bits))
    val adapter = StreamWidthAdapter(inStream, outStream, order = SlicesOrder.HIGHER_FIRST)
    ```
+
    同时还有一个与`ORDER`具有相同效果的名为`endianness`的传统参数。当`endianness`的值为`LITTLE`时, 它和`order`的`LOWER_FIRST`值等同。同理其`BIG`值和`HIGHER_FIRST`等同。`padding`参数是一个可选择的布尔逻辑值, 其可以决定该适应器能否接受输入与输出负载位宽之间的非整数倍数关系。
 
 5. 流仲裁器(StreamArbiter)

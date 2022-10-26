@@ -145,19 +145,59 @@
 </section>
 <section id="functions">
 <h2>二、函数(Functions)<a class="headerlink" href="#functions" title="此标题的永久链接"></a></h2>
-<p>对于<code class="docutils literal notranslate"><span class="pre">Stream[Fragment[T]]</span></code>和<code class="docutils literal notranslate"><span class="pre">Flow[Fragment[T]]</span></code>, 给出了以下函数:
-|   句式    | 返回类型 |                         描述                         |
-| :——-: | :——: | :————————————————–: |
-|  x.first  |   Bool   |  当下一个或当前传输任务是包的第一个子片段时返回True  |
-|  x.tail   |   Bool   | 当下一个或当前传输任务不是包的第一个子片段时返回True |
-| x.isFirst |   Bool   |  当传输任务被提交且是数据包的第一个子片段时返回True  |
-| x.isTail  |   Bool   | 当传输任务被提交且不是数据包的第一个子片段时返回True |
-| x.isLast  |   Bool   | 当传输任务被提交且是数据包的最后一个子片段时返回True |</p>
-<p>对于<code class="docutils literal notranslate"><span class="pre">Stream[Fragment[T]]</span></code>, 下面的函数也是可使用的:
-|            句式            |      返回类型       |                    描述                     |
-| :————————: | :—————–: | :—————————————–: |
-| x.insertHeader(header : T) | Stream[Fragment[T]] | 对每一个<code class="docutils literal notranslate"><span class="pre">x</span></code>的包添加<code class="docutils literal notranslate"><span class="pre">header</span></code>并且返回结果总线 |</p>
-</section>
+<p>对于<code class="docutils literal notranslate"><span class="pre">Stream[Fragment[T]]</span></code>和<code class="docutils literal notranslate"><span class="pre">Flow[Fragment[T]]</span></code>, 给出了以下函数:</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">句式</th>
+<th style="text-align: center;">返回类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">x.first</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">当下一个或当前传输任务是包的第一个子片段时返回True</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.tail</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">当下一个或当前传输任务不是包的第一个子片段时返回True</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.isFirst</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">当传输任务被提交且是数据包的第一个子片段时返回True</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.isTail</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">当传输任务被提交且不是数据包的第一个子片段时返回True</td>
+</tr>
+<tr>
+<td style="text-align: center;">x.isLast</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">当传输任务被提交且是数据包的最后一个子片段时返回True</td>
+</tr>
+</tbody>
+</table><p>对于<code class="docutils literal notranslate"><span class="pre">Stream[Fragment[T]]</span></code>, 下面的函数也是可使用的:</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">句式</th>
+<th style="text-align: center;">返回类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">x.insertHeader(header : T)</td>
+<td style="text-align: center;">Stream[Fragment[T]]</td>
+<td style="text-align: center;">对每一个<code>x</code>的包添加<code>header</code>并且返回结果总线</td>
+</tr>
+</tbody>
+</table></section>
 </section>
 
 

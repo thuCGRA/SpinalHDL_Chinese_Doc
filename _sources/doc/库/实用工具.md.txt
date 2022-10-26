@@ -83,15 +83,15 @@
 
    - asyncAssertSyncDeassert
 
-       用户可以利用一个异步有效同步无效(asynchronously asserted synchronously de-asserted)逻辑来筛选异步复位。可以使用`ResetCtrl.asyncAssertSyncDeassert`函数来筛选并返回相应的值。
+   用户可以利用一个异步有效同步无效(asynchronously asserted synchronously de-asserted)逻辑来筛选异步复位。可以使用`ResetCtrl.asyncAssertSyncDeassert`函数来筛选并返回相应的值。
        
-       |    声明命名    |  返回类型   |                          描述                          |
-       | :------------: | :---------: | :----------------------------------------------------: |
-       |     input      |    Bool     |                       筛选的信号                       |
-       |  clockDomain   | ClockDomain |              返回将要使用所筛选值的时钟域              |
-       | inputPolarity  |  Polarity   |                HIGH/LOW (default=HIGH)                 |
-       | outputPolarity |  Polarity   | HIGH/LOW (default=clockDomain.config.resetActiveLevel) |
-       |  bufferDepth   |     Int     |         防止亚稳态所需的寄存器级数（默认为2）          |
+   |    声明命名    |  返回类型   |                          描述                          |
+   | :------------: | :---------: | :----------------------------------------------------: |
+   |     input      |    Bool     |                       筛选的信号                       |
+   |  clockDomain   | ClockDomain |              返回将要使用所筛选值的时钟域              |
+   | inputPolarity  |  Polarity   |                HIGH/LOW (default=HIGH)                 |
+   | outputPolarity |  Polarity   | HIGH/LOW (default=clockDomain.config.resetActiveLevel) |
+   |  bufferDepth   |     Int     |         防止亚稳态所需的寄存器级数（默认为2）          |
 
        另外有一个ResetCtrl.asyncAssertSyncDeassertDrive版本的工具, 它直接分配clockDomain以重置的值。
 

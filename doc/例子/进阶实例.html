@@ -384,33 +384,58 @@
 </ul>
 </li>
 </ol>
-<pre><code>   |       名称        | 类型  |                     描述                      |
-   | :---------------: | :---: | :-------------------------------------------: |
-   |   dataWidthMax    |  Int  |     使用单个UART帧可以发送的最大数据位数      |
-   | clockDividerWidth |  Int  |              时钟分频器的比特数               |
-   |  preSamplingSize  |  Int  |        在采样窗口开始时要drop的样本数         |
-   |   samplingSize    |  Int  | 获得滤波后的RXD值所需的窗口中间使用的样本数量 |
-   | postSamplingSize  |  Int  |        在采样窗口结束时要drop的样本数         |
-</code></pre><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   为了使得实现简单，假设`preSamplingSize + samplingSize + postSamplingSize`都是2的幂次方。
-
-   同时不需要将每个构造参数(泛型)逐个添加到`UartCtrl`中，而是可以将它们分组到一个类中，这个类将用作`UartCtrl`的单个参数。
-
-   ```Scala
-   case class UartCtrlGenerics( dataWidthMax: Int = 8,
-                        clockDividerWidth: Int = 20, // baudrate = Fclk / rxSamplePerBit / clockDividerWidth
-                        preSamplingSize: Int = 1,
-                        samplingSize: Int = 5,
-                        postSamplingSize: Int = 2) {
-     val rxSamplePerBit = preSamplingSize + samplingSize + postSamplingSize
-     assert(isPow2(rxSamplePerBit))
-     if ((samplingSize % 2) == 0)
-       SpinalWarning(s&quot;It&#39;s not nice to have a odd samplingSize value (because of the majority vote)&quot;)
-   }
-   ```
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">名称</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">dataWidthMax</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;">使用单个UART帧可以发送的最大数据位数</td>
+</tr>
+<tr>
+<td style="text-align: center;">clockDividerWidth</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;">时钟分频器的比特数</td>
+</tr>
+<tr>
+<td style="text-align: center;">preSamplingSize</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;">在采样窗口开始时要drop的样本数</td>
+</tr>
+<tr>
+<td style="text-align: center;">samplingSize</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;">获得滤波后的RXD值所需的窗口中间使用的样本数量</td>
+</tr>
+<tr>
+<td style="text-align: center;">postSamplingSize</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;">在采样窗口结束时要drop的样本数</td>
+</tr>
+</tbody>
+</table><p>为了使得实现简单，假设<code class="docutils literal notranslate"><span class="pre">preSamplingSize</span> <span class="pre">+</span> <span class="pre">samplingSize</span> <span class="pre">+</span> <span class="pre">postSamplingSize</span></code>都是2的幂次方。</p>
+<p>同时不需要将每个构造参数(泛型)逐个添加到<code class="docutils literal notranslate"><span class="pre">UartCtrl</span></code>中，而是可以将它们分组到一个类中，这个类将用作<code class="docutils literal notranslate"><span class="pre">UartCtrl</span></code>的单个参数。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">UartCtrlGenerics</span><span class="p">(</span><span class="w"> </span><span class="n">dataWidthMax</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"></span>
+<span class="w">                     </span><span class="n">clockDividerWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="c1">// baudrate = Fclk / rxSamplePerBit / clockDividerWidth</span>
+<span class="w">                     </span><span class="n">preSamplingSize</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">                     </span><span class="n">samplingSize</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"></span>
+<span class="w">                     </span><span class="n">postSamplingSize</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">rxSamplePerBit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">preSamplingSize</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">samplingSize</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">postSamplingSize</span><span class="w"></span>
+<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="n">isPow2</span><span class="p">(</span><span class="n">rxSamplePerBit</span><span class="p">))</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">samplingSize</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nc">SpinalWarning</span><span class="p">(</span><span class="s">s&quot;It&#39;s not nice to have a odd samplingSize value (because of the majority vote)&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-<ul>
-<li><p>UART总线</p>
+<ul class="simple">
+<li><p>UART总线</p></li>
+</ul>
 <p>定义一个无流控制的UART总线：</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Uart</span><span class="p">()</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="nc">IMasterSlave</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">txd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
@@ -423,8 +448,9 @@
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-</li>
-<li><p>UART配置枚举(UART configuration enums)</p>
+<ul class="simple">
+<li><p>UART配置枚举(UART configuration enums)</p></li>
+</ul>
 <p>定义奇偶校验和停止位枚举(stop bit enumerations)</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span><span class="w"> </span><span class="nc">UartParityType</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">SpinalEnum</span><span class="p">(</span><span class="n">sequancial</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nc">NONE</span><span class="p">,</span><span class="w"> </span><span class="nc">EVEN</span><span class="p">,</span><span class="w"> </span><span class="nc">ODD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newElement</span><span class="p">()</span><span class="w"></span>
@@ -436,8 +462,9 @@
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-</li>
-<li><p>UartCtrl配置类</p>
+<ul class="simple">
+<li><p>UartCtrl配置类</p></li>
+</ul>
 <p>定义将会被用作IO单元来设置<code class="docutils literal notranslate"><span class="pre">UartCtrl</span></code>的<code class="docutils literal notranslate"><span class="pre">Bundle</span></code>。</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">UartCtrlFrameConfig</span><span class="p">(</span><span class="n">g</span><span class="p">:</span><span class="w"> </span><span class="nc">UartCtrlGenerics</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">dataLength</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">log2Up</span><span class="p">(</span><span class="n">g</span><span class="p">.</span><span class="n">dataWidthMax</span><span class="p">)</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"> </span><span class="c1">//Bit count = dataLength + 1</span>
@@ -455,357 +482,386 @@
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-</li>
-</ul>
 <ol>
 <li><p>实现</p>
 <p>在<code class="docutils literal notranslate"><span class="pre">UartCtrl</span></code>中，三个物体会被实例化：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- 一个时钟分频器，以UART RX采样率产生采样脉冲
-- 一个`UartCtrlTx``Component`
-- 一个`UartCtrlRx``Component`
-</pre></div>
-</div>
-<ul>
-<li><p>UartCtrlTx</p>
-<p>该<code class="docutils literal notranslate"><span class="pre">Component</span></code>的端口如下：</p>
-</li>
+<ul class="simple">
+<li><p>一个时钟分频器，以UART RX采样率产生采样脉冲</p></li>
+<li><p>一个<code class="docutils literal notranslate"><span class="pre">UartCtrlTx``Component</span></code></p></li>
+<li><p>一个<code class="docutils literal notranslate"><span class="pre">UartCtrlRx``Component</span></code></p></li>
+<li><p>UartCtrlTx</p></li>
 </ul>
+<p>该<code class="docutils literal notranslate"><span class="pre">Component</span></code>的端口如下：</p>
 </li>
 </ol>
-<pre><code>   |     名称     |        类型         |                     描述                     |
-   | :----------: | :-----------------: | :------------------------------------------: |
-   | configFrame  | UartCtrlFrameConfig |        包含数据位宽度计数和停止位配置        |
-   | samplingTick |        Bool         | 每UART波特，脉冲`rxSamplePerBit`次的时间参考 |
-   |    write     |    Stream[Bits]     |        系统向控制器发出传输指令的端口        |
-   |     txd      |        Bool         |                UART txd 引脚                 |
-</code></pre><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   定义用作存储`UartCtrlTX`状态的枚举：
-
-   ```Scala
-   object UartCtrlTxState extends SpinalEnum {
-     val IDLE, START, DATA, PARITY, STOP = newElement()
-   }
-   ```
-
-   定义`UartCtrlTx`的框架:
-
-   ```Scala
-   class UartCtrlTx(g : UartCtrlGenerics) extends Component {
-     `import g._
-
-     val io = new Bundle {
-       val configFrame  = in(UartCtrlFrameConfig(g))
-       val samplingTick = in Bool()
-       val write        = slave Stream (Bits(dataWidthMax bits))
-       val txd          = out Bool
-     }
-
-     
-     val clockDivider = new Area {
-       val counter = Reg(UInt(log2Up(rxSamplePerBit) bits)) init(0)
-       val tick = False
-       ..
-     }
-
-     machine to count up data bits and stop bits
-     val tickCounter = new Area {
-       val value = Reg(UInt(Math.max(dataWidthMax, 2) bits))
-       def reset() = value := 0
-       ..
-     }
-
-     val stateMachine = new Area {
-       import UartCtrlTxState._
-
-       val state = RegInit(IDLE)
-       val parity = Reg(Bool)
-       val txd = True
-       ..
-       switch(state) {
-         ..
-       }
-     }
-
-     io.txd := RegNext(stateMachine.txd) init(True)
-   }
-   ```
-
-   完整实现如下：
-
-   ```Scala
-   class UartCtrlTx(g : UartCtrlGenerics) extends Component {
-     import g._
-
-     val io = new Bundle {
-       val configFrame  = in(UartCtrlFrameConfig(g))
-       val samplingTick = in Bool
-       val write        = slave Stream (Bits(dataWidthMax bits))
-       val txd          = out Bool
-     }
-
-     
-     val clockDivider = new Area {
-       val counter = Reg(UInt(log2Up(rxSamplePerBit) bits)) init(0)
-       val tick = False
-       when(io.samplingTick) {
-         counter := counter - 1
-         tick := counter === 0
-       }
-     }
-
-     machine to count up data bits and stop bits
-     val tickCounter = new Area {
-       val value = Reg(UInt(Math.max(dataWidthMax, 2) bits))
-       def reset() = value := 0
-
-       when(clockDivider.tick) {
-         value := value + 1
-       }
-     }
-
-     val stateMachine = new Area {
-       import UartCtrlTxState._
-
-       val state = RegInit(IDLE)
-       val parity = Reg(Bool)
-       val txd = True
-
-       when(clockDivider.tick) {
-         parity := parity ^ txd
-       }
-
-       io.write.ready := False
-       switch(state) {
-         is(IDLE){
-           when(io.write.valid &amp;&amp; clockDivider.tick){
-             state := START
-           }
-         }
-         is(START) {
-           txd := False
-           when(clockDivider.tick) {
-             state := DATA
-             parity := io.configFrame.parity === UartParityType.ODD
-             tickCounter.reset()
-           }
-         }
-         is(DATA) {
-           txd := io.write.payload(tickCounter.value)
-           when(clockDivider.tick) {
-             when(tickCounter.value === io.configFrame.dataLength) {
-               io.write.ready := True
-               tickCounter.reset()
-               when(io.configFrame.parity === UartParityType.NONE) {
-                 state := STOP
-               } otherwise {
-                 state := PARITY
-               }
-             }
-           }
-         }
-         is(PARITY) {
-           txd := parity
-           when(clockDivider.tick) {
-             state := STOP
-             tickCounter.reset()
-           }
-         }
-         is(STOP) {
-           when(clockDivider.tick) {
-             when(tickCounter.value === toBitCount(io.configFrame.stop)) {
-               state := io.write.valid ? START | IDLE
-             }
-           }
-         }
-       }
-     }
-
-     io.txd := RegNext(stateMachine.txd, True)
-   }
-   ```
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">名称</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">configFrame</td>
+<td style="text-align: center;">UartCtrlFrameConfig</td>
+<td style="text-align: center;">包含数据位宽度计数和停止位配置</td>
+</tr>
+<tr>
+<td style="text-align: center;">samplingTick</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">每UART波特，脉冲<code>rxSamplePerBit</code>次的时间参考</td>
+</tr>
+<tr>
+<td style="text-align: center;">write</td>
+<td style="text-align: center;">Stream[Bits]</td>
+<td style="text-align: center;">系统向控制器发出传输指令的端口</td>
+</tr>
+<tr>
+<td style="text-align: center;">txd</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">UART txd 引脚</td>
+</tr>
+</tbody>
+</table><p>定义用作存储<code class="docutils literal notranslate"><span class="pre">UartCtrlTX</span></code>状态的枚举：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span><span class="w"> </span><span class="nc">UartCtrlTxState</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">SpinalEnum</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nc">IDLE</span><span class="p">,</span><span class="w"> </span><span class="nc">START</span><span class="p">,</span><span class="w"> </span><span class="nc">DATA</span><span class="p">,</span><span class="w"> </span><span class="nc">PARITY</span><span class="p">,</span><span class="w"> </span><span class="nc">STOP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newElement</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-<ul>
-<li><p>UartCtrlRx</p>
-<p>该<code class="docutils literal notranslate"><span class="pre">Component</span></code>的端口如下：</p>
-</li>
+<p>定义<code class="docutils literal notranslate"><span class="pre">UartCtrlTx</span></code>的框架:</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span>class UartCtrlTx(g : UartCtrlGenerics) extends Component {
+  `import g._
+
+  val io = new Bundle {
+    val configFrame  = in(UartCtrlFrameConfig(g))
+    val samplingTick = in Bool()
+    val write        = slave Stream (Bits(dataWidthMax bits))
+    val txd          = out Bool
+  }
+
+  
+  val clockDivider = new Area {
+    val counter = Reg(UInt(log2Up(rxSamplePerBit) bits)) init(0)
+    val tick = False
+    ..
+  }
+
+  machine to count up data bits and stop bits
+  val tickCounter = new Area {
+    val value = Reg(UInt(Math.max(dataWidthMax, 2) bits))
+    def reset() = value := 0
+    ..
+  }
+
+  val stateMachine = new Area {
+    import UartCtrlTxState._
+
+    val state = RegInit(IDLE)
+    val parity = Reg(Bool)
+    val txd = True
+    ..
+    switch(state) {
+      ..
+    }
+  }
+
+  io.txd := RegNext(stateMachine.txd) init(True)
+}
+</pre></div>
+</div>
+<p>完整实现如下：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">UartCtrlTx</span><span class="p">(</span><span class="n">g</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">UartCtrlGenerics</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="nn">g</span><span class="p">.</span><span class="n">_</span>
+
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">configFrame</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="p">(</span><span class="nc">UartCtrlFrameConfig</span><span class="p">(</span><span class="n">g</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">samplingTick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">write</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="n">slave</span><span class="w"> </span><span class="nc">Stream</span><span class="w"> </span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="n">dataWidthMax</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">txd</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="nc">Bool</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">clockDivider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="n">log2Up</span><span class="p">(</span><span class="n">rxSamplePerBit</span><span class="p">)</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">tick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">False</span><span class="w"></span>
+<span class="w">    </span><span class="n">when</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">samplingTick</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">counter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">      </span><span class="n">tick</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">machine</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="n">bits</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="n">bits</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">tickCounter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="nc">Math</span><span class="p">.</span><span class="n">max</span><span class="p">(</span><span class="n">dataWidthMax</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">when</span><span class="p">(</span><span class="n">clockDivider</span><span class="p">.</span><span class="n">tick</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">value</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">stateMachine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="nc">UartCtrlTxState</span><span class="p">.</span><span class="n">_</span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RegInit</span><span class="p">(</span><span class="nc">IDLE</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">parity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">Bool</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">txd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">True</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">when</span><span class="p">(</span><span class="n">clockDivider</span><span class="p">.</span><span class="n">tick</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">parity</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">parity</span><span class="w"> </span><span class="n">^</span><span class="w"> </span><span class="n">txd</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">write</span><span class="p">.</span><span class="n">ready</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">False</span><span class="w"></span>
+<span class="w">    </span><span class="n">switch</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">is</span><span class="p">(</span><span class="nc">IDLE</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">write</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">clockDivider</span><span class="p">.</span><span class="n">tick</span><span class="p">){</span><span class="w"></span>
+<span class="w">          </span><span class="n">state</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">START</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="n">is</span><span class="p">(</span><span class="nc">START</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">txd</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">False</span><span class="w"></span>
+<span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">clockDivider</span><span class="p">.</span><span class="n">tick</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="n">state</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">DATA</span><span class="w"></span>
+<span class="w">          </span><span class="n">parity</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">configFrame</span><span class="p">.</span><span class="n">parity</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nc">UartParityType</span><span class="p">.</span><span class="nc">ODD</span><span class="w"></span>
+<span class="w">          </span><span class="n">tickCounter</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="n">is</span><span class="p">(</span><span class="nc">DATA</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">txd</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">write</span><span class="p">.</span><span class="n">payload</span><span class="p">(</span><span class="n">tickCounter</span><span class="p">.</span><span class="n">value</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">clockDivider</span><span class="p">.</span><span class="n">tick</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="n">when</span><span class="p">(</span><span class="n">tickCounter</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">configFrame</span><span class="p">.</span><span class="n">dataLength</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">io</span><span class="p">.</span><span class="n">write</span><span class="p">.</span><span class="n">ready</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">True</span><span class="w"></span>
+<span class="w">            </span><span class="n">tickCounter</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="n">when</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">configFrame</span><span class="p">.</span><span class="n">parity</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nc">UartParityType</span><span class="p">.</span><span class="nc">NONE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">              </span><span class="n">state</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">STOP</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="n">otherwise</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">              </span><span class="n">state</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">PARITY</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="n">is</span><span class="p">(</span><span class="nc">PARITY</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">txd</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">parity</span><span class="w"></span>
+<span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">clockDivider</span><span class="p">.</span><span class="n">tick</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="n">state</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">STOP</span><span class="w"></span>
+<span class="w">          </span><span class="n">tickCounter</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="n">is</span><span class="p">(</span><span class="nc">STOP</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">clockDivider</span><span class="p">.</span><span class="n">tick</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="n">when</span><span class="p">(</span><span class="n">tickCounter</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="n">toBitCount</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">configFrame</span><span class="p">.</span><span class="n">stop</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">state</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">write</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nc">START</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nc">IDLE</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">io</span><span class="p">.</span><span class="n">txd</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">stateMachine</span><span class="p">.</span><span class="n">txd</span><span class="p">,</span><span class="w"> </span><span class="nc">True</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>UartCtrlRx</p></li>
 </ul>
-<pre><code>   |     名称     |        类型         |                     描述                     |
-   | :----------: | :-----------------: | :------------------------------------------: |
-   | configFrame  | UartCtrlFrameConfig |        包含数据位宽度计数和停止位配置        |
-   | samplingTick |        Bool         | 每UART波特，脉冲`rxSamplePerBit`次的时间参考 |
-   |     read     |     Flow[Bits]      |         用来向系统告知数据帧接收成功         |
-   |     txd      |        Bool         |     UART txd 引脚，没有与当前时钟域同步      |
-</code></pre><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   定义用作存储`UartCtrlTX`状态的枚举：
-
-   ```Scala
-   object UartCtrlRxState extends SpinalEnum {
-     val IDLE, START, DATA, PARITY, STOP = newElement()
-   }
-   ```
-
-   定义`UartCtrlTx`的框架:
-
-   ```Scala
-   class UartCtrlRx(g : UartCtrlGenerics) extends Component {
-     import g._
-     val io = new Bundle {
-       val configFrame  = in(UartCtrlFrameConfig(g))
-       val samplingTick = in Bool
-       val read         = master Flow (Bits(dataWidthMax bits))
-       val rxd          = in Bool
-     }
-
-     
-     val sampler = new Area {
-       val syncroniser = BufferCC(io.rxd)
-       val samples     = History(that=syncroniser,when=io.samplingTick,length=samplingSize)
-       val value       = RegNext(MajorityVote(samples))
-       val tick        = RegNext(io.samplingTick)
-     }
-
-     
-     val bitTimer = new Area {
-       val counter = Reg(UInt(log2Up(rxSamplePerBit) bits))
-       def reset() = counter := preSamplingSize + (samplingSize - 1) / 2 - 1)
-       val tick = False
-       ...
-     }
-
-     
-     val bitCounter = new Area {
-       val value = Reg(UInt(Math.max(dataWidthMax, 2) bits))
-       def reset() = value := 0
-       ...
-     }
-
-     val stateMachine = new Area {
-       import UartCtrlRxState._
-
-       val state   = RegInit(IDLE)
-       val parity  = Reg(Bool)
-       val shifter = Reg(io.read.payload)
-       ...
-       switch(state) {
-         ...
-       }
-     }
-   }
-   ```
-
-   完整实现如下：
-
-   ```Scala
-   class UartCtrlRx(g : UartCtrlGenerics) extends Component {
-     import g._
-     val io = new Bundle {
-       val configFrame  = in(UartCtrlFrameConfig(g))
-       val samplingTick = in Bool
-       val read         = master Flow (Bits(dataWidthMax bits))
-       val rxd          = in Bool
-     }
-
-     
-     val sampler = new Area {
-       val syncroniser = BufferCC(io.rxd)
-       val samples     = History(that=syncroniser,when=io.samplingTick,length=samplingSize)
-       val value       = RegNext(MajorityVote(samples))
-       val tick        = RegNext(io.samplingTick)
-     }
-
-     
-     val bitTimer = new Area {
-       val counter = Reg(UInt(log2Up(rxSamplePerBit) bits))
-       def reset() = counter := preSamplingSize + (samplingSize - 1) / 2 - 1
-       val tick = False
-       when(sampler.tick) {
-         counter := counter - 1
-         when(counter === 0) {
-           tick := True
-         }
-       }
-     }
-
-     
-     val bitCounter = new Area {
-       val value = Reg(UInt(Math.max(dataWidthMax, 2) bits))
-       def reset() = value := 0
-
-       when(bitTimer.tick) {
-         value := value + 1
-       }
-     }
-
-     val stateMachine = new Area {
-       import UartCtrlRxState._
-
-       val state   = RegInit(IDLE)
-       val parity  = Reg(Bool)
-       val shifter = Reg(io.read.payload)
-
-       
-       when(bitTimer.tick) {
-         parity := parity ^ sampler.value
-       }
-
-       io.read.valid := False
-       switch(state) {
-         is(IDLE) {
-           when(sampler.value === False) {
-             state := START
-             bitTimer.reset()
-           }
-         }
-         is(START) {
-           when(bitTimer.tick) {
-             state := DATA
-             bitCounter.reset()
-             parity := io.configFrame.parity === UartParityType.ODD
-             when(sampler.value === True) {
-               state := IDLE
-             }
-           }
-         }
-         is(DATA) {
-           when(bitTimer.tick) {
-             shifter(bitCounter.value) := sampler.value
-             when(bitCounter.value === io.configFrame.dataLength) {
-               bitCounter.reset()
-               when(io.configFrame.parity === UartParityType.NONE) {
-                 state := STOP
-               } otherwise {
-                 state := PARITY
-               }
-             }
-           }
-         }
-         is(PARITY) {
-           when(bitTimer.tick) {
-             state := STOP
-             bitCounter.reset()
-             when(parity =/= sampler.value) {
-               state := IDLE
-             }
-           }
-         }
-         is(STOP) {
-           when(bitTimer.tick) {
-             when(!sampler.value) {
-               state := IDLE
-             }.elsewhen(bitCounter.value === toBitCount(io.configFrame.stop)) {
-               state := IDLE
-               io.read.valid := True
-             }
-           }
-         }
-       }
-     }
-     io.read.payload := stateMachine.shifter
-   }
-   ```
+<p>该<code class="docutils literal notranslate"><span class="pre">Component</span></code>的端口如下：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">名称</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">configFrame</td>
+<td style="text-align: center;">UartCtrlFrameConfig</td>
+<td style="text-align: center;">包含数据位宽度计数和停止位配置</td>
+</tr>
+<tr>
+<td style="text-align: center;">samplingTick</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">每UART波特，脉冲<code>rxSamplePerBit</code>次的时间参考</td>
+</tr>
+<tr>
+<td style="text-align: center;">read</td>
+<td style="text-align: center;">Flow[Bits]</td>
+<td style="text-align: center;">用来向系统告知数据帧接收成功</td>
+</tr>
+<tr>
+<td style="text-align: center;">txd</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">UART txd 引脚，没有与当前时钟域同步</td>
+</tr>
+</tbody>
+</table><p>定义用作存储<code class="docutils literal notranslate"><span class="pre">UartCtrlTX</span></code>状态的枚举：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span><span class="w"> </span><span class="nc">UartCtrlRxState</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">SpinalEnum</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nc">IDLE</span><span class="p">,</span><span class="w"> </span><span class="nc">START</span><span class="p">,</span><span class="w"> </span><span class="nc">DATA</span><span class="p">,</span><span class="w"> </span><span class="nc">PARITY</span><span class="p">,</span><span class="w"> </span><span class="nc">STOP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newElement</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-<ul>
-<li><p>UartCtrl</p>
+<p>定义<code class="docutils literal notranslate"><span class="pre">UartCtrlTx</span></code>的框架:</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">UartCtrlRx</span><span class="p">(</span><span class="n">g</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">UartCtrlGenerics</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="nn">g</span><span class="p">.</span><span class="n">_</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">configFrame</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="p">(</span><span class="nc">UartCtrlFrameConfig</span><span class="p">(</span><span class="n">g</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">samplingTick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">read</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="n">master</span><span class="w"> </span><span class="nc">Flow</span><span class="w"> </span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="n">dataWidthMax</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">rxd</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">sampler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">syncroniser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">BufferCC</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">rxd</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">samples</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nc">History</span><span class="p">(</span><span class="n">that</span><span class="o">=</span><span class="n">syncroniser</span><span class="p">,</span><span class="n">when</span><span class="o">=</span><span class="n">io</span><span class="p">.</span><span class="n">samplingTick</span><span class="p">,</span><span class="n">length</span><span class="o">=</span><span class="n">samplingSize</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="nc">MajorityVote</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">tick</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">samplingTick</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">bitTimer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="n">log2Up</span><span class="p">(</span><span class="n">rxSamplePerBit</span><span class="p">)</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">preSamplingSize</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">samplingSize</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">tick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">False</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">bitCounter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="nc">Math</span><span class="p">.</span><span class="n">max</span><span class="p">(</span><span class="n">dataWidthMax</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">stateMachine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="nc">UartCtrlRxState</span><span class="p">.</span><span class="n">_</span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">state</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nc">RegInit</span><span class="p">(</span><span class="nc">IDLE</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">parity</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">Bool</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">shifter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">read</span><span class="p">.</span><span class="n">payload</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="n">switch</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>完整实现如下：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">UartCtrlRx</span><span class="p">(</span><span class="n">g</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">UartCtrlGenerics</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="nn">g</span><span class="p">.</span><span class="n">_</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">configFrame</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="p">(</span><span class="nc">UartCtrlFrameConfig</span><span class="p">(</span><span class="n">g</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">samplingTick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">read</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="n">master</span><span class="w"> </span><span class="nc">Flow</span><span class="w"> </span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="n">dataWidthMax</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">rxd</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">sampler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">syncroniser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">BufferCC</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">rxd</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">samples</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nc">History</span><span class="p">(</span><span class="n">that</span><span class="o">=</span><span class="n">syncroniser</span><span class="p">,</span><span class="n">when</span><span class="o">=</span><span class="n">io</span><span class="p">.</span><span class="n">samplingTick</span><span class="p">,</span><span class="n">length</span><span class="o">=</span><span class="n">samplingSize</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="nc">MajorityVote</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">tick</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="nc">RegNext</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">samplingTick</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">bitTimer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="n">log2Up</span><span class="p">(</span><span class="n">rxSamplePerBit</span><span class="p">)</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">preSamplingSize</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">samplingSize</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">tick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">False</span><span class="w"></span>
+<span class="w">    </span><span class="n">when</span><span class="p">(</span><span class="n">sampler</span><span class="p">.</span><span class="n">tick</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">counter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">      </span><span class="n">when</span><span class="p">(</span><span class="n">counter</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">tick</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">True</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">bitCounter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">UInt</span><span class="p">(</span><span class="nc">Math</span><span class="p">.</span><span class="n">max</span><span class="p">(</span><span class="n">dataWidthMax</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">when</span><span class="p">(</span><span class="n">bitTimer</span><span class="p">.</span><span class="n">tick</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">value</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">stateMachine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="nc">UartCtrlRxState</span><span class="p">.</span><span class="n">_</span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">state</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nc">RegInit</span><span class="p">(</span><span class="nc">IDLE</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">parity</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="nc">Bool</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">shifter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Reg</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">read</span><span class="p">.</span><span class="n">payload</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span>
+<span class="w">    </span><span class="n">when</span><span class="p">(</span><span class="n">bitTimer</span><span class="p">.</span><span class="n">tick</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">parity</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">parity</span><span class="w"> </span><span class="n">^</span><span class="w"> </span><span class="n">sampler</span><span class="p">.</span><span class="n">value</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">io</span><span class="p">.</span><span class="n">read</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">False</span><span class="w"></span>
+<span class="w">    </span><span class="n">switch</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">is</span><span class="p">(</span><span class="nc">IDLE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">sampler</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nc">False</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="n">state</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">START</span><span class="w"></span>
+<span class="w">          </span><span class="n">bitTimer</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="n">is</span><span class="p">(</span><span class="nc">START</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">bitTimer</span><span class="p">.</span><span class="n">tick</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="n">state</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">DATA</span><span class="w"></span>
+<span class="w">          </span><span class="n">bitCounter</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span><span class="w"></span>
+<span class="w">          </span><span class="n">parity</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">configFrame</span><span class="p">.</span><span class="n">parity</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nc">UartParityType</span><span class="p">.</span><span class="nc">ODD</span><span class="w"></span>
+<span class="w">          </span><span class="n">when</span><span class="p">(</span><span class="n">sampler</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nc">True</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">state</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">IDLE</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="n">is</span><span class="p">(</span><span class="nc">DATA</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">bitTimer</span><span class="p">.</span><span class="n">tick</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="n">shifter</span><span class="p">(</span><span class="n">bitCounter</span><span class="p">.</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">sampler</span><span class="p">.</span><span class="n">value</span><span class="w"></span>
+<span class="w">          </span><span class="n">when</span><span class="p">(</span><span class="n">bitCounter</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">configFrame</span><span class="p">.</span><span class="n">dataLength</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">bitCounter</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="n">when</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">configFrame</span><span class="p">.</span><span class="n">parity</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nc">UartParityType</span><span class="p">.</span><span class="nc">NONE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">              </span><span class="n">state</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">STOP</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="n">otherwise</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">              </span><span class="n">state</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">PARITY</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="n">is</span><span class="p">(</span><span class="nc">PARITY</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">bitTimer</span><span class="p">.</span><span class="n">tick</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="n">state</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">STOP</span><span class="w"></span>
+<span class="w">          </span><span class="n">bitCounter</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span><span class="w"></span>
+<span class="w">          </span><span class="n">when</span><span class="p">(</span><span class="n">parity</span><span class="w"> </span><span class="o">=/=</span><span class="w"> </span><span class="n">sampler</span><span class="p">.</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">state</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">IDLE</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="n">is</span><span class="p">(</span><span class="nc">STOP</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">bitTimer</span><span class="p">.</span><span class="n">tick</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="n">when</span><span class="p">(</span><span class="o">!</span><span class="n">sampler</span><span class="p">.</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">state</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">IDLE</span><span class="w"></span>
+<span class="w">          </span><span class="p">}.</span><span class="n">elsewhen</span><span class="p">(</span><span class="n">bitCounter</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="n">toBitCount</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">configFrame</span><span class="p">.</span><span class="n">stop</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">state</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">IDLE</span><span class="w"></span>
+<span class="w">            </span><span class="n">io</span><span class="p">.</span><span class="n">read</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nc">True</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="n">io</span><span class="p">.</span><span class="n">read</span><span class="p">.</span><span class="n">payload</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">stateMachine</span><span class="p">.</span><span class="n">shifter</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>UartCtrl</p></li>
+</ul>
 <p>让编写<code class="docutils literal notranslate"><span class="pre">UartCtrl</span></code>来实例化<code class="docutils literal notranslate"><span class="pre">UartCtrlRx</span></code>和<code class="docutils literal notranslate"><span class="pre">UartCtrlTx</span></code>部分，生成时钟分频器逻辑，并将它们彼此连接起来。</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">UartCtrl</span><span class="p">(</span><span class="n">g</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">UartCtrlGenerics</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UartCtrlGenerics</span><span class="p">())</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -843,8 +899,6 @@
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-</li>
-</ul>
 <ol>
 <li><p>简单使用</p>
 <p>将<code class="docutils literal notranslate"><span class="pre">uartCtrl</span></code>综合为<code class="docutils literal notranslate"><span class="pre">115200-N-8-1</span></code>：</p>
@@ -951,8 +1005,9 @@
 </li>
 <li><p>数据结构</p>
 <p>在实现控制器前需要定义一些数据结构。</p>
-<ul>
-<li><p>RGB颜色</p>
+<ul class="simple">
+<li><p>RGB颜色</p></li>
+</ul>
 <p>首先，需要一个三通道的颜色结构(红、绿、蓝)。这个数据结构将被用来给控制器提供像素，也将被VGA总线使用。</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RgbConfig</span><span class="p">(</span><span class="n">rWidth</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="n">gWidth</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="n">bWidth</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">){</span><span class="w"></span>
 <span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">getWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rWidth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gWidth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">bWidth</span><span class="w"></span>
@@ -965,37 +1020,60 @@
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-</li>
+<ul class="simple">
 <li><p>VGA总线</p></li>
 </ul>
 </li>
 </ol>
-<pre><code>   | IO名称  |  驱动  |           描述           |
-   | :-----: | :----: | :----------------------: |
-   |  vSync  | master | 垂直同步，表示新帧的开始 |
-   |  hSync  | master | 水平同步，表示新行的开始 |
-   | colorEn | master | 当接口处于可见部分时置高 |
-   |  color  | master |         携带颜色         |
-</code></pre><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   ```Scala
-   case class Vga (rgbConfig: RgbConfig) extends Bundle with IMasterSlave{
-     val vSync = Bool()
-     val hSync = Bool()
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">IO名称</th>
+<th style="text-align: center;">驱动</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">vSync</td>
+<td style="text-align: center;">master</td>
+<td style="text-align: center;">垂直同步，表示新帧的开始</td>
+</tr>
+<tr>
+<td style="text-align: center;">hSync</td>
+<td style="text-align: center;">master</td>
+<td style="text-align: center;">水平同步，表示新行的开始</td>
+</tr>
+<tr>
+<td style="text-align: center;">colorEn</td>
+<td style="text-align: center;">master</td>
+<td style="text-align: center;">当接口处于可见部分时置高</td>
+</tr>
+<tr>
+<td style="text-align: center;">color</td>
+<td style="text-align: center;">master</td>
+<td style="text-align: center;">携带颜色</td>
+</tr>
+</tbody>
+</table><div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Vga</span><span class="w"> </span><span class="p">(</span><span class="n">rgbConfig</span><span class="p">:</span><span class="w"> </span><span class="nc">RgbConfig</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="nc">IMasterSlave</span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">vSync</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">hSync</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
 
-     val colorEn = Bool()
-     val color   = Rgb(rgbConfig)
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">colorEn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">color</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nc">Rgb</span><span class="p">(</span><span class="n">rgbConfig</span><span class="p">)</span><span class="w"></span>
 
-     override def asMaster() : Unit = this.asOutput()
-   }
-   ```
-   这个Vga `Bundle`使用了`IMasterSlave`特性，它允许用户使用以下方式创建主/从Vga接口:
-   ```
-   master(Vga(...))
-   slave(Vga(...))
-   ```
+<span class="w">  </span><span class="k">override</span><span class="w"> </span><span class="k">def</span><span class="w"> </span><span class="nf">asMaster</span><span class="p">()</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">this</span><span class="p">.</span><span class="n">asOutput</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-<ul>
-<li><p>VGA时序</p>
+<p>这个Vga <code class="docutils literal notranslate"><span class="pre">Bundle</span></code>使用了<code class="docutils literal notranslate"><span class="pre">IMasterSlave</span></code>特性，它允许用户使用以下方式创建主/从Vga接口:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">master</span><span class="p">(</span><span class="n">Vga</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+<span class="n">slave</span><span class="p">(</span><span class="n">Vga</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>VGA时序</p></li>
+</ul>
 <p>VGA接口通过使用8种不同的时序来驱动。下面是一个能够携带它们的<code class="docutils literal notranslate"><span class="pre">Bundle</span></code>的简单例子。</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">VgaTimings</span><span class="p">(</span><span class="n">timingsWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">hSyncStart</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">timingsWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
@@ -1060,8 +1138,6 @@
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-</li>
-</ul>
 <ol class="simple">
 <li><p>VGA控制器</p>
 <ul class="simple">
@@ -1110,8 +1186,9 @@
 </tr>
 </tbody>
 </table><p>控制器不集成任何像素缓冲。它直接把它们从<code class="docutils literal notranslate"><span class="pre">pixels``Stream</span></code>获取并在适当的时候把它们放在<code class="docutils literal notranslate"><span class="pre">vga.color</span></code>上。如果<code class="docutils literal notranslate"><span class="pre">pixels</span></code>无效，那么在一个周期内<code class="docutils literal notranslate"><span class="pre">error</span></code>会拉高。</p>
-<ul>
-<li><p>组件和io定义</p>
+<ul class="simple">
+<li><p>组件和io定义</p></li>
+</ul>
 <p>定义一个新的VgaCtrl<code class="docutils literal notranslate"><span class="pre">Component</span></code>，它将<code class="docutils literal notranslate"><span class="pre">RgbConfig</span></code>和<code class="docutils literal notranslate"><span class="pre">timingsWidth</span></code>作为参数。将位宽设置为默认值12。</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">VgaCtrl</span><span class="p">(</span><span class="n">rgbConfig</span><span class="p">:</span><span class="w"> </span><span class="nc">RgbConfig</span><span class="p">,</span><span class="w"> </span><span class="n">timingsWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -1127,8 +1204,9 @@
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-</li>
-<li><p>水平和垂直逻辑</p>
+<ul class="simple">
+<li><p>水平和垂直逻辑</p></li>
+</ul>
 <p>产生水平和垂直同步信号的逻辑是完全相同的。有点像~PWM~。水平同步器每循环加一次，而垂直同步器使用水平同步信号作为增量。</p>
 <p>定义<code class="docutils literal notranslate"><span class="pre">HVArea</span></code>，它表示1个 ~PWM，然后实例化它两次:一次用于水平同步和一次用于垂直同步</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">VgaCtrl</span><span class="p">(</span><span class="n">rgbConfig</span><span class="p">:</span><span class="w"> </span><span class="nc">RgbConfig</span><span class="p">,</span><span class="w"> </span><span class="n">timingsWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -1164,8 +1242,9 @@
 </pre></div>
 </div>
 <p>可见，这是通过使用Area完成的。这是为了避免创建一个新的<code class="docutils literal notranslate"><span class="pre">Component</span></code>，否则会变得冗长得多。</p>
-</li>
-<li><p>互联</p>
+<ul class="simple">
+<li><p>互联</p></li>
+</ul>
 <p>有了用于水平和垂直同步的定时生成器，需要驱动输出。</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">VgaCtrl</span><span class="p">(</span><span class="n">rgbConfig</span><span class="p">:</span><span class="w"> </span><span class="nc">RgbConfig</span><span class="p">,</span><span class="w"> </span><span class="n">timingsWidth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{...}</span><span class="w"></span>
@@ -1187,8 +1266,9 @@
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-</li>
-<li><p>奖励</p>
+<ul class="simple">
+<li><p>奖励</p></li>
+</ul>
 <p>上面定义的VgaCtrl是通用的(不是特定于应用程序的)。可以想象这样一个情况，系统提供了RGB的片段流(<code class="docutils literal notranslate"><span class="pre">Stream</span></code> of <code class="docutils literal notranslate"><span class="pre">Fragment</span></code>)，这意味着系统在图像开始/结束指示之间传输像素。</p>
 <p>在这种情况下，可以通过在<code class="docutils literal notranslate"><span class="pre">error</span></code>发生时激活它来自动管理<code class="docutils literal notranslate"><span class="pre">softReset</span></code>输入，然后等待当前<code class="docutils literal notranslate"><span class="pre">pixel</span></code>图片的结束来无效<code class="docutils literal notranslate"><span class="pre">error</span></code>。</p>
 <p>向<code class="docutils literal notranslate"><span class="pre">VgaCtrl</span></code>添加一个函数，可以通过使用RGB片段流从父组件调用该函数来提供<code class="docutils literal notranslate"><span class="pre">VgaCtrl</span></code>。</p>
@@ -1213,8 +1293,6 @@
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-</li>
-</ul>
 </section>
 </section>
 

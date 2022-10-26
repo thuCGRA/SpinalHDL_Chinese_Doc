@@ -416,14 +416,12 @@
 <ol>
 <li><p>变式</p>
 <p>Axi4总线有三个变式：</p>
-</li>
-</ol>
-<p>|     类型      |                                                                                                     述                                                                                                      |
-| :———–: :———————————————————————————————————————————————————————————————————-: |
-| Axi4ReadOnly  |                                                                                               只有AR和R通在                                                                                                |
-| Axi4WriteOnly |                                                                                              只有AW、W和B通在                                                                                              |
+<p>|     类型      |                                                                                                      述                                                                                                      |
+| :———–:  :————————————————————————————————————————————————————- ———————————————: |
+| Axi4ReadOnly  |                                                                                               只有AR和R通 在                                                                                                |
+| Axi4WriteOnly |                                                                                              只有AW、W和B通 在                                                                                              |
 |  Axi4Shared   | 这种变式是该库的首创。<br>它使用4个通道, W, B,R, 还有一个名为AWR的新通道。<br>AWR通道可以用来传输AR和AW事务。要分离它们, 需要一个信号<code class="docutils literal notranslate"><span class="pre">write</span></code>。<br>这种Axi4Shared变体的优点是使用更少的面积, 尤其是在互连方面。 |</p>
-<ol class="simple">
+</li>
 <li><p>函数与操作</p></li>
 </ol>
 <table border="1" class="docutils">
@@ -468,8 +466,7 @@
 <li><p>性能不如AXI, 但使用的面积少得多(读写命令使用相同的握手通道。主端口不需要存储挂起请求的地址以避免读/写风险)</p></li>
 </ul>
 </li>
-<li><p>配置和实例化</p></li>
-</ol>
+<li><p>配置和实例化</p>
 <p>AvalonMM Bundle有一个构造参数<code class="docutils literal notranslate"><span class="pre">AvalonMMConfig</span></code>。由于Avalon总线的灵活性, <code class="docutils literal notranslate"><span class="pre">AvalonMMConfig</span></code>可以作为许多配置元素。</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AvalonMMConfig</span><span class="p">(</span><span class="w"> </span><span class="n">addressWidth</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"></span>
 <span class="w">                       </span><span class="n">dataWidth</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"></span>
@@ -501,54 +498,17 @@
 </pre></div>
 </div>
 <p>这样的配置类也有一些函数：</p>
-<table border="1" class="docutils">
-<thead>
-<tr>
-<th style="text-align: center;">函数名</th>
-<th style="text-align: center;">返回</th>
-<th style="text-align: center;">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">getReadOnlyConfig</td>
-<td style="text-align: center;">AvalonMMConfig</td>
-<td style="text-align: center;">返回一个类似的配置, 但禁用所有写入属性。</td>
-</tr>
-<tr>
-<td style="text-align: center;">getWriteOnlyConfig</td>
-<td style="text-align: center;">AvalonMMConfig</td>
-<td style="text-align: center;">返回一个类似的配置, 但禁用所有读属性</td>
-</tr>
-</tbody>
-</table>
+<p>|       函数名       |      返回      |                   描述                   |
+| :—————-: | :————: | :————————————–: |
+| getReadOnlyConfig  | AvalonMMConfig | 返回一个类似的配置, 但禁用所有写入属性。 |
+| getWriteOnlyConfig | AvalonMMConfig |   返回一个类似的配置, 但禁用所有读属性   |</p>
 <p>这个配置对象也有一些函数来提供一些AvalonMMConfig模板:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">函数名</th>
-<th style="text-align: center;">返回</th>
-<th style="text-align: center;">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">fixed(addressWidth,dataWidth,readLatency)</td>
-<td style="text-align: center;">AvalonMMConfig</td>
-<td style="text-align: center;">返回一个具有固定读取时间的简单配置。</td>
-</tr>
-<tr>
-<td style="text-align: center;">pipelined(addressWidth,dataWidth)</td>
-<td style="text-align: center;">AvalonMMConfig</td>
-<td style="text-align: center;">返回一个配置, 读取延迟可变</td>
-</tr>
-<tr>
-<td style="text-align: center;">bursted(addressWidth,dataWidth,burstCountWidth)</td>
-<td style="text-align: center;">AvalonMMConfig</td>
-<td style="text-align: center;">返回一个具有可变延迟读取和突发功能的配置</td>
-</tr>
-</tbody>
-</table><div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">// 创建一个只写的AvalonMM配置, 具有突发能力和字节使能</span>
+<p>|                     函数名                      |      返回      |                   描述                   |
+| :———————————————: | :————: | :————————————–: |
+|    fixed(addressWidth,dataWidth,readLatency)    | AvalonMMConfig |   返回一个具有固定读取时间的简单配置。   |
+|        pipelined(addressWidth,dataWidth)        | AvalonMMConfig |        返回一个配置, 读取延迟可变        |
+| bursted(addressWidth,dataWidth,burstCountWidth) | AvalonMMConfig | 返回一个具有可变延迟读取和突发功能的配置 |</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="c1">// 创建一个只写的AvalonMM配置, 具有突发能力和字节使能</span>
 <span class="kd">val</span><span class="w"> </span><span class="n">myAvalonConfig</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="nc">AvalonMMConfig</span><span class="p">.</span><span class="n">bursted</span><span class="p">(</span><span class="w"></span>
 <span class="w">                    </span><span class="n">addressWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">addressWidth</span><span class="p">,</span><span class="w"></span>
 <span class="w">                    </span><span class="n">dataWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">memDataWidth</span><span class="p">,</span><span class="w"></span>
@@ -563,6 +523,8 @@
 <span class="kd">val</span><span class="w"> </span><span class="n">bus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">AvalonMM</span><span class="p">(</span><span class="n">myAvalonConfig</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
+</li>
+</ol>
 </section>
 </section>
 

@@ -165,50 +165,202 @@
 </section>
 <section id="access-types">
 <h2>二、28种可支持类型(28 Access Types)<a class="headerlink" href="#access-types" title="此标题的永久链接"></a></h2>
-<p>大多数这些类型来自于UVM定义：
-| 接入类型 |                          描述                           | 来源  |
-| :——: | :—————————————————–: | :—: |
-|    RO    |                  w: 无影响, r: 无影响                   |  UVM  |
-|    RW    |                   w: as-is, r: 无影响                   |  UVM  |
-|    RC    |               w: 无影响, r: 清空所有比特                |  UVM  |
-|    RS    |               w: 无影响, r: 设置所有比特                |  UVM  |
-|   WRC    |                w: as-is, r: 清空所有比特                |  UVM  |
-|   WRS    |                w: as-is, r: 设置所有比特                |  UVM  |
-|    WC    |               w: 清空所有比特, r: 无影响                |  UVM  |
-|    WS    |               w: 设置所有比特, r: 无影响                |  UVM  |
-|   WSRC   |            w: 设置所有比特, r: 清空所有比特             |  UVM  |
-|   WCRC   |            w: 清空所有比特, r: 设置所有比特             |  UVM  |
-|   W1C    |       w: 1/0 清空/对于匹配的比特无影响, r: 无影响       |  UVM  |
-|   W1S    |       w: 1/0 设置/对于匹配的比特无影响, r: 无影响       |  UVM  |
-|   W1T    |       w: 1/0 切换/对于匹配的比特无影响, r: 无影响       |  UVM  |
-|   W0C    |          w: 1/0 无影响/清空匹配比特, r: 无影响          |  UVM  |
-|   W0S    |          w: 1/0 无影响/设置匹配比特, r: 无影响          |  UVM  |
-|   W0T    |          w: 1/0 无影响/切换匹配比特, r: 无影响          |  UVM  |
-|  W1SRC   |    w: 1/0 设置/对于匹配的比特无影响, r: 清空所有比特    |  UVM  |
-|  W1CRS   |    w: 1/0 清空/对于匹配的比特无影响, r: 设置所有比特    |  UVM  |
-|  W0SRC   |       w: 1/0 无影响/设置匹配比特, r: 清空所有比特       |  UVM  |
-|  W0CRS   |       w: 1/0 无影响/清空匹配比特, r: 设置所有比特       |  UVM  |
-|    WO    |                   w: as-is, r: error                    |  UVM  |
-|   WOC    |                w: 清空所有比特, r: error                |  UVM  |
-|   WOS    |                w: 设置所有比特, r: error                |  UVM  |
-|    W1    | w: 第一个进行硬复位的是as-is, 其他w对s无影响, r: 无影响 |  UVM  |
-|   WO1    |  w: 第一个进行硬复位的是as-is,其他w对s无影响, r: 错误   |  UVM  |
-|    NA    |                w: reserved, r: reserved                 |  New  |
-|   W1P    |      w: 1/0 pulse/对于匹配的比特无影响, r: 无影响       |  New  |
-|   W0P    |      w: 0/1 pulse/对于匹配的比特无影响, r: 无影响       |  New  |</p>
-</section>
+<p>大多数这些类型来自于UVM定义：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">接入类型</th>
+<th style="text-align: center;">描述</th>
+<th style="text-align: center;">来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">RO</td>
+<td style="text-align: center;">w: 无影响, r: 无影响</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">RW</td>
+<td style="text-align: center;">w: as-is, r: 无影响</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">RC</td>
+<td style="text-align: center;">w: 无影响, r: 清空所有比特</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">RS</td>
+<td style="text-align: center;">w: 无影响, r: 设置所有比特</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">WRC</td>
+<td style="text-align: center;">w: as-is, r: 清空所有比特</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">WRS</td>
+<td style="text-align: center;">w: as-is, r: 设置所有比特</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">WC</td>
+<td style="text-align: center;">w: 清空所有比特, r: 无影响</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">WS</td>
+<td style="text-align: center;">w: 设置所有比特, r: 无影响</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">WSRC</td>
+<td style="text-align: center;">w: 设置所有比特, r: 清空所有比特</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">WCRC</td>
+<td style="text-align: center;">w: 清空所有比特, r: 设置所有比特</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">W1C</td>
+<td style="text-align: center;">w: 1/0 清空/对于匹配的比特无影响, r: 无影响</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">W1S</td>
+<td style="text-align: center;">w: 1/0 设置/对于匹配的比特无影响, r: 无影响</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">W1T</td>
+<td style="text-align: center;">w: 1/0 切换/对于匹配的比特无影响, r: 无影响</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">W0C</td>
+<td style="text-align: center;">w: 1/0 无影响/清空匹配比特, r: 无影响</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">W0S</td>
+<td style="text-align: center;">w: 1/0 无影响/设置匹配比特, r: 无影响</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">W0T</td>
+<td style="text-align: center;">w: 1/0 无影响/切换匹配比特, r: 无影响</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">W1SRC</td>
+<td style="text-align: center;">w: 1/0 设置/对于匹配的比特无影响, r: 清空所有比特</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">W1CRS</td>
+<td style="text-align: center;">w: 1/0 清空/对于匹配的比特无影响, r: 设置所有比特</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">W0SRC</td>
+<td style="text-align: center;">w: 1/0 无影响/设置匹配比特, r: 清空所有比特</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">W0CRS</td>
+<td style="text-align: center;">w: 1/0 无影响/清空匹配比特, r: 设置所有比特</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">WO</td>
+<td style="text-align: center;">w: as-is, r: error</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">WOC</td>
+<td style="text-align: center;">w: 清空所有比特, r: error</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">WOS</td>
+<td style="text-align: center;">w: 设置所有比特, r: error</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">W1</td>
+<td style="text-align: center;">w: 第一个进行硬复位的是as-is, 其他w对s无影响, r: 无影响</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">WO1</td>
+<td style="text-align: center;">w: 第一个进行硬复位的是as-is,其他w对s无影响, r: 错误</td>
+<td style="text-align: center;">UVM</td>
+</tr>
+<tr>
+<td style="text-align: center;">NA</td>
+<td style="text-align: center;">w: reserved, r: reserved</td>
+<td style="text-align: center;">New</td>
+</tr>
+<tr>
+<td style="text-align: center;">W1P</td>
+<td style="text-align: center;">w: 1/0 pulse/对于匹配的比特无影响, r: 无影响</td>
+<td style="text-align: center;">New</td>
+</tr>
+<tr>
+<td style="text-align: center;">W0P</td>
+<td style="text-align: center;">w: 0/1 pulse/对于匹配的比特无影响, r: 无影响</td>
+<td style="text-align: center;">New</td>
+</tr>
+</tbody>
+</table></section>
 <section id="automatic-documentation-generation">
 <h2>三、自动文献生成(Automatic documentation generation)<a class="headerlink" href="#automatic-documentation-generation" title="此标题的永久链接"></a></h2>
-<p>文献类型：
-|  文献类型  |                                使用                                 | 状态  |
-| :——–: | :—————————————————————–: | :—: |
-|    HTML    | <code class="docutils literal notranslate"><span class="pre">busif.accept(HtmlGenerator(&quot;regif&quot;,</span> <span class="pre">title</span> <span class="pre">=</span> <span class="pre">&quot;XXX</span> <span class="pre">register</span> <span class="pre">file&quot;))</span></code> |   Y   |
-|  CHeader   |          <code class="docutils literal notranslate"><span class="pre">busif.accept(CHeaderGenerator(&quot;header&quot;,</span> <span class="pre">&quot;AP&quot;))</span></code>           |   Y   |
-|    JSON    |               <code class="docutils literal notranslate"><span class="pre">busif.accept(JsonGenerator(&quot;regif&quot;))</span></code>                |   Y   |
-| RALF(UVM)  |               <code class="docutils literal notranslate"><span class="pre">busif.accept(RalfGenerator(&quot;header&quot;))</span></code>               |   Y   |
-| Latex(pdf) |                                                                     |   N   |
-|    docx    |                                                                     |   N   |</p>
-<p>HTML自动文档目前完成了, 生成的HTML文档如下：</p>
+<p>文献类型：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">文献类型</th>
+<th style="text-align: center;">使用</th>
+<th style="text-align: center;">状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">HTML</td>
+<td style="text-align: center;"><code>busif.accept(HtmlGenerator("regif", title = "XXX register file"))</code></td>
+<td style="text-align: center;">Y</td>
+</tr>
+<tr>
+<td style="text-align: center;">CHeader</td>
+<td style="text-align: center;"><code>busif.accept(CHeaderGenerator("header", "AP"))</code></td>
+<td style="text-align: center;">Y</td>
+</tr>
+<tr>
+<td style="text-align: center;">JSON</td>
+<td style="text-align: center;"><code>busif.accept(JsonGenerator("regif"))</code></td>
+<td style="text-align: center;">Y</td>
+</tr>
+<tr>
+<td style="text-align: center;">RALF(UVM)</td>
+<td style="text-align: center;"><code>busif.accept(RalfGenerator("header"))</code></td>
+<td style="text-align: center;">Y</td>
+</tr>
+<tr>
+<td style="text-align: center;">Latex(pdf)</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">N</td>
+</tr>
+<tr>
+<td style="text-align: center;">docx</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">N</td>
+</tr>
+</tbody>
+</table><p>HTML自动文档目前完成了, 生成的HTML文档如下：</p>
 <p><img alt="regif-html" src="../../_images/regif-html.png" /></p>
 </section>
 <section id="id1">

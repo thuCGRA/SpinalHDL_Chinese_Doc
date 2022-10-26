@@ -494,25 +494,54 @@
 </li>
 <li><p>计时器</p>
 <p>首先从<code class="docutils literal notranslate"><span class="pre">Timer</span></code>组件开始。</p>
-<ul>
-<li><p>规范</p>
+<ul class="simple">
+<li><p>规范</p></li>
+</ul>
 <p>该<code class="docutils literal notranslate"><span class="pre">Timer</span></code>组件将有一个单独的构造参数：</p>
 </li>
-</ul>
-</li>
 </ol>
-<pre><code>   | 名称  | 类型  |           描述           |
-   | :---: | :---: | :----------------------: |
-   | width |  Int  | 指明时间计数器的比特位宽 |
-</code></pre><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   并且有一些输入/输出：
-</pre></div>
-</div>
-<pre><code>   | 名称  | 方向  | 类型  |                          描述                           |
-   | :---: | :---: | :---: | :-----------------------------------------------------: |
-   | tick  |  in   | Bool  |       当`tick`为True时，计时器会一直计数到`limit`       |
-   | clear |  in   | Bool  | 当`tick`为True时，计时器设置为零。`Clear`优先于`tick`。 |
-</code></pre><ul>
-<li><p>实现</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">名称</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">width</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;">指明时间计数器的比特位宽</td>
+</tr>
+</tbody>
+</table><p>并且有一些输入/输出：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">名称</th>
+<th style="text-align: center;">方向</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">tick</td>
+<td style="text-align: center;">in</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">当<code>tick</code>为True时，计时器会一直计数到<code>limit</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">clear</td>
+<td style="text-align: center;">in</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">当<code>tick</code>为True时，计时器设置为零。<code>Clear</code>优先于<code>tick</code>。</td>
+</tr>
+</tbody>
+</table><ul class="simple">
+<li><p>实现</p></li>
+</ul>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Timer</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">tick</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
@@ -536,37 +565,54 @@
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-</li>
-</ul>
 <ol>
 <li><p>桥接函数(Bridging function)</p>
 <p>可以从这个例子的主要目的开始:定义一个总线桥接函数。为此，将使用两种技术:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- 利用https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Libraries/bus_slave_factory.html#bus-slave-factory下的`BusSlaveFactory`工具
-- 在`Timer`组件内部定义一个函数，可以从父组件调用该函数，以抽象的方式驱动`Timer`的IO。
-</pre></div>
-</div>
 <ul class="simple">
+<li><p>利用https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Libraries/bus_slave_factory.html#bus-slave-factory下的<code class="docutils literal notranslate"><span class="pre">BusSlaveFactory</span></code>工具</p></li>
+<li><p>在<code class="docutils literal notranslate"><span class="pre">Timer</span></code>组件内部定义一个函数，可以从父组件调用该函数，以抽象的方式驱动<code class="docutils literal notranslate"><span class="pre">Timer</span></code>的IO。</p></li>
 <li><p>规范</p></li>
 </ul>
 </li>
 </ol>
-<pre><code>   |    名称     |      类型       |                     描述                      |
-   | :---------: | :-------------: | :-------------------------------------------: |
-   |   busCtrl   | BusSlaveFactory | 函数将使用`BusSlaveFactory`实例创建桥接逻辑。 |
-   | baseAddress |     BigInt      |          桥接逻辑应该被映射的基地址           |
-   |    ticks    |    Seq[Bool]    |           可用作tick信号的逻辑资源            |
-   |   clears    |    Seq[Bool]    |           可用作clear信号的逻辑资源           |
-</code></pre><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   该寄存器映射会假设总线系统是32比特位宽：
-   
-   |     名称     | 接入  |    位宽     | 地址偏移 | 比特偏移 |
-   | :----------: | :---: | :---------: | :------: | :------: |
-   | ticksEnable  |  RW   | len(ticks)  |    0     |    0     |
-   | clearsEnable |  RW   | len(clears) |    0     |    16    |
-   |    limit     |  RW   |    width    |    4     |    0     |
-   |    value     |   R   |    width    |    8     |    0     |
-   |    clear     |   W   |             |    8     |          |
-</pre></div>
-</div>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">名称</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">busCtrl</td>
+<td style="text-align: center;">BusSlaveFactory</td>
+<td style="text-align: center;">函数将使用<code>BusSlaveFactory</code>实例创建桥接逻辑。</td>
+</tr>
+<tr>
+<td style="text-align: center;">baseAddress</td>
+<td style="text-align: center;">BigInt</td>
+<td style="text-align: center;">桥接逻辑应该被映射的基地址</td>
+</tr>
+<tr>
+<td style="text-align: center;">ticks</td>
+<td style="text-align: center;">Seq[Bool]</td>
+<td style="text-align: center;">可用作tick信号的逻辑资源</td>
+</tr>
+<tr>
+<td style="text-align: center;">clears</td>
+<td style="text-align: center;">Seq[Bool]</td>
+<td style="text-align: center;">可用作clear信号的逻辑资源</td>
+</tr>
+</tbody>
+</table><p>该寄存器映射会假设总线系统是32比特位宽：</p>
+<p>|     名称     | 接入  |    位宽     | 地址偏移 | 比特偏移 |
+| :———-: | :—: | :———: | :——: | :——: |
+| ticksEnable  |  RW   | len(ticks)  |    0     |    0     |
+| clearsEnable |  RW   | len(clears) |    0     |    16    |
+|    limit     |  RW   |    width    |    4     |    0     |
+|    value     |   R   |    width    |    8     |    0     |
+|    clear     |   W   |             |    8     |          |</p>
 <ul>
 <li><p>实现</p>
 <p>将桥接函数加入<code class="docutils literal notranslate"><span class="pre">Timer</span></code>组件</p>
