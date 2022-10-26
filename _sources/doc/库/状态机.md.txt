@@ -9,6 +9,7 @@
 ![fsm_simple](../../img/fsm_simple.svg)
 
 格式A:
+
 ```Scala
 import spinal.lib.fsm._
 
@@ -40,7 +41,9 @@ class TopLevel extends Component {
   }
 }
 ```
+
 格式B：
+
 ```Scala
 import spinal.lib.fsm._
 
@@ -216,12 +219,15 @@ endmodule
 ### 二、状态机(StateMachine)
 
 `StateMachine`是基本类(class), 它管理FSM的逻辑。
+
 ```Scala
 val myFsm = new StateMachine {
   // 定义状态
 }
 ```
+
 `StateMachine`还提供了一些访问器(accessors):
+
 |       命名        | 返回类型 |                 描述                 |
 | :---------------: | :------: | :----------------------------------: |
 |  isActive(state)  |   Bool   |  当状态机处于所给定的状态时返回true  |
@@ -230,10 +236,13 @@ val myFsm = new StateMachine {
 1. 入口点(Entry point)
 
    通过扩展EntryPoint特征, 可以将状态定义为状态机的入口点:
+
    ```Scala
    val stateA = new State with EntryPoint
    ```
+
    或者通过使用`val stateA = new State with EntryPoint`：
+
    ```Scala
    val stateA = new State
    setEntry(stateA)
@@ -254,6 +263,7 @@ val myFsm = new StateMachine {
 + `StateParallelFsm`
 
 它们每个都提供以下函数来定义与它们相关的逻辑：
+
 |                       命名                        |                                      描述                                      |
 | :-----------------------------------------------: | :----------------------------------------------------------------------------: |
 |   state.onEntry {<br>``  yourStatements``<br>}    |    `yourStatements`在状态机未处于`state`时应用, 并将在下一个周期处于`state`    |
@@ -356,6 +366,7 @@ val stateB : State = new State {
    > **注意：在仿真过程中, boot状态总是命名为`Boot`.**
 
    例如：
+   
    ```Scala
    // 状态序列: IDLE, STATE_A, STATE_B, ...
    val fsm = new StateMachine {

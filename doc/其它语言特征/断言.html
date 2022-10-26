@@ -96,14 +96,33 @@
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="n">assert</span><span class="p">(</span><span class="n">assertion</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Bool</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">String</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="n">severity</span><span class="p">:</span><span class="w"> </span><span class="nc">AssertNodeSeverity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Error</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
-<p>严重性级别为：
-| 严重性声明 |               描述               |
-| :——–: | :——————————: |
-|    NOTE    |       用于提供一个消息信息       |
-|  WARNING   |      用于报告一个非常规情况      |
-|   ERROR    |   用于报告一个本不该出现的情况   |
-|  FAILURE   | 用于报告一个失败的情况并终止仿真 |</p>
-<p>以一个实际例子为例, 需要检查握手协议的有效信号valid在ready为低时不会下降:</p>
+<p>严重性级别为：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">严重性声明</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">NOTE</td>
+<td style="text-align: center;">用于提供一个消息信息</td>
+</tr>
+<tr>
+<td style="text-align: center;">WARNING</td>
+<td style="text-align: center;">用于报告一个非常规情况</td>
+</tr>
+<tr>
+<td style="text-align: center;">ERROR</td>
+<td style="text-align: center;">用于报告一个本不该出现的情况</td>
+</tr>
+<tr>
+<td style="text-align: center;">FAILURE</td>
+<td style="text-align: center;">用于报告一个失败的情况并终止仿真</td>
+</tr>
+</tbody>
+</table><p>以一个实际例子为例, 需要检查握手协议的有效信号valid在ready为低时不会下降:</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TopLevel</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RegInit</span><span class="p">(</span><span class="nc">False</span><span class="p">)</span><span class="w"></span>
 <span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nc">Bool</span><span class="w"></span>

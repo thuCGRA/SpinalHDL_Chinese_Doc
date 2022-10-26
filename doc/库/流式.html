@@ -110,13 +110,41 @@
 <h1>流(Stream)<a class="headerlink" href="#stream" title="此标题的永久链接"></a></h1>
 <section id="specification">
 <h2>一、规范(Specification)<a class="headerlink" href="#specification" title="此标题的永久链接"></a></h2>
-<p>Stream接口是一个用来承载负载(payload)的简单握手协议。例如, 它可以用来对FIFO压入或弹出数据、发送请求给UART控制器等等。
-|  信号   | 类型  |  驱动  |                      描述                      |    Don’t care 条件     |
-| :—–: | :—: | :—-: | :——————————————–: | :——————–: |
-|  valid  | Bool  | Master |          当置高时, 说明负载通过该接口          |                        |
-|  ready  | Bool  | Slave  | 当置低时, 表明该slave口不接收传输(transaction) | valid为低时, dont care |
-| payload |   T   | Master |                 负载任务的内容                 | valid为低时, dont care |</p>
-<p><img alt="../../_images/Lib-Stream-Spec.png" src="../../_images/Lib-Stream-Spec.png" /></p>
+<p>Stream接口是一个用来承载负载(payload)的简单握手协议。例如, 它可以用来对FIFO压入或弹出数据、发送请求给UART控制器等等。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">信号</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">驱动</th>
+<th style="text-align: center;">描述</th>
+<th style="text-align: center;">Don't care 条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">valid</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">Master</td>
+<td style="text-align: center;">当置高时, 说明负载通过该接口</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;">ready</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">Slave</td>
+<td style="text-align: center;">当置低时, 表明该slave口不接收传输(transaction)</td>
+<td style="text-align: center;">valid为低时, dont care</td>
+</tr>
+<tr>
+<td style="text-align: center;">payload</td>
+<td style="text-align: center;">T</td>
+<td style="text-align: center;">Master</td>
+<td style="text-align: center;">负载任务的内容</td>
+<td style="text-align: center;">valid为低时, dont care</td>
+</tr>
+</tbody>
+</table><p><img alt="../../_images/Lib-Stream-Spec.png" src="../../_images/Lib-Stream-Spec.png" /></p>
 <p>在SpinalHDL中有如下应用例子：</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">StreamFifo</span><span class="p">[</span><span class="nc">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="nc">Data</span><span class="p">](</span><span class="n">dataType</span><span class="p">:</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="n">depth</span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -251,8 +279,8 @@
 <td style="text-align: center;">0</td>
 </tr>
 </tbody>
-</table><p>下方的代码将会产生如下图所示的逻辑电路：
-<img alt="stream_throw_m2spipe" src="../../_images/stream_throw_m2spipe.svg" /></p>
+</table><p>下方的代码将会产生如下图所示的逻辑电路：</p>
+<p><img alt="stream_throw_m2spipe" src="../../_images/stream_throw_m2spipe.svg" /></p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RGB</span><span class="p">(</span><span class="n">channelWidth</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">red</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">channelWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
 <span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">green</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">channelWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
@@ -530,17 +558,57 @@
 </div>
 </li>
 </ol>
-<pre><code>|  参数名  | 类型  |           描述           |
-| :------: | :---: | :----------------------: |
-| dataType |   T   | 流式FIFO上负载数据的类型 |
-|  depth   |  Int  |    存储数据的存储大小    |
-</code></pre><pre><code>|  IO口名   |              类型              |             描述             |
-| :-------: | :----------------------------: | :--------------------------: |
-|   push    |           Stream[T]            |   用来向流式FIFO中压入数据   |
-|    pop    |           Stream[T]            |   用来从流式FIFO中弹出数据   |
-|   flush   |              Bool              | 用来清空流式FIFO中的所有数据 |
-| occupancy | UInt of log2Up(depth + 1) bits |     反映内部存储占用情况     |
-</code></pre><ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">参数名</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">dataType</td>
+<td style="text-align: center;">T</td>
+<td style="text-align: center;">流式FIFO上负载数据的类型</td>
+</tr>
+<tr>
+<td style="text-align: center;">depth</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;">存储数据的存储大小</td>
+</tr>
+</tbody>
+</table><table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">IO口名</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">push</td>
+<td style="text-align: center;">Stream[T]</td>
+<td style="text-align: center;">用来向流式FIFO中压入数据</td>
+</tr>
+<tr>
+<td style="text-align: center;">pop</td>
+<td style="text-align: center;">Stream[T]</td>
+<td style="text-align: center;">用来从流式FIFO中弹出数据</td>
+</tr>
+<tr>
+<td style="text-align: center;">flush</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">用来清空流式FIFO中的所有数据</td>
+</tr>
+<tr>
+<td style="text-align: center;">occupancy</td>
+<td style="text-align: center;">UInt of log2Up(depth + 1) bits</td>
+<td style="text-align: center;">反映内部存储占用情况</td>
+</tr>
+</tbody>
+</table><ol>
 <li><p>流式FIFOCC(StreamFifoCC)</p>
 <p>用户可以通过如下方式定义一个双时钟域FIFO：</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">clockA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">(</span><span class="o">???</span><span class="p">)</span><span class="w"></span>
@@ -557,21 +625,69 @@
 <span class="n">myFifo</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">pop</span><span class="w">  </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">streamB</span><span class="w"></span>
 </pre></div>
 </div>
-<p>|  参数名   |    类型     |           描述           |
-| :——-: | :———: | :———————-: |
-| dataType  |      T      | 流式FIFO上负载数据的类型 |
-|   depth   |     Int     |    存储数据的存储大小    |
-| pushClock | ClockDomain |  存入数据端使用的时钟域  |
-| popClock  | ClockDomain |  取出数据端使用的时钟域  |</p>
 </li>
 </ol>
-<pre><code>|    IO口名     |              类型              |                 描述                 |
-| :-----------: | :----------------------------: | :----------------------------------: |
-|     push      |           Stream[T]            |       用来向流式FIFO中压入数据       |
-|      pop      |           Stream[T]            |       用来从流式FIFO中弹出数据       |
-| pushOccupancy | UInt of log2Up(depth + 1) bits | 反映内部存储占用情况(从存入数据角度) |
-| popOccupancy  | UInt of log2Up(depth + 1) bits | 反映内部存储占用情况(从取出数据角度) |
-</code></pre><ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">参数名</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">dataType</td>
+<td style="text-align: center;">T</td>
+<td style="text-align: center;">流式FIFO上负载数据的类型</td>
+</tr>
+<tr>
+<td style="text-align: center;">depth</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;">存储数据的存储大小</td>
+</tr>
+<tr>
+<td style="text-align: center;">pushClock</td>
+<td style="text-align: center;">ClockDomain</td>
+<td style="text-align: center;">存入数据端使用的时钟域</td>
+</tr>
+<tr>
+<td style="text-align: center;">popClock</td>
+<td style="text-align: center;">ClockDomain</td>
+<td style="text-align: center;">取出数据端使用的时钟域</td>
+</tr>
+</tbody>
+</table><table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">IO口名</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">push</td>
+<td style="text-align: center;">Stream[T]</td>
+<td style="text-align: center;">用来向流式FIFO中压入数据</td>
+</tr>
+<tr>
+<td style="text-align: center;">pop</td>
+<td style="text-align: center;">Stream[T]</td>
+<td style="text-align: center;">用来从流式FIFO中弹出数据</td>
+</tr>
+<tr>
+<td style="text-align: center;">pushOccupancy</td>
+<td style="text-align: center;">UInt of log2Up(depth + 1) bits</td>
+<td style="text-align: center;">反映内部存储占用情况(从存入数据角度)</td>
+</tr>
+<tr>
+<td style="text-align: center;">popOccupancy</td>
+<td style="text-align: center;">UInt of log2Up(depth + 1) bits</td>
+<td style="text-align: center;">反映内部存储占用情况(从取出数据角度)</td>
+</tr>
+</tbody>
+</table><ol>
 <li><p>StreamCCByToggle</p>
 <p>该方法基于信号切换来生成连接跨时钟域的流的组件。这种方法生成的跨时钟域桥占用较小的面积, 但同时其带宽较低。</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">clockA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">(</span><span class="o">???</span><span class="p">)</span><span class="w"></span>
@@ -594,110 +710,119 @@
 | outputClock | ClockDomain |  取出数据端使用的时钟域  |</p>
 </li>
 </ol>
-<pre><code>| IO口名 |   类型    |           描述           |
-| :----: | :-------: | :----------------------: |
-| input  | Stream[T] | 用来向流式FIFO中压入数据 |
-| output | Stream[T] | 用来从流式FIFO中弹出数据 |
-
-另外用户也可使用更简短的语句来直接生成所需的跨时钟流：
-```Scala
-val clockA = ClockDomain(???)
-val clockB = ClockDomain(???)
-val streamA = Stream(Bits(8 bits))
-val streamB = StreamCCByToggle(
-input       = streamA,
-inputClock  = clockA,
-outputClock = clockB
-)
-```
-</code></pre><ol>
-<li>流位宽适应器(StreamWidthAdapter)</li>
-</ol><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>该组件会使得输入流与输出流的位宽相匹配。当输出流`outStream`的负载的位宽比`inStream`的位宽更大时, 会通过将多个输入传输任务结合成一个的操作来匹配输出的大位宽；相反, 如果输出位宽大于输入位宽, 则一个输入的传输任务会被分割成多个输出传输任务以匹配输出的小位宽。
-
-在最好的情况下, 输入`inStream`负载的位宽应该是输出`outStream`负载的整数倍, 如下方代码所示：
-```Scala
-val inStream = Stream(Bits(8 bits))
-val outStream = Stream(Bits(16 bits))
-val adapter = StreamWidthAdapter(inStream, outStream)
-```
-
-Verilog:
-
-```Verilog
-module MyTopLevel (
-  input               io_cond0,
-  input               io_cond1,
-  output              io_flag,
-  output     [7:0]    io_state,
-  input               clk,
-  input               reset
-);
-
-  wire       [15:0]   _zz_outStream_payload_1;
-  wire                inStream_valid;
-  wire                inStream_ready;
-  wire       [7:0]    inStream_payload;
-  wire                outStream_valid;
-  wire                outStream_ready;
-  wire       [15:0]   outStream_payload;
-  wire                inStream_fire;
-  reg                 _zz_inStream_ready;
-  reg        [0:0]    _zz_inStream_ready_1;
-  reg        [0:0]    _zz_inStream_ready_2;
-  wire                _zz_inStream_ready_3;
-  reg        [7:0]    _zz_outStream_payload;
-  wire                inStream_fire_1;
-
-  assign _zz_outStream_payload_1 = {inStream_payload,_zz_outStream_payload};
-  assign inStream_fire = (inStream_valid &amp;&amp; inStream_ready);
-  always @(*) begin
-    _zz_inStream_ready = 1&#39;b0;
-    if(inStream_fire) begin
-      _zz_inStream_ready = 1&#39;b1;
-    end
-  end
-
-  assign _zz_inStream_ready_3 = (_zz_inStream_ready_2 == 1&#39;b1);
-  always @(*) begin
-    _zz_inStream_ready_1 = (_zz_inStream_ready_2 + _zz_inStream_ready);
-    if(1&#39;b0) begin
-      _zz_inStream_ready_1 = 1&#39;b0;
-    end
-  end
-
-  assign inStream_fire_1 = (inStream_valid &amp;&amp; inStream_ready);
-  assign outStream_valid = (inStream_valid &amp;&amp; _zz_inStream_ready_3);
-  assign outStream_payload = _zz_outStream_payload_1;
-  assign inStream_ready = (! ((! outStream_ready) &amp;&amp; _zz_inStream_ready_3));
-  always @(posedge clk or posedge reset) begin
-    if(reset) begin
-      _zz_inStream_ready_2 &lt;= 1&#39;b0;
-    end else begin
-      _zz_inStream_ready_2 &lt;= _zz_inStream_ready_1;
-    end
-  end
-
-  always @(posedge clk) begin
-    if(inStream_fire_1) begin
-      _zz_outStream_payload &lt;= inStream_payload;
-    end
-  end
-
-
-endmodule
-```
-如上方例子所示, 两个`inStream`的传输将会被结合成一个`outStream`传输, 并且第一个`inStream`的传输会被默认放置在输出负载的低比特。
-
-如果输入传输任务负载的期望顺序和默认设置不同, 这里有一个例子：
-```Scala
-val inStream = Stream(Bits(8 bits))
-val outStream = Stream(Bits(16 bits))
-val adapter = StreamWidthAdapter(inStream, outStream, order = SlicesOrder.HIGHER_FIRST)
-```
-同时还有一个与`ORDER`具有相同效果的名为`endianness`的传统参数。当`endianness`的值为`LITTLE`时, 它和`order`的`LOWER_FIRST`值等同。同理其`BIG`值和`HIGHER_FIRST`等同。`padding`参数是一个可选择的布尔逻辑值, 其可以决定该适应器能否接受输入与输出负载位宽之间的非整数倍数关系。
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">IO口名</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">input</td>
+<td style="text-align: center;">Stream[T]</td>
+<td style="text-align: center;">用来向流式FIFO中压入数据</td>
+</tr>
+<tr>
+<td style="text-align: center;">output</td>
+<td style="text-align: center;">Stream[T]</td>
+<td style="text-align: center;">用来从流式FIFO中弹出数据</td>
+</tr>
+</tbody>
+</table>
+<p>另外用户也可使用更简短的语句来直接生成所需的跨时钟流：</p><div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">clockA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">(</span><span class="o">???</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">clockB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ClockDomain</span><span class="p">(</span><span class="o">???</span><span class="p">)</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">streamA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">streamB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">StreamCCByToggle</span><span class="p">(</span><span class="w"></span>
+<span class="n">input</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="n">streamA</span><span class="p">,</span><span class="w"></span>
+<span class="n">inputClock</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">clockA</span><span class="p">,</span><span class="w"></span>
+<span class="n">outputClock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clockB</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 <ol>
+<li><p>流位宽适应器(StreamWidthAdapter)</p>
+<p>该组件会使得输入流与输出流的位宽相匹配。当输出流<code class="docutils literal notranslate"><span class="pre">outStream</span></code>的负载的位宽比<code class="docutils literal notranslate"><span class="pre">inStream</span></code>的位宽更大时, 会通过将多个输入传输任务结合成一个的操作来匹配输出的大位宽；相反, 如果输出位宽大于输入位宽, 则一个输入的传输任务会被分割成多个输出传输任务以匹配输出的小位宽。</p>
+<p>在最好的情况下, 输入<code class="docutils literal notranslate"><span class="pre">inStream</span></code>负载的位宽应该是输出<code class="docutils literal notranslate"><span class="pre">outStream</span></code>负载的整数倍, 如下方代码所示：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">inStream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">outStream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">16</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">adapter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">StreamWidthAdapter</span><span class="p">(</span><span class="n">inStream</span><span class="p">,</span><span class="w"> </span><span class="n">outStream</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verilog:</p>
+<div class="highlight-Verilog notranslate"><div class="highlight"><pre><span></span><span class="k">module</span><span class="w"> </span><span class="n">MyTopLevel</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_cond0</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">io_cond1</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">              </span><span class="n">io_flag</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">output</span><span class="w">     </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">io_state</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">clk</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">reset</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">15</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">_zz_outStream_payload_1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">inStream_valid</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">inStream_ready</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">inStream_payload</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">outStream_valid</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">outStream_ready</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">       </span><span class="p">[</span><span class="mh">15</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">outStream_payload</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">inStream_fire</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">                 </span><span class="n">_zz_inStream_ready</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">0</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">_zz_inStream_ready_1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">0</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">_zz_inStream_ready_2</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">_zz_inStream_ready_3</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">reg</span><span class="w">        </span><span class="p">[</span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">_zz_outStream_payload</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">wire</span><span class="w">                </span><span class="n">inStream_fire_1</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">_zz_outStream_payload_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">inStream_payload</span><span class="p">,</span><span class="n">_zz_outStream_payload</span><span class="p">};</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">inStream_fire</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">inStream_valid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">inStream_ready</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">_zz_inStream_ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">inStream_fire</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">_zz_inStream_ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">_zz_inStream_ready_3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">_zz_inStream_ready_2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="n">_zz_inStream_ready_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">_zz_inStream_ready_2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">_zz_inStream_ready</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">_zz_inStream_ready_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">inStream_fire_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">inStream_valid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">inStream_ready</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">outStream_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">inStream_valid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">_zz_inStream_ready_3</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">outStream_payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_zz_outStream_payload_1</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">inStream_ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="w"> </span><span class="p">((</span><span class="o">!</span><span class="w"> </span><span class="n">outStream_ready</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">_zz_inStream_ready_3</span><span class="p">));</span><span class="w"></span>
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">posedge</span><span class="w"> </span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">_zz_inStream_ready_2</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">_zz_inStream_ready_2</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">_zz_inStream_ready_1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">inStream_fire_1</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"></span>
+<span class="w">      </span><span class="n">_zz_outStream_payload</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">inStream_payload</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">  </span><span class="k">end</span><span class="w"></span>
+
+
+<span class="k">endmodule</span><span class="w"></span>
+</pre></div>
+</div>
+<p>如上方例子所示, 两个<code class="docutils literal notranslate"><span class="pre">inStream</span></code>的传输将会被结合成一个<code class="docutils literal notranslate"><span class="pre">outStream</span></code>传输, 并且第一个<code class="docutils literal notranslate"><span class="pre">inStream</span></code>的传输会被默认放置在输出负载的低比特。</p>
+<p>如果输入传输任务负载的期望顺序和默认设置不同, 这里有一个例子：</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">inStream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">outStream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">16</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">adapter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">StreamWidthAdapter</span><span class="p">(</span><span class="n">inStream</span><span class="p">,</span><span class="w"> </span><span class="n">outStream</span><span class="p">,</span><span class="w"> </span><span class="n">order</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">SlicesOrder</span><span class="p">.</span><span class="nc">HIGHER_FIRST</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>同时还有一个与<code class="docutils literal notranslate"><span class="pre">ORDER</span></code>具有相同效果的名为<code class="docutils literal notranslate"><span class="pre">endianness</span></code>的传统参数。当<code class="docutils literal notranslate"><span class="pre">endianness</span></code>的值为<code class="docutils literal notranslate"><span class="pre">LITTLE</span></code>时, 它和<code class="docutils literal notranslate"><span class="pre">order</span></code>的<code class="docutils literal notranslate"><span class="pre">LOWER_FIRST</span></code>值等同。同理其<code class="docutils literal notranslate"><span class="pre">BIG</span></code>值和<code class="docutils literal notranslate"><span class="pre">HIGHER_FIRST</span></code>等同。<code class="docutils literal notranslate"><span class="pre">padding</span></code>参数是一个可选择的布尔逻辑值, 其可以决定该适应器能否接受输入与输出负载位宽之间的非整数倍数关系。</p>
+</li>
 <li><p>流仲裁器(StreamArbiter)</p>
 <p>当用户有多个流而且希望能够仲裁它们并驱动单个流, 这时可以使用StreamArbiterFactory。</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">streamA</span><span class="p">,</span><span class="w"> </span><span class="n">streamB</span><span class="p">,</span><span class="w"> </span><span class="n">streamC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
@@ -707,34 +832,79 @@ val adapter = StreamWidthAdapter(inStream, outStream, order = SlicesOrder.HIGHER
 <span class="kd">val</span><span class="w"> </span><span class="n">arbitredDEF</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">StreamArbiterFactory</span><span class="p">.</span><span class="n">lowerFirst</span><span class="p">.</span><span class="n">noLock</span><span class="p">.</span><span class="n">onArgs</span><span class="p">(</span><span class="n">streamD</span><span class="p">,</span><span class="w"> </span><span class="n">streamE</span><span class="p">,</span><span class="w"> </span><span class="n">streamF</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
-<p>|    仲裁函数     |                             描述                              |
-| :————-: | :———————————————————–: |
-|   lowerFirst    |                   低端口的优先级大于高端口                    |
-|   roundRobin    |                         公平轮询仲裁                          |
-| sequentialOrder | 按照顺序次序遍历任务。第一个传输来自于端口零, 然后依次执行… |</p>
-<p>|     锁函数      |                                                 描述                                                  |
-| :————-: | :—————————————————————————————————: |
-|     noLock      |                     端口选择在每个周期都可以改变, 即使被选择的端口的传输没有执行                      |
-| transactionLock |                                 端口选择被锁定直到端口的数据交换完成                                  |
-|  fragmentLock   | 可用来仲裁Stream[Flow[T]]。在这个模式下, 端口选择被锁定直到被选择的端口完成信号突发(burst)(last=True) |</p>
 </li>
 </ol>
-<pre><code>|          生成函数           |  返回值   |
-| :-------------------------: | :-------: |
-| on(inputs : Seq[Stream[T]]) | Stream[T] |
-| onArgs(inputs : Stream[T]*) | Stream[T] |
-</code></pre><ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">仲裁函数</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">lowerFirst</td>
+<td style="text-align: center;">低端口的优先级大于高端口</td>
+</tr>
+<tr>
+<td style="text-align: center;">roundRobin</td>
+<td style="text-align: center;">公平轮询仲裁</td>
+</tr>
+<tr>
+<td style="text-align: center;">sequentialOrder</td>
+<td style="text-align: center;">按照顺序次序遍历任务。第一个传输来自于端口零, 然后依次执行...</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">锁函数</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">noLock</td>
+<td style="text-align: center;">端口选择在每个周期都可以改变, 即使被选择的端口的传输没有执行</td>
+</tr>
+<tr>
+<td style="text-align: center;">transactionLock</td>
+<td style="text-align: center;">端口选择被锁定直到端口的数据交换完成</td>
+</tr>
+<tr>
+<td style="text-align: center;">fragmentLock</td>
+<td style="text-align: center;">可用来仲裁Stream[Flow[T]]。在这个模式下, 端口选择被锁定直到被选择的端口完成信号突发(burst)(last=True)</td>
+</tr>
+</tbody>
+</table><table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">生成函数</th>
+<th style="text-align: center;">返回值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">on(inputs : Seq[Stream[T]])</td>
+<td style="text-align: center;">Stream[T]</td>
+</tr>
+<tr>
+<td style="text-align: center;">onArgs(inputs : Stream[T]*)</td>
+<td style="text-align: center;">Stream[T]</td>
+</tr>
+</tbody>
+</table>
+<ol>
 <li>StreamJoin</li>
-</ol><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>该工具接受多个输入流, 并等待它们全部触发, 随后全部通过所有输入流。
-```Scala
-val cmdJoin = Stream(Cmd())
-cmdJoin.arbitrationFrom(StreamJoin.arg(cmdABuffer, cmdBBuffer))
-```
+</ol><p>该工具接受多个输入流, 并等待它们全部触发, 随后全部通过所有输入流。</p>
+<div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">cmdJoin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Cmd</span><span class="p">())</span><span class="w"></span>
+<span class="n">cmdJoin</span><span class="p">.</span><span class="n">arbitrationFrom</span><span class="p">(</span><span class="nc">StreamJoin</span><span class="p">.</span><span class="n">arg</span><span class="p">(</span><span class="n">cmdABuffer</span><span class="p">,</span><span class="w"> </span><span class="n">cmdBBuffer</span><span class="p">))</span><span class="w"></span>
 </pre></div>
 </div>
 <ol>
 <li><p>流式叉(StreamFork)</p>
-<p>StreamFork将会对每个输入数据进行克隆并分配到所有的输出流中。如果同步为true, 则所有的输出流会同时激活, 意味着流会停滞直到所有的输出流准备就绪。如果同步信号为false, 则在额外的一个触发器的开销下, 每次只有一个输出流准备就绪。输入的流将会被堵塞直到所有的输出流已经处理过每个项目。</p>
+<p>StreamFork将会对每个输入数据进行克隆并分配到所有的输出流中。如果同步为true, 则所有的输出流会同时激活, 意味着流会停滞直到所有的输出流准备就绪。如果同步信号为false, 则在额外的一个触发器的开销下,每次只有一个输出流准备就绪。输入的流将会被堵塞直到所有的输出流已经处理过每个项目。</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">inputStream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">bits</span><span class="p">))</span><span class="w"></span>
 <span class="kd">val</span><span class="w"> </span><span class="p">(</span><span class="n">outputstream1</span><span class="p">,</span><span class="w"> </span><span class="n">outputstream2</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">StreamFork2</span><span class="p">(</span><span class="n">inputStream</span><span class="p">,</span><span class="w"> </span><span class="n">synchronous</span><span class="o">=</span><span class="kc">false</span><span class="p">)</span><span class="w"></span>
 </pre></div>

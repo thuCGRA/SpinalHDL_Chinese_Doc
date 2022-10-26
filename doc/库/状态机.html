@@ -323,12 +323,28 @@
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">StateMachine</span></code>还提供了一些访问器(accessors):
-|       命名        | 返回类型 |                 描述                 |
-| :—————: | :——: | :———————————-: |
-|  isActive(state)  |   Bool   |  当状态机处于所给定的状态时返回true  |
-| isEntering(state) |   Bool   | 当状态机要进入所给定的状态时返回true |</p>
-<ol>
+<p><code class="docutils literal notranslate"><span class="pre">StateMachine</span></code>还提供了一些访问器(accessors):</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">命名</th>
+<th style="text-align: center;">返回类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">isActive(state)</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">当状态机处于所给定的状态时返回true</td>
+</tr>
+<tr>
+<td style="text-align: center;">isEntering(state)</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">当状态机要进入所给定的状态时返回true</td>
+</tr>
+</tbody>
+</table><ol>
 <li><p>入口点(Entry point)</p>
 <p>通过扩展EntryPoint特征, 可以将状态定义为状态机的入口点:</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">stateA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">State</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="nc">EntryPoint</span><span class="w"></span>
@@ -357,14 +373,33 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">StateFsm</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">StateParallelFsm</span></code></p></li>
 </ul>
-<p>它们每个都提供以下函数来定义与它们相关的逻辑：
-|                       命名                        |                                      描述                                      |
-| :———————————————–: | :—————————————————————————-: |
-|   state.onEntry {<br><code class="docutils literal notranslate">&#160; <span class="pre">yourStatements</span></code><br>}    |    <code class="docutils literal notranslate"><span class="pre">yourStatements</span></code>在状态机未处于<code class="docutils literal notranslate"><span class="pre">state</span></code>时应用, 并将在下一个周期处于<code class="docutils literal notranslate"><span class="pre">state</span></code>    |
-|    state.onExit {<br><code class="docutils literal notranslate">&#160; <span class="pre">yourStatements</span></code><br>}    |    <code class="docutils literal notranslate"><span class="pre">yourStatements</span></code>在状态机处于<code class="docutils literal notranslate"><span class="pre">state</span></code>时应用, 并将在下一个周期处于其他状态     |
-| state.whenIsActive {<br><code class="docutils literal notranslate">&#160; <span class="pre">yourStatements</span></code><br>} |                   <code class="docutils literal notranslate"><span class="pre">yourStatements</span></code>在状态机处于<code class="docutils literal notranslate"><span class="pre">state</span></code>时应用                    |
-|  state.whenIsNext {<br><code class="docutils literal notranslate">&#160; <span class="pre">yourStatements</span></code><br>}  | <code class="docutils literal notranslate"><span class="pre">yourStatements</span></code>在状态机将在下一个周期处于<code class="docutils literal notranslate"><span class="pre">state</span></code>时执行(即使已经是<code class="docutils literal notranslate"><span class="pre">state</span></code>状态) |</p>
-<p>``state.<code class="docutils literal notranslate"><span class="pre">隐含在一个</span></code>new State`块中：</p>
+<p>它们每个都提供以下函数来定义与它们相关的逻辑：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">命名</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">state.onEntry {<br><code>yourStatements</code><br>}</td>
+<td style="text-align: center;"><code>yourStatements</code>在状态机未处于<code>state</code>时应用, 并将在下一个周期处于<code>state</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">state.onExit {<br><code>yourStatements</code><br>}</td>
+<td style="text-align: center;"><code>yourStatements</code>在状态机处于<code>state</code>时应用, 并将在下一个周期处于其他状态</td>
+</tr>
+<tr>
+<td style="text-align: center;">state.whenIsActive {<br><code>yourStatements</code><br>}</td>
+<td style="text-align: center;"><code>yourStatements</code>在状态机处于<code>state</code>时应用</td>
+</tr>
+<tr>
+<td style="text-align: center;">state.whenIsNext {<br><code>yourStatements</code><br>}</td>
+<td style="text-align: center;"><code>yourStatements</code>在状态机将在下一个周期处于<code>state</code>时执行(即使已经是<code>state</code>状态)</td>
+</tr>
+</tbody>
+</table><p>``state.<code class="docutils literal notranslate"><span class="pre">隐含在一个</span></code>new State`块中：</p>
 <p><img alt="fsm_stateb" src="../../_images/fsm_stateb.svg" /></p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">stateB</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">State</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">State</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="n">onEntry</span><span class="p">(</span><span class="n">counter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>

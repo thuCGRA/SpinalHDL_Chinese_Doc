@@ -215,14 +215,35 @@
 </tbody>
 </table><ol>
 <li><p>计数器</p>
-<p>Counter工具可以用来实例化一个硬件计数器。
-|                        句式                         |                  描述                   |
-| :————————————————-: | :————————————-: |
-| <code class="docutils literal notranslate"><span class="pre">Counter(start:</span> <span class="pre">BigInt,</span> <span class="pre">end:</span> <span class="pre">BigInt[,</span> <span class="pre">inc</span> <span class="pre">:</span> <span class="pre">Bool])</span></code> |                   无                    |
-|       <code class="docutils literal notranslate"><span class="pre">Counter(range</span> <span class="pre">:</span> <span class="pre">Range[,</span> <span class="pre">inc</span> <span class="pre">:</span> <span class="pre">Bool])</span></code>        |      与<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">to</span> <span class="pre">y``x</span> <span class="pre">until</span> <span class="pre">y</span></code>语句匹配      |
-|     <code class="docutils literal notranslate"><span class="pre">Counter(stateCount:</span> <span class="pre">BigInt[,</span> <span class="pre">inc</span> <span class="pre">:</span> <span class="pre">Bool])</span></code>     |  从0开始计数, 到<code class="docutils literal notranslate"><span class="pre">statecCount</span> <span class="pre">-</span> <span class="pre">1</span></code>结束   |
-|     <code class="docutils literal notranslate"><span class="pre">Counter(bitCount:</span> <span class="pre">BitCount[,</span> <span class="pre">inc</span> <span class="pre">:</span> <span class="pre">Bool])</span></code>     | 从0开始计数, 到<code class="docutils literal notranslate"><span class="pre">(1</span> <span class="pre">&lt;&lt;</span> <span class="pre">bitCoun)</span> <span class="pre">-</span> <span class="pre">1</span></code>结束 |</p>
-<p>一个计数器可以被方法所控制, 并且导线可以被读取：</p>
+<p>Counter工具可以用来实例化一个硬件计数器。</p>
+</li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">句式</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>Counter(start: BigInt, end: BigInt[, inc : Bool])</code></td>
+<td style="text-align: center;">无</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>Counter(range : Range[, inc : Bool])</code></td>
+<td style="text-align: center;">与<code>x to y``x until y</code>语句匹配</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>Counter(stateCount: BigInt[, inc : Bool])</code></td>
+<td style="text-align: center;">从0开始计数, 到<code>statecCount - 1</code>结束</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>Counter(bitCount: BitCount[, inc : Bool])</code></td>
+<td style="text-align: center;">从0开始计数, 到<code>(1 &lt;&lt; bitCoun) - 1</code>结束</td>
+</tr>
+</tbody>
+</table><p>一个计数器可以被方法所控制, 并且导线可以被读取：</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Counter</span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="mi">9</span><span class="p">)</span><span class="w"> </span><span class="c1">// 建立一个八状态计数器 (2 to 9)</span>
 <span class="c1">// 方法</span>
 <span class="n">counter</span><span class="p">.</span><span class="n">clear</span><span class="p">()</span><span class="w">               </span><span class="c1">// 复位计数器</span>
@@ -237,15 +258,33 @@
 </pre></div>
 </div>
 <p>当一个是计数器溢出(达到最终值), 它会在下一个周期重启并设置为初始值。<code class="docutils literal notranslate"><span class="pre">CounterFreeRun</span></code>构建一个始终运行的计数器:<code class="docutils literal notranslate"><span class="pre">CounterFreeRun(stateCount:</span> <span class="pre">BigInt)</span></code>。</p>
-</li>
+<ol>
 <li><p>超时(Timeout)</p>
-<p>Timeout工具可以用来方便地例化一个硬件Timeout。
-|              例化句式              |              描述               |
-| :——————————–: | :—————————–: |
-|     <code class="docutils literal notranslate"><span class="pre">Timeout(cycles</span> <span class="pre">:</span> <span class="pre">BigInt)</span></code>     |    <code class="docutils literal notranslate"><span class="pre">cycles</span></code>个时钟后进行标记     |
-| <code class="docutils literal notranslate"><span class="pre">Delay(that:</span> <span class="pre">T,</span> <span class="pre">cycleCount:</span> <span class="pre">Int)</span></code>  |    持续<code class="docutils literal notranslate"><span class="pre">time</span></code>时间后进行标记     |
-| <code class="docutils literal notranslate"><span class="pre">Timeout(frequency</span> <span class="pre">:</span> <span class="pre">HertzNumber)</span></code> | 以<code class="docutils literal notranslate"><span class="pre">frequency</span></code>的速率进行计时标记 |
-下方代码举例了可以和Counter工具一起使用的不同语法句式的例子：</p>
+<p>Timeout工具可以用来方便地例化一个硬件Timeout。</p>
+</li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">例化句式</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>Timeout(cycles : BigInt)</code></td>
+<td style="text-align: center;"><code>cycles</code>个时钟后进行标记</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>Delay(that: T, cycleCount: Int)</code></td>
+<td style="text-align: center;">持续<code>time</code>时间后进行标记</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>Timeout(frequency : HertzNumber)</code></td>
+<td style="text-align: center;">以<code>frequency</code>的速率进行计时标记</td>
+</tr>
+</tbody>
+</table><p>下方代码举例了可以和Counter工具一起使用的不同语法句式的例子：</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Timeout</span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="n">ms</span><span class="p">)</span><span class="w">  </span><span class="c1">//计时10ms后的对象会被记为超时</span>
 <span class="n">when</span><span class="p">(</span><span class="n">timeout</span><span class="p">){</span><span class="w">                </span><span class="c1">//检查是否被判断为超时</span>
 <span class="w">    </span><span class="n">timeout</span><span class="p">.</span><span class="n">clear</span><span class="p">()</span><span class="w">           </span><span class="c1">//请求timeout工具清空他的标志位</span>
@@ -255,13 +294,13 @@
 <blockquote>
 <div><p><strong>备注：如果使用时间或频率设置实例化<code class="docutils literal notranslate"><span class="pre">Timeout</span></code>, 则隐含的<code class="docutils literal notranslate"><span class="pre">ClockDomain</span></code>应该具有频率设置。</strong></p>
 </div></blockquote>
-</li>
+<ol>
 <li><p>复位控制(ResetControl)</p>
 <p>复位控制提供了一些工具以管理复位。</p>
 <ul>
 <li><p>asyncAssertSyncDeassert</p>
-<p>用户可以利用一个异步有效同步无效(asynchronously asserted synchronously de-asserted)逻辑来筛选异步复位。可以使用<code class="docutils literal notranslate"><span class="pre">ResetCtrl.asyncAssertSyncDeassert</span></code>函数来筛选并返回相应的值。
-|    声明命名    |  返回类型   |                          描述                          |
+<p>用户可以利用一个异步有效同步无效(asynchronously asserted synchronously de-asserted)逻辑来筛选异步复位。可以使用<code class="docutils literal notranslate"><span class="pre">ResetCtrl.asyncAssertSyncDeassert</span></code>函数来筛选并返回相应的值。</p>
+<p>|    声明命名    |  返回类型   |                          描述                          |
 | :————: | :———: | :—————————————————-: |
 |     input      |    Bool     |                       筛选的信号                       |
 |  clockDomain   | ClockDomain |              返回将要使用所筛选值的时钟域              |

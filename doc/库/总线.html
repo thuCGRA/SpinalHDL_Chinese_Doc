@@ -111,12 +111,33 @@
 <h2>一、AHB-Lite3<a class="headerlink" href="#ahb-lite3" title="此标题的永久链接"></a></h2>
 <ol>
 <li><p>配置与实例化(Configuration and instanciation)</p>
-<p>首先, 每次创建AHB-Lite3总线时, 都需要一个配置对象。这个配置对象是一个<code class="docutils literal notranslate"><span class="pre">AhbLite3Config</span></code>, 有以下参数:
-|    参数名    | 类型  | 默认值 |         描述          |
-| :———-: | :—: | :—-: | :——————-: |
-| addressWidth |  Int  |        | HADDR的位宽(字节粒度) |
-|  dataWidth   |  Int  |        | HWDATA和HRDATA的位宽  |</p>
-<p>简而言之, 在SpinalHDL库中AHB-Lite3总线是如下定义的:</p>
+<p>首先, 每次创建AHB-Lite3总线时, 都需要一个配置对象。这个配置对象是一个<code class="docutils literal notranslate"><span class="pre">AhbLite3Config</span></code>, 有以下参数:</p>
+</li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">参数名</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">默认值</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">addressWidth</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">HADDR的位宽(字节粒度)</td>
+</tr>
+<tr>
+<td style="text-align: center;">dataWidth</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">HWDATA和HRDATA的位宽</td>
+</tr>
+</tbody>
+</table><p>简而言之, 在SpinalHDL库中AHB-Lite3总线是如下定义的:</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AhbLite3</span><span class="p">(</span><span class="n">config</span><span class="p">:</span><span class="w"> </span><span class="nc">AhbLite3Config</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="nc">IMasterSlave</span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="c1">//  地址和控制</span>
 <span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">HADDR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">addressWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
@@ -157,7 +178,7 @@
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-</li>
+<ol>
 <li><p>变式(Variations)</p>
 <p>有一个AhbLite3Master变体。唯一的区别是没有<code class="docutils literal notranslate"><span class="pre">HREADYOUT</span></code>信号。当互连线和从端口使用<code class="docutils literal notranslate"><span class="pre">AhbLite3</span></code>时, 这个变式应该只被master使用。</p>
 </li>
@@ -170,14 +191,45 @@
 <p>AMBA3-APB总线通常用于连接低带宽外设。</p>
 </li>
 <li><p>配置和实例化</p>
-<p>首先, 每次创建APB3总线时, 都需要一个配置对象。这个配置对象是<code class="docutils literal notranslate"><span class="pre">Apb3Config</span></code>, 有以下参数:
-|    参数名     |  类型   | 默认值 |         描述          |
-| :———–: | :—–: | :—-: | :——————-: |
-| addressWidth  |   Int   |        | HADDR的位宽(字节粒度) |
-|   dataWidth   |   Int   |        | PWDATA和PRDATA的位宽  |
-|   selWidth    |   Int   |   1    |      PSEL的位宽       |
-| useSlaveError | Boolean | false  |     指定PSLVERROR     |</p>
-<p>简而言之, APB3总线在SpinalHDL库中定义的方式如下:</p>
+<p>首先, 每次创建APB3总线时, 都需要一个配置对象。这个配置对象是<code class="docutils literal notranslate"><span class="pre">Apb3Config</span></code>, 有以下参数:</p>
+</li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">参数名</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">默认值</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">addressWidth</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">HADDR的位宽(字节粒度)</td>
+</tr>
+<tr>
+<td style="text-align: center;">dataWidth</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">PWDATA和PRDATA的位宽</td>
+</tr>
+<tr>
+<td style="text-align: center;">selWidth</td>
+<td style="text-align: center;">Int</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">PSEL的位宽</td>
+</tr>
+<tr>
+<td style="text-align: center;">useSlaveError</td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: center;">false</td>
+<td style="text-align: center;">指定PSLVERROR</td>
+</tr>
+</tbody>
+</table><p>简而言之, APB3总线在SpinalHDL库中定义的方式如下:</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Apb3</span><span class="p">(</span><span class="n">config</span><span class="p">:</span><span class="w"> </span><span class="nc">Apb3Config</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="nc">IMasterSlave</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">PADDR</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="nc">UInt</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">addressWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
 <span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nc">PSEL</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="nc">Bits</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">selWidth</span><span class="w"> </span><span class="n">bits</span><span class="p">)</span><span class="w"></span>
@@ -204,7 +256,7 @@
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-</li>
+<ol class="simple">
 <li><p>函数和运算(Functions and operators)</p></li>
 </ol>
 <table border="1" class="docutils">
@@ -366,28 +418,12 @@
 <p>Axi4总线有三个变式：</p>
 </li>
 </ol>
-<table border="1" class="docutils">
-<thead>
-<tr>
-<th style="text-align: center;">类型</th>
-<th style="text-align: center;">述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">Axi4ReadOnly</td>
-<td style="text-align: center;">只有AR和R通道在</td>
-</tr>
-<tr>
-<td style="text-align: center;">Axi4WriteOnly</td>
-<td style="text-align: center;">只有AW、W和B通道在</td>
-</tr>
-<tr>
-<td style="text-align: center;">Axi4Shared</td>
-<td style="text-align: center;">这种变式是该库的首创。<br>它使用4个通道, W, B,R, 还有一个名为AWR的新通道。<br>AWR通道可以用来传输AR和AW事务。要分离它们, 需要一个信号<code>write</code>。<br>这种Axi4Shared变体的优点是使用更少的面积, 尤其是在互连方面。</td>
-</tr>
-</tbody>
-</table><ol class="simple">
+<p>|     类型      |                                                                                                     述                                                                                                      |
+| :———–: :———————————————————————————————————————————————————————————————————-: |
+| Axi4ReadOnly  |                                                                                               只有AR和R通在                                                                                                |
+| Axi4WriteOnly |                                                                                              只有AW、W和B通在                                                                                              |
+|  Axi4Shared   | 这种变式是该库的首创。<br>它使用4个通道, W, B,R, 还有一个名为AWR的新通道。<br>AWR通道可以用来传输AR和AW事务。要分离它们, 需要一个信号<code class="docutils literal notranslate"><span class="pre">write</span></code>。<br>这种Axi4Shared变体的优点是使用更少的面积, 尤其是在互连方面。 |</p>
+<ol class="simple">
 <li><p>函数与操作</p></li>
 </ol>
 <table border="1" class="docutils">
@@ -432,7 +468,8 @@
 <li><p>性能不如AXI, 但使用的面积少得多(读写命令使用相同的握手通道。主端口不需要存储挂起请求的地址以避免读/写风险)</p></li>
 </ul>
 </li>
-<li><p>配置和实例化</p>
+<li><p>配置和实例化</p></li>
+</ol>
 <p>AvalonMM Bundle有一个构造参数<code class="docutils literal notranslate"><span class="pre">AvalonMMConfig</span></code>。由于Avalon总线的灵活性, <code class="docutils literal notranslate"><span class="pre">AvalonMMConfig</span></code>可以作为许多配置元素。</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AvalonMMConfig</span><span class="p">(</span><span class="w"> </span><span class="n">addressWidth</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"></span>
 <span class="w">                       </span><span class="n">dataWidth</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">,</span><span class="w"></span>
@@ -464,8 +501,6 @@
 </pre></div>
 </div>
 <p>这样的配置类也有一些函数：</p>
-</li>
-</ol>
 <table border="1" class="docutils">
 <thead>
 <tr>

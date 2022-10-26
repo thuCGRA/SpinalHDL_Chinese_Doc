@@ -380,17 +380,60 @@
 </li>
 <li><p>规范</p>
 <p>该实现将基于一个带RX FIFO的APB3总线。</p>
-<p>以下是寄存器映射表：
-|     名称     |        类型         | 接入  | 地址  |                             描述                             |
-| :———-: | :—————–: | :—: | :—: | :———————————————————-: |
-| clockDivider |        UInt         |  RW   |   0   |                    设置UartCtrl时钟分频器                    |
-|    frame     | UartCtrlFrameConfig |  RW   |   4   |               设置数据长度，校验位和停止位配置               |
-|   writeCmd   |        Bits         |   W   |   8   |                   向UartCtrl发送一条写命令                   |
-|  writeBusy   |        Bool         |   R   |   8   |      当一条新的writeCmd可以被发送时，操作Bit 0 =&gt; zero       |
-|     read     |     Bool / Bits     |   R   |  12   | Bits 7 downto 0 =&gt; rx payload <br>Bit 31 =&gt; rx payload valid |</p>
+<p>以下是寄存器映射表：</p>
 </li>
-<li><p>实现</p>
-<p>在该实现中，Apb3SlaveFactory工具将会被使用。它允许用户用优美的语法定义一个APB3从端。可以从https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Librariesbus_slave_factory.html#bus-slave-factory找到该工具的文档。</p>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">名称</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">接入</th>
+<th style="text-align: center;">地址</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">clockDivider</td>
+<td style="text-align: center;">UInt</td>
+<td style="text-align: center;">RW</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">设置UartCtrl时钟分频器</td>
+</tr>
+<tr>
+<td style="text-align: center;">frame</td>
+<td style="text-align: center;">UartCtrlFrameConfig</td>
+<td style="text-align: center;">RW</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">设置数据长度，校验位和停止位配置</td>
+</tr>
+<tr>
+<td style="text-align: center;">writeCmd</td>
+<td style="text-align: center;">Bits</td>
+<td style="text-align: center;">W</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">向UartCtrl发送一条写命令</td>
+</tr>
+<tr>
+<td style="text-align: center;">writeBusy</td>
+<td style="text-align: center;">Bool</td>
+<td style="text-align: center;">R</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">当一条新的writeCmd可以被发送时，操作Bit 0 =&gt; zero</td>
+</tr>
+<tr>
+<td style="text-align: center;">read</td>
+<td style="text-align: center;">Bool / Bits</td>
+<td style="text-align: center;">R</td>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">Bits 7 downto 0 =&gt; rx payload <br>Bit 31 =&gt; rx payload valid</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>实现</li>
+</ol><p>在该实现中，Apb3SlaveFactory工具将会被使用。它允许用户用优美的语法定义一个APB3从端。可以从https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Librariesbus_slave_factory.html#bus-slave-factory找到该工具的文档。</p>
 <p>首先，我们只需要定义控制器将要使用的<code class="docutils literal notranslate"><span class="pre">Apb3Config</span></code>。它被定义为Scala object里的一个函数。</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span><span class="w"> </span><span class="nc">Apb3UartCtrl</span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">getApb3Config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Apb3Config</span><span class="p">(</span><span class="w"></span>
@@ -438,8 +481,6 @@
 <blockquote>
 <div><p><strong>重要：是的，以上就是全部。它同样是可综合的。Apb3SlaveFactory工具并不是硬编码到SpinalHDL编译器中的东西。它是用SpinalHDL规则硬件描述语法实现的。</strong></p>
 </div></blockquote>
-</li>
-</ol>
 </section>
 <section id="pinesec">
 <h2>三、Pinesec<a class="headerlink" href="#pinesec" title="此标题的永久链接"></a></h2>
@@ -455,16 +496,22 @@
 <p>首先从<code class="docutils literal notranslate"><span class="pre">Timer</span></code>组件开始。</p>
 <ul>
 <li><p>规范</p>
-<p>该<code class="docutils literal notranslate"><span class="pre">Timer</span></code>组件将有一个单独的构造参数：
-| 名称  | 类型  |           描述           |
-| :—: | :—: | :———————-: |
-| width |  Int  | 指明时间计数器的比特位宽 |</p>
-<p>并且有一些输入/输出：
-| 名称  | 方向  | 类型  |                          描述                           |
-| :—: | :—: | :—: | :—————————————————–: |
-| tick  |  in   | Bool  |       当<code class="docutils literal notranslate"><span class="pre">tick</span></code>为True时，计时器会一直计数到<code class="docutils literal notranslate"><span class="pre">limit</span></code>       |
-| clear |  in   | Bool  | 当<code class="docutils literal notranslate"><span class="pre">tick</span></code>为True时，计时器设置为零。<code class="docutils literal notranslate"><span class="pre">Clear</span></code>优先于<code class="docutils literal notranslate"><span class="pre">tick</span></code>。 |</p>
+<p>该<code class="docutils literal notranslate"><span class="pre">Timer</span></code>组件将有一个单独的构造参数：</p>
 </li>
+</ul>
+</li>
+</ol>
+<pre><code>   | 名称  | 类型  |           描述           |
+   | :---: | :---: | :----------------------: |
+   | width |  Int  | 指明时间计数器的比特位宽 |
+</code></pre><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   并且有一些输入/输出：
+</pre></div>
+</div>
+<pre><code>   | 名称  | 方向  | 类型  |                          描述                           |
+   | :---: | :---: | :---: | :-----------------------------------------------------: |
+   | tick  |  in   | Bool  |       当`tick`为True时，计时器会一直计数到`limit`       |
+   | clear |  in   | Bool  | 当`tick`为True时，计时器设置为零。`Clear`优先于`tick`。 |
+</code></pre><ul>
 <li><p>实现</p>
 <div class="highlight-Scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Timer</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Int</span><span class="p">)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="p">{</span><span class="w"></span>
@@ -491,7 +538,7 @@
 </div>
 </li>
 </ul>
-</li>
+<ol>
 <li><p>桥接函数(Bridging function)</p>
 <p>可以从这个例子的主要目的开始:定义一个总线桥接函数。为此，将使用两种技术:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- 利用https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Libraries/bus_slave_factory.html#bus-slave-factory下的`BusSlaveFactory`工具
@@ -510,6 +557,7 @@
    |    ticks    |    Seq[Bool]    |           可用作tick信号的逻辑资源            |
    |   clears    |    Seq[Bool]    |           可用作clear信号的逻辑资源           |
 </code></pre><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   该寄存器映射会假设总线系统是32比特位宽：
+   
    |     名称     | 接入  |    位宽     | 地址偏移 | 比特偏移 |
    | :----------: | :---: | :---------: | :------: | :------: |
    | ticksEnable  |  RW   | len(ticks)  |    0     |    0     |
