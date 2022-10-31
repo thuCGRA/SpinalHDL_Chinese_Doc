@@ -3246,10 +3246,10 @@ myUInt := ((4 downto 1) -> true, default -> false)  //赋值“00011110”
     | :-------: | :--------: | :-----------------------: |
     |    x+y    |    加法    |  T(max(w(x), w(y)) bits)  |
     |   x+^y    | 产生进位加 | T(max(w(x), w(y))+1 bits) |
-    | x+\|y | 溢出判断加 |  T(max(w(x), w(y)) bits)  |
+    | x+\|y | 饱和判断加 |  T(max(w(x), w(y)) bits)  |
     |    x-y    |    减法    |  T(max(w(x), w(y)) bits)  |
     |   x-^y    | 产生借位减 | T(max(w(x), w(y))+1 bits) |
-    |    x-\|y   |     y      |           减法            | T(max(w(x), w(y)) bits) |
+    |    x-\|y   |    饱和判断减            | T(max(w(x), w(y)) bits) |
     |    x*y    |    乘法    |  T(max(w(x), w(y)) bits)  |
     |    x/y    |    除法    |        T(w(x)bits)        |
     |    x%y    |    取模    |        T(w(x)bits)        |
@@ -3304,7 +3304,7 @@ myUInt := ((4 downto 1) -> true, default -> false)  //赋值“00011110”
     | 操作符 |   描述   | 返回类型 |
     | :----: | :------: | :------: |
     | x===y  |   相等   |   Bool   |
-    |  x=/=  |  不相等  |   Bool   |
+    |  x=/=y  |  不相等  |   Bool   |
     |  x>y   |   大于   |   Bool   |
     |  x>=y  | 大于等于 |   Bool   |
     |  x<y   |   小于   |   Bool   |
