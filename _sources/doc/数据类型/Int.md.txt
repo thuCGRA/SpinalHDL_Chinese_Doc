@@ -162,10 +162,10 @@ myUInt := ((4 downto 1) -> true, default -> false)  //赋值“00011110”
    | :-------: | :--------: | :-----------------------: |
    |    x+y    |    加法    |  T(max(w(x), w(y)) bits)  |
    |   x+^y    | 产生进位加 | T(max(w(x), w(y))+1 bits) |
-   | x+&#124;y | 溢出判断加 |  T(max(w(x), w(y)) bits)  |
+   | x+&#124;y | 饱和判断加 |  T(max(w(x), w(y)) bits)  |
    |    x-y    |    减法    |  T(max(w(x), w(y)) bits)  |
    |   x-^y    | 产生借位减 | T(max(w(x), w(y))+1 bits) |
-   |    x-\|y  |     y      |           减法            | T(max(w(x), w(y)) bits) |
+   |    x-\|y  |    饱和判断减法   | T(max(w(x), w(y)) bits) |
    |    x*y    |    乘法    |  T(max(w(x), w(y)) bits)  |
    |    x/y    |    除法    |        T(w(x)bits)        |
    |    x%y    |    取模    |        T(w(x)bits)        |
