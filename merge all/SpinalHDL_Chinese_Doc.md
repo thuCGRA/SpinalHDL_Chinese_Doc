@@ -2769,7 +2769,7 @@ Verilog
     | :------------------------: | :-----------------------: | :--------------------: |
     |             ~x             |         按位取非          |    Bits(w(x) bits)     |
     |           x & y            |          按位与           |    Bits(w(xy) bits)    |
-    |         x &#124; y         |          按位或           |    Bits(w(xy) bits)    |
+    |           x \| y         |          按位或           |    Bits(w(xy) bits)    |
     |           x ^ y            |         按位异或          |    Bits(w(xy) bits)    |
     |           x.xorR           |     x的所有bits取异或     |          Bool          |
     |           x.orR            |      x的所有bits取或      |          Bool          |
@@ -3163,7 +3163,7 @@ myUInt := ((4 downto 1) -> true, default -> false)  //赋值“00011110”
     |           x ^ y            |         逻辑异或          |          Bool           |
     |             ~x             |         按位取非          |      T(w(x) bits)       |
     |           x & y            |          按位与           | T(max(w(x), w(y)) bits) |
-    |         x &#124; y         |          按位或           | T(max(w(x), w(y)) bits) |
+    |         x \| y             |          按位或           | T(max(w(x), w(y)) bits) |
     |           x ^ y            |         按位异或          | T(max(w(x), w(y)) bits) |
     |           x.xorR           |     x的所有bits取异或     |          Bool           |
     |           x.orR            |      x的所有bits取或      |          Bool           |
@@ -3246,7 +3246,7 @@ myUInt := ((4 downto 1) -> true, default -> false)  //赋值“00011110”
     | :-------: | :--------: | :-----------------------: |
     |    x+y    |    加法    |  T(max(w(x), w(y)) bits)  |
     |   x+^y    | 产生进位加 | T(max(w(x), w(y))+1 bits) |
-    | x+&#124;y | 溢出判断加 |  T(max(w(x), w(y)) bits)  |
+    | x+\|y | 溢出判断加 |  T(max(w(x), w(y)) bits)  |
     |    x-y    |    减法    |  T(max(w(x), w(y)) bits)  |
     |   x-^y    | 产生借位减 | T(max(w(x), w(y))+1 bits) |
     |    x-\|y   |     y      |           减法            | T(max(w(x), w(y)) bits) |
