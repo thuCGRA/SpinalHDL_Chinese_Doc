@@ -88,8 +88,8 @@ myUInt := ((4 downto 1) -> true, default -> false)  //赋值“00011110”
    |           x >> y           |     算术右移, y: UInt     |      T(w(x) bits)       |
    |           x << y           |     算术左移, y: Int      |     T(w(x)+y bits)      |
    |           x << y           |     算术左移, y: UInt     |   T(w(x)+max(y) bits)   |
-   |             x \|>> y             |           >> y            |  逻辑右移, y: Int/UInt  | T(w(x) bits) |
-   |             x \|<< y             |           << y            |  逻辑左移, y: Int/UInt  | T(w(x) bits) |
+   |             x \|>> y       |  逻辑右移, y: Int/UInt  | T(w(x) bits) |
+   |             x \|<< y       |  逻辑左移, y: Int/UInt  | T(w(x) bits) |
    |      x.rotateLeft(y)       | 逻辑循环左移, y: UInt/Int |      T(w(x) bits)       |
    |      x.rotateRight(y)      | 逻辑循环右移, y: UInt/Int |      T(w(x) bits)       |
    |       x.clearAll[()]       |       清除所有bits        |                         |
