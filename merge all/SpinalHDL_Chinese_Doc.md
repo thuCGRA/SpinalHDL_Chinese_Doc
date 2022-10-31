@@ -2778,8 +2778,8 @@ Verilog
     |           x >> y           |     逻辑右移, y: UInt     |    Bits(w(x) bits)     |
     |           x << y           |     逻辑左移, y: Int      |   Bits(w(x)+y bits)    |
     |           x << y           |     逻辑左移, y: UInt     | Bits(w(x)+max(y) bits) |
-    |             x|>>           |           >> y            | 逻辑右移, y: Int/UInt  | Bits(w(x) bits) |
-    |             x|<<           |           << y            | 逻辑左移, y: Int/UInt  | Bits(w(x) bits) |
+    |           x\|>>y           |           >> y            | 逻辑右移, y: Int/UInt  | Bits(w(x) bits) |
+    |           x\|<<y           |           << y            | 逻辑左移, y: Int/UInt  | Bits(w(x) bits) |
     |      x.rotateLeft(y)       | 逻辑循环左移, y: UInt/Int |    Bits(w(x) bits)     |
     |      x.rotateRight(y)      | 逻辑循环右移, y: UInt/Int |    Bits(w(x) bits)     |
     |       x.clearAll[()]       |       清除所有bits        |                        |
