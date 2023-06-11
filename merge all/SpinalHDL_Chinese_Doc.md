@@ -758,7 +758,7 @@ SpinalHDL 是一种用 Scala 编写的硬件描述语言, Scala 是一种使用 
 
     在干净的Debian发行版中, 你可以在shell中键入以下命令。这些命令将安装 ava、Scala、SBT, 下载基础项目, 并生成相应的VHDL文件。如果你第一次运行它需要一些时间, 请不要担心。
 
-    ```Linux
+    ```bash
     sudo apt-get install openjdk-8-jdk
     sudo apt-get install scala
     echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
@@ -11938,7 +11938,7 @@ when(io.dataBus.read === 42){
     ```
 
     下面的`main`将使用io.bus和io.uart生成Verilog和QSys TCL脚本:
-    ```scala
+    ```Scala
     object AvalonMMUartCtrl{
     def main(args: Array[String]) {
         //生成verilog
@@ -12163,7 +12163,7 @@ import spinal.core.sim._
 
     **Linux**
 
-    ```Linux
+    ```bash
     sudo apt-get install build-essential libboost-dev git
     sudo apt-get install gnat # Ada compiler used to buid GHDL
     git clone https://github.com/ghdl/ghdl.git
@@ -12185,7 +12185,7 @@ import spinal.core.sim._
 
     **Linux**
 
-    ```Linux
+    ```bash
     sudo apt-get install build-essential libboost-dev iverilog
     ```
 
@@ -12205,7 +12205,7 @@ import spinal.core.sim._
 
     把以下路径添加到`LD_LIBRARY_PATH`前面来开启PLI特征。
 
-    ```Linux
+    ```bash
     export LD_LIBRARY_PATH=$VERDI_HOME/share/PLI/VCS/LINUX64:$LD_LIBRARY_PATH
     export LD_LIBRARY_PATH=$VERDI_HOME/share/PLI/IUS/LINUX64:$LD_LIBRARY_PATH
     export LD_LIBRARY_PATH=$VERDI_HOME/share/PLI/lib/LINUX64:$LD_LIBRARY_PATH
@@ -12313,7 +12313,7 @@ import spinal.core.sim._
 
     你也需要一个最近版本安装的Verilator：
 
-    ```Linux
+    ```bash
     sudo apt-get install git make autoconf g++ flex bison  # First time prerequisites
     git clone http://git.veripool.org/git/verilator   # Only first time
     unsetenv VERILATOR_ROOT  # For csh; ignore error if on bash
@@ -12343,7 +12343,7 @@ import spinal.core.sim._
 
     **从MinGW包管理器中**
 
-    ```linux
+    ```bash
     pacman -Syuu
     # Close the MSYS2 shell once you're asked to
     pacman -Syuu
@@ -13989,7 +13989,7 @@ when(io.dataBus.read === 42){
     ```
 
     下面的`main`将使用io.bus和io.uart生成Verilog和QSys TCL脚本:
-    ```scala
+    ```Scala
     object AvalonMMUartCtrl{
     def main(args: Array[String]) {
         //生成verilog

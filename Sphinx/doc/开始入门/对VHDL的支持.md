@@ -636,7 +636,7 @@
 2. 数据类型(Data types)
 
    Spinal的数据类型类似于VHDL的：
-   
+
    |       VHDL       | SpinalHDL |
    | :--------------: | :-------: |
    |    std_logic     |   Bool    |
@@ -660,7 +660,7 @@
    }
    ```
 
-   之后如果想实例化一个`Bundle`, 需要写``val myColor = RGB(channelWidth=8)`.
+   之后如果想实例化一个`Bundle`, 需要写`val myColor = RGB(channelWidth=8)`.
 
 3. 信号(Signal)
 
